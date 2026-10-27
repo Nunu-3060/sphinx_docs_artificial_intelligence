@@ -1,0 +1,349 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4. 回帰 &mdash; 機械学習・深層学習入門</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=f043dae3" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=19757887"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=4755f45a"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="5. 分類" href="ch05_classification.html" />
+    <link rel="prev" title="3. データと前処理" href="ch03_data.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            機械学習・深層学習入門
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">はじめに</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">はじめに</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">本編</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ch01_overview.html">1. 機械学習の全体像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_math.html">2. 数学の準備</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_data.html">3. データと前処理</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. 回帰</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">4.1. 線形回帰のモデル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">4.2. 損失関数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">4.3. 正規方程式による解法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">4.4. 勾配降下法</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">4.4.1. アルゴリズム</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">4.4.2. 実装</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">4.4.3. 学習率の選び方</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">4.4.4. ハイパーパラメータ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">4.4.5. 確率的勾配降下法</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id11">4.5. 多項式回帰</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scikit-learn">4.6. scikit-learn による線形回帰</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id12">4.7. まとめ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_classification.html">5. 分類</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_evaluation.html">6. モデルの評価と改善</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_tree_ensemble.html">7. 決定木とアンサンブル学習</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_unsupervised.html">8. 教師なし学習</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_neural_network.html">9. ニューラルネットワークの基礎</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_training_techniques.html">10. 深層学習の学習テクニック</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_cnn.html">11. 畳み込みニューラルネットワーク</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch12_sequence_transformer.html">12. 系列データと Transformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch13_practice.html">13. 実務への適用</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">付録</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendix_glossary.html">用語集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_symbols.html">記号一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_examples.html">サンプルコード一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_references.html">参考文献</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">機械学習・深層学習入門</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">4. </span>回帰</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">4. </span>回帰<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>この章では、教師あり学習のうち、数値を予測する<strong>回帰</strong>を扱う。最も基本的な手法である線形回帰を題材に、「モデルを定義する」「損失関数を定義する」「損失関数を最小化するパラメータを求める」という機械学習の基本的な流れを説明する。この流れは、第 9 章以降の深層学習でもそのまま使われる。</p>
+<section id="id2">
+<h2><span class="section-number">4.1. </span>線形回帰のモデル<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>まず、特徴量が 1 つだけの場合を考える。<a class="reference internal" href="#fig-ch04-linear-fit"><span class="std std-numref">図 4.1</span></a> の青い点のように、特徴量 <span class="math notranslate nohighlight">\(x\)</span> とラベル <span class="math notranslate nohighlight">\(y\)</span> の間におおよそ直線的な関係があるとき、その関係を直線</p>
+<div class="math notranslate nohighlight">
+\[\hat{y} = w x + b\]</div>
+<p>で表すのが<strong>線形回帰</strong>である。<span class="math notranslate nohighlight">\(\hat{y}\)</span>（ワイハット）はモデルによる予測値を表し、正解の <span class="math notranslate nohighlight">\(y\)</span> と区別するためにハット記号を付ける。<span class="math notranslate nohighlight">\(w\)</span> を<strong>重み</strong>、<span class="math notranslate nohighlight">\(b\)</span> を<strong>バイアス</strong>（切片）と呼ぶ。<span class="math notranslate nohighlight">\(w\)</span> と <span class="math notranslate nohighlight">\(b\)</span> がこのモデルのパラメータであり、データに最もよく当てはまる値を求めることが学習の目的である。</p>
+<figure class="align-center" id="id13">
+<span id="fig-ch04-linear-fit"></span><a class="reference internal image-reference" href="_images/ch04_linear_fit.png"><img alt="_images/ch04_linear_fit.png" src="_images/ch04_linear_fit.png" style="width: 520px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 4.1 </span><span class="caption-text">線形回帰。オレンジ色の線は、正解の値と予測値の差（残差）を表す。</span><a class="headerlink" href="#id13" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>特徴量が <span class="math notranslate nohighlight">\(d\)</span> 個ある場合は、各特徴量に重みを掛けて足し合わせる。</p>
+<div class="math notranslate nohighlight">
+\[\hat{y} = w_1 x_1 + w_2 x_2 + \cdots + w_d x_d + b = \boldsymbol{w}^\top \boldsymbol{x} + b\]</div>
+<p>たとえば家賃の予測なら、「広さ × <span class="math notranslate nohighlight">\(w_1\)</span> + 築年数 × <span class="math notranslate nohighlight">\(w_2\)</span> + 駅徒歩 × <span class="math notranslate nohighlight">\(w_3\)</span> + <span class="math notranslate nohighlight">\(b\)</span>」で家賃を予測する。学習後の重みを見れば、各特徴量が予測にどう影響しているかが分かるという利点もある（ただし、特徴量のスケールがそろっていることが前提である）。</p>
+<p><span class="math notranslate nohighlight">\(n\)</span> 件のデータをまとめて行列 <span class="math notranslate nohighlight">\(X\)</span>（<span class="math notranslate nohighlight">\(n \times d\)</span>）で表せば、全サンプルの予測値は <span class="math notranslate nohighlight">\(\hat{\boldsymbol{y}} = X\boldsymbol{w} + b\)</span> という 1 つの式で計算できる。さらに、<span class="math notranslate nohighlight">\(X\)</span> の先頭に値がすべて 1 の列を追加し、<span class="math notranslate nohighlight">\(\boldsymbol{w}\)</span> の先頭に <span class="math notranslate nohighlight">\(b\)</span> を加えれば、バイアスを重みの一部として <span class="math notranslate nohighlight">\(\hat{\boldsymbol{y}} = X\boldsymbol{w}\)</span> と簡潔に書ける。以降の式ではこの書き方を使う。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">4.2. </span>損失関数<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>「データに最もよく当てはまる」ことを数値で表すために、予測値と正解の食い違いの大きさを表す関数を定義する。これを<a class="reference internal" href="appendix_glossary.html#term-29"><span class="xref std std-term">損失関数</span></a>と呼ぶ。回帰で最もよく使われる損失関数は、予測値と正解の差（<strong>残差</strong>）の 2 乗の平均である<strong>平均二乗誤差</strong>（Mean Squared Error、MSE）である。</p>
+<div class="math notranslate nohighlight">
+\[L(\boldsymbol{w}) = \frac{1}{n} \sum_{i=1}^{n} (\hat{y}_i - y_i)^2 = \frac{1}{n} \| X\boldsymbol{w} - \boldsymbol{y} \|^2\]</div>
+<p>ここで <span class="math notranslate nohighlight">\(\| \boldsymbol{v} \|^2\)</span> はベクトルの各要素の 2 乗の和を表す。差を 2 乗するのは、正の誤差と負の誤差が打ち消し合わないようにするためと、微分しやすくするためである。</p>
+<p>損失関数は、パラメータ <span class="math notranslate nohighlight">\(\boldsymbol{w}\)</span> の関数であることに注意してほしい。データ <span class="math notranslate nohighlight">\(X\)</span> と <span class="math notranslate nohighlight">\(\boldsymbol{y}\)</span> は固定されており、<span class="math notranslate nohighlight">\(\boldsymbol{w}\)</span> を変えると予測値が変わり、損失の値も変わる。学習とは、損失関数 <span class="math notranslate nohighlight">\(L(\boldsymbol{w})\)</span> を最小にする <span class="math notranslate nohighlight">\(\boldsymbol{w}\)</span> を探すことである。</p>
+</section>
+<section id="id4">
+<h2><span class="section-number">4.3. </span>正規方程式による解法<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<p>線形回帰の場合、平均二乗誤差を最小にする <span class="math notranslate nohighlight">\(\boldsymbol{w}\)</span> は式変形で直接求められる。損失関数の勾配を 0 とおくと、次の<strong>正規方程式</strong>が得られる。</p>
+<div class="math notranslate nohighlight">
+\[X^\top X \boldsymbol{w} = X^\top \boldsymbol{y}\]</div>
+<p>これを解けば最適な <span class="math notranslate nohighlight">\(\boldsymbol{w}\)</span> が得られる。NumPy では <code class="docutils literal notranslate"><span class="pre">np.linalg.solve</span></code> で連立方程式として解ける。</p>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-number">コード 4.1 </span><span class="caption-text">正規方程式による線形回帰（ch04_linear_regression_scratch.py より抜粋）</span><a class="headerlink" href="#id14" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">def</span><span class="w"> </span><span class="nf">fit_normal_equation</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatArray</span><span class="p">:</span>
+<span class="linenos">2</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;正規方程式 (X^T X) w = X^T y を解く。&quot;&quot;&quot;</span>
+<span class="linenos">3</span>    <span class="n">xb</span> <span class="o">=</span> <span class="n">add_bias_column</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="linenos">4</span>    <span class="n">w</span><span class="p">:</span> <span class="n">FloatArray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">xb</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">xb</span><span class="p">,</span> <span class="n">xb</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">y</span><span class="p">)</span>
+<span class="linenos">5</span>    <span class="k">return</span> <span class="n">w</span>
+</pre></div>
+</div>
+</div>
+<p>このように、式変形によって厳密に求めた解を<strong>解析解</strong>と呼ぶ。解析解が求められるのは線形回帰のような単純なモデルに限られる。第 5 章のロジスティック回帰や第 9 章のニューラルネットワークでは解析解が得られないため、次に説明する勾配降下法を使う。また、線形回帰でも特徴量の数 <span class="math notranslate nohighlight">\(d\)</span> が非常に大きい場合は、<span class="math notranslate nohighlight">\(d \times d\)</span> の行列 <span class="math notranslate nohighlight">\(X^\top X\)</span> を扱う正規方程式の計算量が問題になる。</p>
+</section>
+<section id="id5">
+<h2><span class="section-number">4.4. </span>勾配降下法<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<section id="id6">
+<h3><span class="section-number">4.4.1. </span>アルゴリズム<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p><a class="reference internal" href="appendix_glossary.html#term-17"><span class="xref std std-term">勾配降下法</span></a>は、損失関数の勾配（第 2 章）の逆方向にパラメータを少しずつ動かして、損失関数の最小値を探す方法である。</p>
+<ol class="arabic">
+<li><p>パラメータ <span class="math notranslate nohighlight">\(\boldsymbol{w}\)</span> を適当な値（例: すべて 0）で初期化する。</p></li>
+<li><p>現在の <span class="math notranslate nohighlight">\(\boldsymbol{w}\)</span> での損失関数の勾配 <span class="math notranslate nohighlight">\(\nabla L(\boldsymbol{w})\)</span> を計算する。</p></li>
+<li><p>パラメータを次の式で更新する。</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{w} \leftarrow \boldsymbol{w} - \eta \nabla L(\boldsymbol{w})\]</div>
+</li>
+<li><p>損失が十分小さくなるか、決められた回数に達するまで 2〜3 を繰り返す。</p></li>
+</ol>
+<p><span class="math notranslate nohighlight">\(\eta\)</span>（イータ）は 1 回の更新でどれだけパラメータを動かすかを決める正の定数で、<a class="reference internal" href="appendix_glossary.html#term-4"><span class="xref std std-term">学習率</span></a>と呼ぶ。山の中で目隠しをして谷底を目指すとき、足元の傾きを確かめながら下り坂の方向に一歩ずつ進む様子を想像するとよい。学習率は一歩の大きさにあたる。</p>
+<p>平均二乗誤差の勾配は、連鎖律を使って計算すると次のようになる。</p>
+<div class="math notranslate nohighlight">
+\[\nabla L(\boldsymbol{w}) = \frac{2}{n} X^\top (X\boldsymbol{w} - \boldsymbol{y})\]</div>
+<p><span class="math notranslate nohighlight">\(X\boldsymbol{w} - \boldsymbol{y}\)</span> は各サンプルの残差を並べたベクトルである。つまり勾配は、「残差」と「その残差を生んだ特徴量の値」の積をサンプル全体で平均したものになっている。残差が大きいサンプルほど、パラメータの更新に強く影響する。</p>
+</section>
+<section id="id7">
+<h3><span class="section-number">4.4.2. </span>実装<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>勾配降下法による線形回帰を NumPy で実装すると次のようになる。</p>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-number">コード 4.2 </span><span class="caption-text">勾配降下法による線形回帰（ch04_linear_regression_scratch.py より抜粋）</span><a class="headerlink" href="#id15" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span><span class="w"> </span><span class="nf">fit_gradient_descent</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">lr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatArray</span><span class="p">:</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;勾配降下法で平均二乗誤差を最小化する。&quot;&quot;&quot;</span>
+<span class="linenos"> 3</span>    <span class="n">xb</span> <span class="o">=</span> <span class="n">add_bias_column</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="linenos"> 4</span>    <span class="n">n</span> <span class="o">=</span> <span class="n">xb</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos"> 5</span>    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">xb</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="linenos"> 6</span>    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+<span class="linenos"> 7</span>        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">xb</span> <span class="o">@</span> <span class="n">w</span>
+<span class="linenos"> 8</span>        <span class="n">grad</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">xb</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="p">(</span><span class="n">y_pred</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span>
+<span class="linenos"> 9</span>        <span class="n">w</span> <span class="o">-=</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">grad</span>
+<span class="linenos">10</span>        <span class="k">if</span> <span class="n">epoch</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="linenos">11</span>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;epoch </span><span class="si">{</span><span class="n">epoch</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2">: loss = </span><span class="si">{</span><span class="n">mse</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">y_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos">12</span>    <span class="k">return</span> <span class="n">w</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>3 行目で、バイアスを扱うために値が 1 の列を追加している。</p></li>
+<li><p>7 行目で現在のパラメータによる予測値を計算し、8 行目で上の式に従って勾配を計算している。</p></li>
+<li><p>9 行目で、学習率を掛けた勾配を引いてパラメータを更新している。</p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\(y = 3x + 2\)</span> にノイズを加えて生成したデータで学習した結果を次に示す。勾配降下法で求めたパラメータは、正規方程式による解析解と一致している。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>正規方程式: 切片 = 1.998, 傾き = 2.980
+<span class="linenos">2</span>epoch    0: loss = 31.0796
+<span class="linenos">3</span>epoch  100: loss = 0.0846
+<span class="linenos">4</span>epoch  200: loss = 0.0846
+<span class="linenos">5</span>epoch  300: loss = 0.0846
+<span class="linenos">6</span>epoch  400: loss = 0.0846
+<span class="linenos">7</span>勾配降下法: 切片 = 1.998, 傾き = 2.980
+<span class="linenos">8</span>訓練データでの MSE = 0.0846
+</pre></div>
+</div>
+<p>サンプルコードの全体は <a class="reference download internal" download="" href="_downloads/bb5a17a7a97ecf92dc1fa2e164a65262/ch04_linear_regression_scratch.py"><code class="xref download docutils literal notranslate"><span class="pre">ch04_linear_regression_scratch.py</span></code></a> からダウンロードできる。</p>
+</section>
+<section id="id8">
+<h3><span class="section-number">4.4.3. </span>学習率の選び方<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p>学習率は、学習の成否を大きく左右する。<a class="reference internal" href="#fig-ch04-learning-rate"><span class="std std-numref">図 4.2</span></a> に、学習率を変えたときの損失の推移を示す。</p>
+<figure class="align-center" id="id16">
+<span id="fig-ch04-learning-rate"></span><a class="reference internal image-reference" href="_images/ch04_learning_rate.png"><img alt="_images/ch04_learning_rate.png" src="_images/ch04_learning_rate.png" style="width: 520px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 4.2 </span><span class="caption-text">学習率と損失の推移（縦軸は対数目盛）</span><a class="headerlink" href="#id16" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<ul class="simple">
+<li><p>学習率が小さすぎる（0.01）と、損失は確実に減るが、収束までに多くの反復が必要になる。</p></li>
+<li><p>学習率が適切（0.1）だと、少ない反復で損失が最小値付近に達する。</p></li>
+<li><p>学習率が大きすぎる（0.55）と、最小値を飛び越えて反対側に行き、さらに大きく飛び越えることを繰り返すため、損失が発散する。</p></li>
+</ul>
+<p>適切な学習率は、問題やモデルによって異なる。実際には、0.1、0.01、0.001 のように 10 倍刻みでいくつか試し、損失が順調に減るものを選ぶことが多い。特徴量のスケールがそろっていないと、ある方向には学習率が大きすぎ、別の方向には小さすぎるという状況になりやすい。これが、勾配降下法を使う前に標準化（第 3 章）を行う理由の 1 つである。</p>
+</section>
+<section id="id9">
+<h3><span class="section-number">4.4.4. </span>ハイパーパラメータ<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<p>学習率や反復回数のように、学習によって決まるのではなく、学習を始める前に人間が決めておく値を<a class="reference internal" href="appendix_glossary.html#term-40"><span class="xref std std-term">ハイパーパラメータ</span></a>と呼ぶ。重み <span class="math notranslate nohighlight">\(\boldsymbol{w}\)</span> のような、学習によって決まるパラメータとは区別する。ハイパーパラメータは、検証データでの性能を見ながら調整する（第 6 章）。</p>
+</section>
+<section id="id10">
+<h3><span class="section-number">4.4.5. </span>確率的勾配降下法<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<p>上の実装では、勾配を計算するたびに全サンプルを使っている。これを<strong>バッチ勾配降下法</strong>と呼ぶ。データが数百万件に及ぶと、1 回の更新に時間がかかりすぎる。そこで、毎回ランダムに選んだ一部のサンプル（<strong>ミニバッチ</strong>）だけで勾配を近似して更新する方法がよく使われる。これを<a class="reference internal" href="appendix_glossary.html#term-5"><span class="xref std std-term">確率的勾配降下法</span></a>（Stochastic Gradient Descent、SGD）と呼ぶ。深層学習では SGD とその改良版が標準的に使われる（第 10 章）。</p>
+</section>
+</section>
+<section id="id11">
+<h2><span class="section-number">4.5. </span>多項式回帰<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
+<p>データの関係が直線的でない場合、線形回帰をそのまま使うと当てはまりが悪い。しかし、特徴量 <span class="math notranslate nohighlight">\(x\)</span> から <span class="math notranslate nohighlight">\(x^2\)</span> や <span class="math notranslate nohighlight">\(x^3\)</span> といった新しい特徴量を作って追加すれば、</p>
+<div class="math notranslate nohighlight">
+\[\hat{y} = w_1 x + w_2 x^2 + \cdots + w_k x^k + b\]</div>
+<p>のように曲線を表現できる。これを<strong>多項式回帰</strong>と呼ぶ。この式は <span class="math notranslate nohighlight">\(x\)</span> については非線形だが、パラメータ <span class="math notranslate nohighlight">\(w_1, \ldots, w_k\)</span> については線形なので、線形回帰と同じ方法で学習できる。<a class="reference internal" href="#fig-ch04-polynomial"><span class="std std-numref">図 4.3</span></a> に、2 次関数に従うデータに直線と 2 次多項式を当てはめた例を示す。</p>
+<figure class="align-center" id="id17">
+<span id="fig-ch04-polynomial"></span><a class="reference internal image-reference" href="_images/ch04_polynomial.png"><img alt="_images/ch04_polynomial.png" src="_images/ch04_polynomial.png" style="width: 520px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 4.3 </span><span class="caption-text">直線と 2 次多項式による当てはめ</span><a class="headerlink" href="#id17" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>このように、元の特徴量を変換・組み合わせて新しい特徴量を作れば、線形なモデルでも複雑な関係を表現できる。ただし、次数を上げすぎると、訓練データのノイズまで再現してしまう過学習が起こる。これは第 6 章で詳しく説明する。</p>
+</section>
+<section id="scikit-learn">
+<h2><span class="section-number">4.6. </span>scikit-learn による線形回帰<a class="headerlink" href="#scikit-learn" title="Link to this heading"></a></h2>
+<p>実務では、線形回帰を自分で実装することはなく、scikit-learn の <code class="docutils literal notranslate"><span class="pre">LinearRegression</span></code> を使う。scikit-learn のモデルは、<code class="docutils literal notranslate"><span class="pre">fit</span></code> メソッドで学習し、<code class="docutils literal notranslate"><span class="pre">predict</span></code> メソッドで予測するという共通の使い方になっている。</p>
+<div class="literal-block-wrapper docutils container" id="id18">
+<div class="code-block-caption"><span class="caption-number">コード 4.3 </span><span class="caption-text">scikit-learn による線形回帰と多項式回帰（ch04_linear_regression_sklearn.py より抜粋）</span><a class="headerlink" href="#id18" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos"> 2</span>    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span>    <span class="c1"># 直線的な関係のデータ</span>
+<span class="linenos"> 5</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="linenos"> 6</span>    <span class="n">y</span> <span class="o">=</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span>    <span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="linenos"> 9</span>    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="linenos">10</span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;切片 = </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">intercept_</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, 傾き = </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos">11</span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x = 1.5 での予測値:&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.5</span><span class="p">]])))</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span>    <span class="c1"># 曲線的な関係のデータには、特徴量を多項式に拡張してから線形回帰を適用する</span>
+<span class="linenos">14</span>    <span class="n">x2</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="linenos">15</span>    <span class="n">y2</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">x2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">x2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span>    <span class="n">linear</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span>
+<span class="linenos">18</span>    <span class="n">poly</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">LinearRegression</span><span class="p">())</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;直線での MSE = </span><span class="si">{</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y2</span><span class="p">,</span><span class="w"> </span><span class="n">linear</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos">21</span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;2 次多項式での MSE = </span><span class="si">{</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y2</span><span class="p">,</span><span class="w"> </span><span class="n">poly</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>8〜9 行目で線形回帰を学習し、10 行目で学習結果を表示している。学習後のバイアスは <code class="docutils literal notranslate"><span class="pre">intercept_</span></code>、重みは <code class="docutils literal notranslate"><span class="pre">coef_</span></code> 属性で参照できる。scikit-learn では、学習によって得られた属性の名前の末尾に <code class="docutils literal notranslate"><span class="pre">_</span></code> が付く。</p></li>
+<li><p>18 行目の <code class="docutils literal notranslate"><span class="pre">make_pipeline</span></code> は、<code class="docutils literal notranslate"><span class="pre">PolynomialFeatures</span></code> による特徴量の追加と <code class="docutils literal notranslate"><span class="pre">LinearRegression</span></code> を連結する。<code class="docutils literal notranslate"><span class="pre">fit</span></code> を呼ぶと、データが順に各処理を通過する。</p></li>
+</ul>
+<p>実行結果を次に示す。2 次多項式の方が、平均二乗誤差が 1 桁小さくなっている。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>切片 = 1.998, 傾き = 2.980
+<span class="linenos">2</span>x = 1.5 での予測値: [6.46834888]
+<span class="linenos">3</span>直線での MSE = 2.014
+<span class="linenos">4</span>2 次多項式での MSE = 0.194
+</pre></div>
+</div>
+<p>サンプルコードの全体は <a class="reference download internal" download="" href="_downloads/12082a09951f9fc03259626151257f92/ch04_linear_regression_sklearn.py"><code class="xref download docutils literal notranslate"><span class="pre">ch04_linear_regression_sklearn.py</span></code></a> からダウンロードできる。</p>
+<p>回帰の評価指標については、第 6 章でまとめて説明する。</p>
+</section>
+<section id="id12">
+<h2><span class="section-number">4.7. </span>まとめ<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>線形回帰は、特徴量の重み付きの和で数値を予測するモデルである。</p></li>
+<li><p>予測と正解の食い違いを損失関数（回帰では平均二乗誤差）で表し、それを最小にするパラメータを求めることが学習である。</p></li>
+<li><p>勾配降下法は、損失関数の勾配の逆方向にパラメータを少しずつ動かして最小値を探す。解析解が得られないモデルでも使える汎用的な方法である。</p></li>
+<li><p>学習率は重要なハイパーパラメータで、小さすぎると学習が遅く、大きすぎると発散する。</p></li>
+<li><p>特徴量を変換・追加すれば、線形なモデルでも曲線的な関係を表現できる。</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch03_data.html" class="btn btn-neutral float-left" title="3. データと前処理" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch05_classification.html" class="btn btn-neutral float-right" title="5. 分類" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nunu_3060.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

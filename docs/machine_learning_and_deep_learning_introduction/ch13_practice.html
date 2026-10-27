@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>13. 実務への適用 &mdash; 機械学習・深層学習入門</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=f043dae3" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=19757887"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=4755f45a"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="用語集" href="appendix_glossary.html" />
+    <link rel="prev" title="12. 系列データと Transformer" href="ch12_sequence_transformer.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            機械学習・深層学習入門
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">はじめに</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">はじめに</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">本編</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ch01_overview.html">1. 機械学習の全体像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_math.html">2. 数学の準備</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_data.html">3. データと前処理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_regression.html">4. 回帰</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_classification.html">5. 分類</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_evaluation.html">6. モデルの評価と改善</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_tree_ensemble.html">7. 決定木とアンサンブル学習</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_unsupervised.html">8. 教師なし学習</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_neural_network.html">9. ニューラルネットワークの基礎</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_training_techniques.html">10. 深層学習の学習テクニック</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_cnn.html">11. 畳み込みニューラルネットワーク</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch12_sequence_transformer.html">12. 系列データと Transformer</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">13. 実務への適用</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">13.1. 主なライブラリ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">13.2. 再現性の確保</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">13.2.1. パイプラインでデータリークを防ぐ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">13.3. モデルの解釈</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">13.4. 運用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id10">13.4.1. 予測の提供方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">13.4.2. データドリフト</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id13">13.5. 責任ある利用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id14">13.6. よくある失敗とチェックリスト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id15">13.7. まとめ</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">付録</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendix_glossary.html">用語集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_symbols.html">記号一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_examples.html">サンプルコード一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_references.html">参考文献</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">機械学習・深層学習入門</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">13. </span>実務への適用</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">13. </span>実務への適用<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>ここまで、機械学習と深層学習の主な手法を説明してきた。しかし、実務で機械学習を使ったシステムを作り、運用し続けるには、モデルの学習以外にも考えるべきことが多い。この章では、ライブラリの選び方、再現性の確保、モデルの解釈、運用、そして責任ある利用について、実務で押さえておくべき点をまとめる。</p>
+<section id="id2">
+<h2><span class="section-number">13.1. </span>主なライブラリ<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>Python には機械学習のための豊富なライブラリがある。本書で扱った内容と、主なライブラリの対応を次に示す。</p>
+<table class="docutils align-default" id="id16">
+<caption><span class="caption-number">表 13.1 </span><span class="caption-text">主なライブラリ</span><a class="headerlink" href="#id16" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 45.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ライブラリ</p></th>
+<th class="head"><p>用途</p></th>
+<th class="head"><p>本書の関連する章</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>NumPy</p></td>
+<td><p>多次元配列の計算。ほぼすべてのライブラリの基盤。</p></td>
+<td><p>第 2 章、各章のスクラッチ実装</p></td>
+</tr>
+<tr class="row-odd"><td><p>pandas</p></td>
+<td><p>表形式データの読み込み・加工・集計。</p></td>
+<td><p>第 3 章</p></td>
+</tr>
+<tr class="row-even"><td><p>scikit-learn</p></td>
+<td><p>前処理、古典的な機械学習の手法、評価、ハイパーパラメータ探索。</p></td>
+<td><p>第 3 章〜第 8 章</p></td>
+</tr>
+<tr class="row-odd"><td><p>LightGBM、XGBoost</p></td>
+<td><p>高速な勾配ブースティング。</p></td>
+<td><p>第 7 章</p></td>
+</tr>
+<tr class="row-even"><td><p>PyTorch</p></td>
+<td><p>深層学習のフレームワーク。自動微分と GPU による計算。</p></td>
+<td><p>第 9 章〜第 12 章</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hugging Face Transformers</p></td>
+<td><p>学習済みの Transformer モデルの利用・ファインチューニング。</p></td>
+<td><p>第 12 章</p></td>
+</tr>
+</tbody>
+</table>
+<p>各ライブラリの詳しい使い方は、公式のドキュメント（<a class="reference internal" href="appendix_references.html#numpydoc" id="id3"><span>[NumPyDoc]</span></a>、<a class="reference internal" href="appendix_references.html#sklearndoc" id="id4"><span>[SklearnDoc]</span></a>、<a class="reference internal" href="appendix_references.html#pytorchdoc" id="id5"><span>[PyTorchDoc]</span></a> など）を参照してほしい。</p>
+<p>深層学習のフレームワークには、PyTorch のほかに TensorFlow（Keras）や JAX などがある。研究と実務の両方で PyTorch が広く使われているが、基本的な考え方（テンソル、自動微分、層、最適化手法）はどのフレームワークでも共通である。</p>
+<p>本書では、重要な手法を NumPy で一から実装した。実務では、正しさが検証され、高速化されたライブラリを使うべきである。ただし、仕組みを理解していれば、ライブラリのハイパーパラメータの意味を理解し、うまくいかないときに原因を推測できる。</p>
+</section>
+<section id="id6">
+<h2><span class="section-number">13.2. </span>再現性の確保<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<p>機械学習の結果は、データ、コード、ライブラリのバージョン、乱数など多くの要因で変わる。後から同じ結果を再現できなければ、改善の効果を正しく比較できず、問題が起きたときに原因を調べることもできない。再現性を確保するには、次の点に注意する。</p>
+<ul class="simple">
+<li><p><strong>乱数のシードを固定する</strong>: データの分割、モデルの初期化、ミニバッチのシャッフルなどに乱数が使われる。scikit-learn では <code class="docutils literal notranslate"><span class="pre">random_state</span></code> 引数、PyTorch では <code class="docutils literal notranslate"><span class="pre">torch.manual_seed</span></code> などで固定する。ただし、GPU を使った計算では、シードを固定しても結果がわずかに変わることがある。</p></li>
+<li><p><strong>ライブラリのバージョンを記録する</strong>: <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> などで、使ったライブラリのバージョンを固定する。</p></li>
+<li><p><strong>データのバージョンを管理する</strong>: どの時点のデータで学習したかを記録する。データは時間とともに追加・修正されるためである。</p></li>
+<li><p><strong>実験の記録を残す</strong>: ハイパーパラメータ、評価結果、学習したモデルを、実験ごとに記録する。MLflow などの実験管理ツールが使える。</p></li>
+</ul>
+<section id="id7">
+<h3><span class="section-number">13.2.1. </span>パイプラインでデータリークを防ぐ<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>第 3 章で、前処理の統計量は訓練データだけから求めるべきであることを説明した。交差検証を行う場合、各分割の学習用データだけから前処理を学習する必要がある。前処理とモデルを scikit-learn の <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> にまとめておけば、<code class="docutils literal notranslate"><span class="pre">GridSearchCV</span></code> などがこれを自動的に正しく扱ってくれる。また、学習済みのパイプラインをそのまま保存すれば、本番環境で前処理の実装が学習時とずれることも防げる。</p>
+<p>次のサンプルは、糖尿病の進行度を予測する回帰問題（scikit-learn 付属のデータセット）で、これらの点を実践したものである。</p>
+<div class="literal-block-wrapper docutils container" id="id17">
+<div class="code-block-caption"><span class="caption-number">コード 13.1 </span><span class="caption-text">実務を意識した学習の流れ（ch13_pipeline.py より抜粋）</span><a class="headerlink" href="#id17" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos"> 2</span>    <span class="n">data</span> <span class="o">=</span> <span class="n">load_diabetes</span><span class="p">()</span>
+<span class="linenos"> 3</span>    <span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+<span class="linenos"> 4</span>                                                        <span class="n">random_state</span><span class="o">=</span><span class="n">SEED</span><span class="p">)</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span>    <span class="c1"># ベースライン: 訓練データの平均値を常に答える</span>
+<span class="linenos"> 7</span>    <span class="n">baseline</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_train</span><span class="o">.</span><span class="n">mean</span><span class="p">()))</span>
+<span class="linenos"> 8</span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ベースライン (平均値) の MAE = </span><span class="si">{</span><span class="n">baseline</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span>    <span class="n">cv</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">SEED</span><span class="p">)</span>
+<span class="linenos">11</span>    <span class="n">candidates</span> <span class="o">=</span> <span class="p">{</span>
+<span class="linenos">12</span>        <span class="s2">&quot;Ridge&quot;</span><span class="p">:</span> <span class="n">GridSearchCV</span><span class="p">(</span>
+<span class="linenos">13</span>            <span class="n">Pipeline</span><span class="p">([(</span><span class="s2">&quot;scale&quot;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span> <span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">Ridge</span><span class="p">())]),</span>
+<span class="linenos">14</span>            <span class="p">{</span><span class="s2">&quot;model__alpha&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">]},</span>
+<span class="linenos">15</span>            <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;neg_mean_absolute_error&quot;</span><span class="p">,</span>
+<span class="linenos">16</span>        <span class="p">),</span>
+<span class="linenos">17</span>        <span class="s2">&quot;勾配ブースティング&quot;</span><span class="p">:</span> <span class="n">GridSearchCV</span><span class="p">(</span>
+<span class="linenos">18</span>            <span class="n">HistGradientBoostingRegressor</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">SEED</span><span class="p">),</span>
+<span class="linenos">19</span>            <span class="p">{</span><span class="s2">&quot;max_depth&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s2">&quot;learning_rate&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]},</span>
+<span class="linenos">20</span>            <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;neg_mean_absolute_error&quot;</span><span class="p">,</span>
+<span class="linenos">21</span>        <span class="p">),</span>
+<span class="linenos">22</span>    <span class="p">}</span>
+<span class="linenos">23</span>    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">search</span> <span class="ow">in</span> <span class="n">candidates</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="linenos">24</span>        <span class="n">search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="linenos">25</span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: 交差検証 MAE = </span><span class="si">{</span><span class="o">-</span><span class="n">search</span><span class="o">.</span><span class="n">best_score_</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, 最良の設定 = </span><span class="si">{</span><span class="n">search</span><span class="o">.</span><span class="n">best_params_</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span>    <span class="c1"># 交差検証の結果が最も良かったモデルを選び、最後に一度だけテストデータで評価する</span>
+<span class="linenos">28</span>    <span class="n">best_name</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">name</span><span class="p">:</span> <span class="n">candidates</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">best_score_</span><span class="p">)</span>
+<span class="linenos">29</span>    <span class="n">best</span> <span class="o">=</span> <span class="n">candidates</span><span class="p">[</span><span class="n">best_name</span><span class="p">]</span><span class="o">.</span><span class="n">best_estimator_</span>
+<span class="linenos">30</span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">best_name</span><span class="si">}</span><span class="s2"> のテストデータでの MAE = </span><span class="si">{</span><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="w"> </span><span class="n">best</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">))</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos">31</span>
+<span class="linenos">32</span>    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmp</span><span class="p">:</span>
+<span class="linenos">33</span>        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;model.joblib&quot;</span>
+<span class="linenos">34</span>        <span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">best</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+<span class="linenos">35</span>        <span class="n">loaded</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="linenos">36</span>        <span class="n">same</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">loaded</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">),</span> <span class="n">best</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">))</span>
+<span class="linenos">37</span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;保存・読み込み後も同じ予測になるか:&quot;</span><span class="p">,</span> <span class="n">same</span><span class="p">)</span>
+<span class="linenos">38</span>
+<span class="linenos">39</span>    <span class="n">result</span> <span class="o">=</span> <span class="n">permutation_importance</span><span class="p">(</span><span class="n">best</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">n_repeats</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">SEED</span><span class="p">,</span>
+<span class="linenos">40</span>                                    <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;neg_mean_absolute_error&quot;</span><span class="p">)</span>
+<span class="linenos">41</span>    <span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">importances_mean</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="mi">3</span><span class="p">]</span>
+<span class="linenos">42</span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">order</span><span class="p">:</span>
+<span class="linenos">43</span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;特徴量 </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">feature_names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">: 重要度 = </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">importances_mean</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>6〜8 行目で、常に訓練データの平均値を答えるベースライン（第 6 章）の性能を求めている。</p></li>
+<li><p>10〜22 行目で、標準化とリッジ回帰を組み合わせたパイプラインと、勾配ブースティングのそれぞれについて、交差検証によるハイパーパラメータの探索を定義している。</p></li>
+<li><p>27〜30 行目で、交差検証の評価値が最も良かったモデル（この例ではリッジ回帰）を選び、最後に一度だけテストデータで評価している。</p></li>
+<li><p>32〜37 行目で、学習済みのパイプラインを <code class="docutils literal notranslate"><span class="pre">joblib</span></code> でファイルに保存し、読み込み直して同じ予測が得られることを確認している。</p></li>
+<li><p>39〜43 行目は、次節で説明する順列重要度の計算である。</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>ベースライン (平均値) の MAE = 59.2
+<span class="linenos">2</span>Ridge: 交差検証 MAE = 43.9, 最良の設定 = {&#39;model__alpha&#39;: 10.0}
+<span class="linenos">3</span>勾配ブースティング: 交差検証 MAE = 45.9, 最良の設定 = {&#39;learning_rate&#39;: 0.1, &#39;max_depth&#39;: 2}
+<span class="linenos">4</span>Ridge のテストデータでの MAE = 46.1
+<span class="linenos">5</span>保存・読み込み後も同じ予測になるか: True
+<span class="linenos">6</span>特徴量 s5: 重要度 = 7.66
+<span class="linenos">7</span>特徴量 bmi: 重要度 = 5.54
+<span class="linenos">8</span>特徴量 bp: 重要度 = 3.99
+</pre></div>
+</div>
+<p>この例では、データが 442 件と少ないこともあり、単純なリッジ回帰の方が勾配ブースティングより良い結果になった。第 7 章で「表形式データでは勾配ブースティングが強い」と述べたが、常にそうなるとは限らない。単純なモデルから順に試し、比較することが重要である。</p>
+<p>サンプルコードの全体は <a class="reference download internal" download="" href="_downloads/c9454c51eee5695d9fe219e775233c16/ch13_pipeline.py"><code class="xref download docutils literal notranslate"><span class="pre">ch13_pipeline.py</span></code></a> からダウンロードできる。</p>
+<p><code class="docutils literal notranslate"><span class="pre">joblib</span></code> や Python の <code class="docutils literal notranslate"><span class="pre">pickle</span></code> で保存したファイルは、読み込むときに任意のコードを実行できてしまう。信頼できない提供元のファイルを読み込んではならない。また、保存時と異なるバージョンのライブラリでは正しく読み込めないことがある。</p>
+</section>
+</section>
+<section id="id8">
+<h2><span class="section-number">13.3. </span>モデルの解釈<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<p>モデルがなぜその予測をしたのかを説明できることは、モデルの不具合の発見、利用者の信頼の獲得、規制への対応などのために重要である。</p>
+<ul class="simple">
+<li><p><strong>線形モデルの重み</strong>: 特徴量を標準化していれば、重みの大きさと符号から各特徴量の影響を読み取れる（第 4 章）。</p></li>
+<li><p><strong>決定木のルール</strong>: 浅い決定木は、if-then ルールとしてそのまま読める（第 7 章）。</p></li>
+<li><p><strong>順列重要度</strong>（permutation importance）: ある特徴量の値をサンプル間でランダムに並べ替えたとき、モデルの性能がどれだけ下がるかで、その特徴量の重要度を測る。どのようなモデルにも使え、学習に使っていないデータ（検証データやテストデータ）で計算できる。上の例では、s5（血清の検査値の 1 つ）と bmi が予測に大きく寄与していることが分かる。</p></li>
+<li><p><strong>SHAP</strong>: 個々の予測について、各特徴量がどれだけ予測値を押し上げた（押し下げた）かを計算する手法である。</p></li>
+</ul>
+<p>いずれの方法も「モデルがどの特徴量を使っているか」を示すものであり、「その特徴量を変えれば結果が変わる」という因果関係を示すものではないことに注意する。</p>
+</section>
+<section id="id9">
+<h2><span class="section-number">13.4. </span>運用<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
+<p>機械学習のシステムは、モデルを作って終わりではない。運用を始めてからも、継続的に監視と改善を行う必要がある。機械学習のシステムを継続的に開発・運用するための考え方や仕組みを <a class="reference internal" href="appendix_glossary.html#term-MLOps"><span class="xref std std-term">MLOps</span></a> と呼ぶ。</p>
+<figure class="align-center" id="id18">
+<div class="graphviz"><img src="_images/graphviz-94595c0a2195e80b2b3c94472794e54ef590bec8.png" alt="digraph mlops {
+    node [shape=box, style=&quot;rounded,filled&quot;, fillcolor=&quot;#eef4fb&quot;, fontsize=11];
+    data [label=&quot;データの収集・蓄積&quot;];
+    train [label=&quot;学習・評価&quot;];
+    deploy [label=&quot;デプロイ&quot;];
+    serve [label=&quot;予測の提供&quot;];
+    monitor [label=&quot;監視&quot;];
+    data -&gt; train -&gt; deploy -&gt; serve -&gt; monitor;
+    monitor -&gt; data [label=&quot;性能の低下を検知したら\n再学習&quot;, fontsize=9, style=dashed];
+}" class="graphviz" /></div>
+<figcaption>
+<p><span class="caption-number">図 13.1 </span><span class="caption-text">機械学習システムの運用のサイクル</span><a class="headerlink" href="#id18" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<section id="id10">
+<h3><span class="section-number">13.4.1. </span>予測の提供方法<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>バッチ予測</strong>: 1 日に 1 回などの頻度で、まとめて予測を計算して保存しておく。需要予測やレコメンドの事前計算などに向いている。</p></li>
+<li><p><strong>オンライン予測</strong>: リクエストのたびに予測を計算して返す。不正検知のように即時の判断が必要な場合に使う。予測にかかる時間（レイテンシ）が重要になる。</p></li>
+</ul>
+<p>いずれの場合も、学習時と予測時で前処理や特徴量の計算方法がずれないように注意する。学習時と予測時の差異による性能の低下は、運用でよく起こる問題の 1 つである。</p>
+</section>
+<section id="id11">
+<h3><span class="section-number">13.4.2. </span>データドリフト<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<p>機械学習のモデルは、学習に使ったデータと同じ傾向のデータが将来も来ることを前提にしている。しかし、現実の世界は変化する。</p>
+<ul class="simple">
+<li><p><strong>データドリフト</strong>: 入力データの分布が変化する。例: 新しい商品の追加、利用者層の変化、センサーの交換。</p></li>
+<li><p><strong>コンセプトドリフト</strong>: 入力と正解の関係そのものが変化する。例: 景気の変化で購買行動が変わる、不正の手口が変わる。</p></li>
+</ul>
+<p>これらによって、運用中にモデルの性能が徐々に低下する。そのため、入力データの分布や予測値の分布、（正解が後から得られる場合は）実際の性能を継続的に監視し、変化を検知したら新しいデータで再学習する仕組みを用意しておく。</p>
+<p>機械学習のシステムは、通常のソフトウェアに比べて、データへの依存や設定の複雑さから技術的負債を抱えやすいことが指摘されている <a class="reference internal" href="appendix_references.html#sculley2015" id="id12"><span>[Sculley2015]</span></a>。モデルのコードはシステム全体のごく一部であり、データの収集・検証、特徴量の計算、監視などの周辺の仕組みの方がはるかに大きくなることが多い。</p>
+</section>
+</section>
+<section id="id13">
+<h2><span class="section-number">13.5. </span>責任ある利用<a class="headerlink" href="#id13" title="Link to this heading"></a></h2>
+<p>機械学習のモデルは、人の生活に影響する判断に使われることがある。技術的な性能だけでなく、次の点にも配慮する必要がある。</p>
+<ul class="simple">
+<li><p><strong>公平性</strong>: 訓練データに含まれる社会的な偏りをモデルが再現・増幅し、性別や人種などによって不当に異なる扱いをすることがある。属性ごとに性能や判定結果の分布を確認する。</p></li>
+<li><p><strong>説明可能性</strong>: 融資の審査や採用のように、判断の理由の説明が求められる場面がある。解釈しやすいモデルを選ぶ、前節の解釈の手法を使う、などの対応を検討する。</p></li>
+<li><p><strong>プライバシー</strong>: 訓練データに個人情報が含まれる場合、その取り扱いに注意する。モデルが訓練データの一部を記憶し、出力に含めてしまうこともある。</p></li>
+<li><p><strong>セキュリティ</strong>: 人間には分からない小さな変化を入力に加えてモデルを誤認識させる攻撃（敵対的サンプル）や、訓練データに不正なデータを混入させる攻撃が知られている。</p></li>
+<li><p><strong>人間の関与</strong>: 誤りの影響が大きい判断では、モデルの予測を最終判断とせず、人間が確認する仕組みを設ける。</p></li>
+</ul>
+</section>
+<section id="id14">
+<h2><span class="section-number">13.6. </span>よくある失敗とチェックリスト<a class="headerlink" href="#id14" title="Link to this heading"></a></h2>
+<p>最後に、機械学習のプロジェクトでよくある失敗を、確認すべき項目としてまとめる。</p>
+<table class="docutils align-default" id="id19">
+<caption><span class="caption-number">表 13.2 </span><span class="caption-text">機械学習プロジェクトのチェックリスト</span><a class="headerlink" href="#id19" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>段階</p></th>
+<th class="head"><p>確認項目</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>課題設定</p></td>
+<td><p>解決したい業務上の課題と、モデルの評価指標が対応しているか。機械学習を使わない方法と比較したか。</p></td>
+</tr>
+<tr class="row-odd"><td><p>データ</p></td>
+<td><p>予測時に使えない情報が特徴量に含まれていないか（データリーク）。訓練データは運用時のデータを代表しているか。ラベルは正しいか。</p></td>
+</tr>
+<tr class="row-even"><td><p>分割</p></td>
+<td><p>時系列データを時間で分割しているか。同じ対象のデータが訓練データとテストデータに分かれていないか。</p></td>
+</tr>
+<tr class="row-odd"><td><p>評価</p></td>
+<td><p>テストデータを一度しか使っていないか。ベースラインと比較したか。不均衡データで正解率だけを見ていないか。</p></td>
+</tr>
+<tr class="row-even"><td><p>モデル</p></td>
+<td><p>単純なモデルから試したか。過学習していないか（訓練誤差と検証誤差の差）。</p></td>
+</tr>
+<tr class="row-odd"><td><p>運用</p></td>
+<td><p>学習時と予測時の前処理は同じか。性能の監視と再学習の仕組みがあるか。</p></td>
+</tr>
+<tr class="row-even"><td><p>責任</p></td>
+<td><p>公平性・説明可能性・プライバシーへの配慮は十分か。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id15">
+<h2><span class="section-number">13.7. </span>まとめ<a class="headerlink" href="#id15" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>実務では検証済みのライブラリを使い、本書で学んだ仕組みの理解はハイパーパラメータの調整や問題の原因の究明に生かす。</p></li>
+<li><p>乱数のシード、ライブラリとデータのバージョン、実験の記録を管理して再現性を確保する。前処理とモデルはパイプラインにまとめる。</p></li>
+<li><p>順列重要度などの手法でモデルを解釈できるが、因果関係を示すものではない。</p></li>
+<li><p>運用中は、データドリフトやコンセプトドリフトによる性能の低下を監視し、再学習する。</p></li>
+<li><p>公平性、説明可能性、プライバシー、セキュリティにも配慮して機械学習を利用する。</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch12_sequence_transformer.html" class="btn btn-neutral float-left" title="12. 系列データと Transformer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="appendix_glossary.html" class="btn btn-neutral float-right" title="用語集" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nunu_3060.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

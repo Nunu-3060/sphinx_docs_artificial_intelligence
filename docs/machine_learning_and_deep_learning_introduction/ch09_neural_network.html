@@ -1,0 +1,478 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>9. ニューラルネットワークの基礎 &mdash; 機械学習・深層学習入門</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=f043dae3" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=19757887"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=4755f45a"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="10. 深層学習の学習テクニック" href="ch10_training_techniques.html" />
+    <link rel="prev" title="8. 教師なし学習" href="ch08_unsupervised.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            機械学習・深層学習入門
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">はじめに</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">はじめに</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">本編</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ch01_overview.html">1. 機械学習の全体像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_math.html">2. 数学の準備</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_data.html">3. データと前処理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_regression.html">4. 回帰</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_classification.html">5. 分類</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_evaluation.html">6. モデルの評価と改善</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_tree_ensemble.html">7. 決定木とアンサンブル学習</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_unsupervised.html">8. 教師なし学習</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">9. ニューラルネットワークの基礎</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">9.1. パーセプトロン</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">9.2. 多層ニューラルネットワーク</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">9.2.1. ネットワークの構造</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">9.2.2. 活性化関数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">9.2.3. 出力層と損失関数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">9.2.4. ニューラルネットワークの表現力</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">9.3. 誤差逆伝播法</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id10">9.3.1. 勾配の計算が問題になる</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">9.3.2. 計算グラフ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">9.3.3. 全結合層の逆伝播</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#numpy">9.4. NumPy による実装</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id14">9.4.1. 順伝播</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id15">9.4.2. 逆伝播</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id16">9.4.3. 勾配確認と学習</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pytorch">9.5. PyTorch による自動微分</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id17">9.6. まとめ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_training_techniques.html">10. 深層学習の学習テクニック</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_cnn.html">11. 畳み込みニューラルネットワーク</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch12_sequence_transformer.html">12. 系列データと Transformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch13_practice.html">13. 実務への適用</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">付録</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendix_glossary.html">用語集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_symbols.html">記号一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_examples.html">サンプルコード一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_references.html">参考文献</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">機械学習・深層学習入門</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">9. </span>ニューラルネットワークの基礎</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">9. </span>ニューラルネットワークの基礎<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>この章から深層学習に入る。深層学習で使われるモデルは<a class="reference internal" href="appendix_glossary.html#term-39"><span class="xref std std-term">ニューラルネットワーク</span></a>と呼ばれ、単純な計算を行う「層」を何段にも重ねた構造を持つ。この章では、ニューラルネットワークの構造と、その学習を可能にする誤差逆伝播法を説明し、NumPy で一から実装する。</p>
+<section id="id2">
+<h2><span class="section-number">9.1. </span>パーセプトロン<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>ニューラルネットワークの起源は、生物の神経細胞（ニューロン）の働きを単純化した数理モデルにある。神経細胞は、他の多数の神経細胞から信号を受け取り、その合計がある値を超えると次の神経細胞に信号を送る。</p>
+<p>1958 年に提案された<strong>パーセプトロン</strong> <a class="reference internal" href="appendix_references.html#rosenblatt1958" id="id3"><span>[Rosenblatt1958]</span></a> は、これを次のような計算で表した。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}y = \begin{cases} 1 &amp; (\boldsymbol{w}^\top \boldsymbol{x} + b &gt; 0) \\ 0 &amp; (\text{それ以外}) \end{cases}\end{split}\]</div>
+<p>入力の重み付きの和を計算し、それが 0 を超えたら 1 を出力する。これは第 5 章のロジスティック回帰と同じく、決定境界が直線（平面）になる線形分類器である。</p>
+<p>線形分類器には、直線で分けられないデータを分類できないという根本的な限界がある。その典型的な例が <strong>XOR</strong>（排他的論理和）の問題である。<a class="reference internal" href="#fig-ch09-xor"><span class="std std-numref">図 9.1</span></a> の左図のように、第 1 象限と第 3 象限の点をクラス 1、第 2 象限と第 4 象限の点をクラス 0 とするデータは、1 本の直線ではどうやっても分けられない。</p>
+<figure class="align-center" id="id18">
+<span id="fig-ch09-xor"></span><a class="reference internal image-reference" href="_images/ch09_xor.png"><img alt="_images/ch09_xor.png" src="_images/ch09_xor.png" style="width: 640px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 9.1 </span><span class="caption-text">XOR 型のデータ。線形分類器（左）では分離できないが、2 層のニューラルネットワーク（右）では分離できる。</span><a class="headerlink" href="#id18" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>この限界は、パーセプトロンを多層に重ねることで克服できる。</p>
+</section>
+<section id="id4">
+<h2><span class="section-number">9.2. </span>多層ニューラルネットワーク<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<section id="id5">
+<h3><span class="section-number">9.2.1. </span>ネットワークの構造<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>ニューラルネットワークは、複数の<strong>ユニット</strong>（ニューロン）を並べた<strong>層</strong>を何段にも重ねた構造を持つ。入力を受け取る<strong>入力層</strong>、予測を出力する<strong>出力層</strong>、その間にある<strong>中間層</strong>（隠れ層）からなる。次の図は、2 つの入力、4 つのユニットを持つ中間層、1 つの出力からなるネットワークである。</p>
+<figure class="align-center" id="id19">
+<div class="graphviz"><img src="_images/graphviz-0c41cca4a61b025077cca297ce495c32bc1aaae6.png" alt="digraph mlp {
+    rankdir=LR;
+    splines=line;
+    nodesep=0.3;
+    node [shape=circle, style=filled, fillcolor=&quot;#eef4fb&quot;, fontsize=11, width=0.5, fixedsize=true];
+    subgraph cluster_in { label=&quot;入力層&quot;; style=dashed; x1 [label=&quot;x1&quot;]; x2 [label=&quot;x2&quot;]; }
+    subgraph cluster_h { label=&quot;中間層&quot;; style=dashed; h1 [label=&quot;h1&quot;]; h2 [label=&quot;h2&quot;]; h3 [label=&quot;h3&quot;]; h4 [label=&quot;h4&quot;]; }
+    subgraph cluster_out { label=&quot;出力層&quot;; style=dashed; y [label=&quot;y&quot;, fillcolor=&quot;#fdf0e0&quot;]; }
+    {x1 x2} -&gt; {h1 h2 h3 h4} [arrowsize=0.5, color=&quot;#667&quot;];
+    {h1 h2 h3 h4} -&gt; y [arrowsize=0.5, color=&quot;#667&quot;];
+}" class="graphviz" /></div>
+<figcaption>
+<p><span class="caption-number">図 9.2 </span><span class="caption-text">2 層のニューラルネットワーク（入力 2、中間層 4、出力 1）</span><a class="headerlink" href="#id19" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>各矢印は 1 つの重みを持つ。中間層の各ユニットは、入力層のすべてのユニットから入力を受け取り、重み付きの和にバイアスを加えたものを<strong>活性化関数</strong> <span class="math notranslate nohighlight">\(f\)</span> に通して出力する。</p>
+<div class="math notranslate nohighlight">
+\[h_j = f\left( \sum_i w_{ij} x_i + b_j \right)\]</div>
+<p>前の層のすべてのユニットが次の層のすべてのユニットとつながっている層を<strong>全結合層</strong>と呼ぶ。<span class="math notranslate nohighlight">\(n\)</span> 件の入力をまとめた行列 <span class="math notranslate nohighlight">\(X\)</span>（<span class="math notranslate nohighlight">\(n \times d\)</span>）を使えば、全結合層の計算は行列の積で書ける。</p>
+<div class="math notranslate nohighlight">
+\[H = f(X W + \boldsymbol{b})\]</div>
+<p>ここで <span class="math notranslate nohighlight">\(W\)</span> は <span class="math notranslate nohighlight">\(d \times m\)</span> の重み行列（<span class="math notranslate nohighlight">\(m\)</span> は中間層のユニット数）、<span class="math notranslate nohighlight">\(\boldsymbol{b}\)</span> は <span class="math notranslate nohighlight">\(m\)</span> 次元のバイアスであり、<span class="math notranslate nohighlight">\(\boldsymbol{b}\)</span> はブロードキャストによって各行に加えられる。活性化関数 <span class="math notranslate nohighlight">\(f\)</span> は要素ごとに適用される。</p>
+<p>層を重ねたネットワーク全体は、全結合層と活性化関数を交互に適用する関数の合成になる。</p>
+<div class="math notranslate nohighlight">
+\[\hat{\boldsymbol{y}} = f_2(f_1(X W_1 + \boldsymbol{b}_1) W_2 + \boldsymbol{b}_2)\]</div>
+<p>このように入力から出力に向かって順に計算することを<strong>順伝播</strong>と呼ぶ。全結合層を重ねたネットワークは<strong>多層パーセプトロン</strong>（Multi-Layer Perceptron、MLP）とも呼ばれる。中間層を何層も重ねた深いネットワークを使う機械学習が深層学習である。</p>
+<p>層の数え方には流儀があるが、本書では重みを持つ層の数で数え、上の図のネットワークを「2 層」と呼ぶ。</p>
+</section>
+<section id="id6">
+<h3><span class="section-number">9.2.2. </span>活性化関数<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>活性化関数は、ニューラルネットワークに非線形性を与える重要な役割を持つ。もし活性化関数がなければ（あるいは線形の関数なら）、何層重ねても</p>
+<div class="math notranslate nohighlight">
+\[(X W_1 + \boldsymbol{b}_1) W_2 + \boldsymbol{b}_2 = X (W_1 W_2) + (\boldsymbol{b}_1 W_2 + \boldsymbol{b}_2)\]</div>
+<p>のように 1 層の線形変換と同じになってしまい、層を重ねる意味がない。代表的な<a class="reference internal" href="appendix_glossary.html#term-6"><span class="xref std std-term">活性化関数</span></a>を<a class="reference internal" href="#fig-ch09-activations"><span class="std std-numref">図 9.3</span></a> に示す。</p>
+<figure class="align-center" id="id20">
+<span id="fig-ch09-activations"></span><img alt="_images/ch09_activations.png" src="_images/ch09_activations.png" />
+<figcaption>
+<p><span class="caption-number">図 9.3 </span><span class="caption-text">代表的な活性化関数（実線）とその導関数（破線）</span><a class="headerlink" href="#id20" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<table class="docutils align-default" id="id21">
+<caption><span class="caption-number">表 9.1 </span><span class="caption-text">代表的な活性化関数</span><a class="headerlink" href="#id21" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 30.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>名前</p></th>
+<th class="head"><p>式</p></th>
+<th class="head"><p>特徴</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>シグモイド</p></td>
+<td><p><span class="math notranslate nohighlight">\(\dfrac{1}{1 + e^{-z}}\)</span></p></td>
+<td><p>出力は 0〜1。導関数の最大値が 0.25 と小さく、入力の絶対値が大きいと導関数がほぼ 0 になるため、深いネットワークの中間層では学習が進みにくい。</p></td>
+</tr>
+<tr class="row-odd"><td><p>tanh</p></td>
+<td><p><span class="math notranslate nohighlight">\(\dfrac{e^z - e^{-z}}{e^z + e^{-z}}\)</span></p></td>
+<td><p>出力は -1〜1。出力の中心が 0 なのでシグモイドより学習しやすいが、入力の絶対値が大きいと導関数がほぼ 0 になる点は同じ。</p></td>
+</tr>
+<tr class="row-even"><td><p>ReLU</p></td>
+<td><p><span class="math notranslate nohighlight">\(\max(0, z)\)</span></p></td>
+<td><p>入力が正なら導関数は常に 1 で、深いネットワークでも勾配が小さくなりにくい。計算も軽い。現在の中間層の標準的な選択肢。</p></td>
+</tr>
+</tbody>
+</table>
+<p>ReLU（Rectified Linear Unit）は入力が負のとき出力も導関数も 0 になるため、学習中にあるユニットへの入力が常に負になると、そのユニットは二度と学習されなくなる。これを避けるため、負の側にもわずかな傾きを持たせた Leaky ReLU や、滑らかにした GELU などの変種も使われる。GELU は第 12 章の Transformer で広く使われている。</p>
+</section>
+<section id="id7">
+<h3><span class="section-number">9.2.3. </span>出力層と損失関数<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>出力層の活性化関数と損失関数は、タスクに応じて次のように組み合わせる。これは第 4 章・第 5 章で学んだ線形回帰・ロジスティック回帰と同じ組み合わせである。</p>
+<table class="docutils align-default" id="id22">
+<caption><span class="caption-number">表 9.2 </span><span class="caption-text">出力層と損失関数の組み合わせ</span><a class="headerlink" href="#id22" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>タスク</p></th>
+<th class="head"><p>出力層のユニット数</p></th>
+<th class="head"><p>出力層の活性化関数</p></th>
+<th class="head"><p>損失関数</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>回帰</p></td>
+<td><p>予測する値の数</p></td>
+<td><p>なし（恒等関数）</p></td>
+<td><p>平均二乗誤差</p></td>
+</tr>
+<tr class="row-odd"><td><p>2 値分類</p></td>
+<td><p>1</p></td>
+<td><p>シグモイド関数</p></td>
+<td><p>2 値交差エントロピー</p></td>
+</tr>
+<tr class="row-even"><td><p>多クラス分類</p></td>
+<td><p>クラス数</p></td>
+<td><p>ソフトマックス関数</p></td>
+<td><p>交差エントロピー</p></td>
+</tr>
+</tbody>
+</table>
+<p>見方を変えると、ニューラルネットワークは「中間層で入力を変換して新しい特徴量を作り、出力層でその特徴量に線形回帰やロジスティック回帰を適用するモデル」と考えられる。第 4 章の多項式回帰では人間が特徴量の変換方法を決めたが、ニューラルネットワークでは、どのような変換が予測に役立つかもデータから学習する。</p>
+</section>
+<section id="id8">
+<h3><span class="section-number">9.2.4. </span>ニューラルネットワークの表現力<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p>中間層が 1 つでも、ユニットの数を十分に増やせば、任意の連続関数をいくらでも精度よく近似できることが知られている（<strong>万能近似定理</strong>）。ただし、これは「近似できるパラメータが存在する」ことを保証するだけで、それを学習で見つけられるか、必要なユニット数が現実的かは別の問題である。実際には、浅く幅の広いネットワークよりも、深いネットワークの方が少ないパラメータで複雑な関数を表現でき、学習もうまくいくことが多い。</p>
+</section>
+</section>
+<section id="id9">
+<h2><span class="section-number">9.3. </span>誤差逆伝播法<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
+<section id="id10">
+<h3><span class="section-number">9.3.1. </span>勾配の計算が問題になる<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<p>ニューラルネットワークも、損失関数を勾配降下法で最小化して学習する。そのためには、損失関数をすべての重みとバイアスで偏微分した勾配が必要である。</p>
+<p>現在の深層学習のモデルは、数百万から数兆個のパラメータを持つ。第 2 章の数値微分では、パラメータ 1 個ごとに損失を 2 回計算する必要があるため、とても間に合わない。この問題を解決したのが<a class="reference internal" href="appendix_glossary.html#term-20"><span class="xref std std-term">誤差逆伝播法</span></a>（バックプロパゲーション）<a class="reference internal" href="appendix_references.html#rumelhart1986" id="id11"><span>[Rumelhart1986]</span></a> である。誤差逆伝播法を使うと、順伝播 1 回分と同程度の計算量で、すべてのパラメータの勾配を一度に求められる。</p>
+</section>
+<section id="id12">
+<h3><span class="section-number">9.3.2. </span>計算グラフ<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<p>誤差逆伝播法を理解するには、計算を<strong>計算グラフ</strong>で表すとよい。計算グラフは、個々の演算をノード、値の流れを矢印で表したものである。例として、<span class="math notranslate nohighlight">\(L = (wx + b - y)^2\)</span> という計算を考える。<span class="math notranslate nohighlight">\(u = wx\)</span>、<span class="math notranslate nohighlight">\(a = u + b\)</span>、<span class="math notranslate nohighlight">\(e = a - y\)</span>、<span class="math notranslate nohighlight">\(L = e^2\)</span> と分解すると、次の計算グラフになる。</p>
+<figure class="align-center" id="id23">
+<div class="graphviz"><img src="_images/graphviz-082a7d073ae29d376a0ec3da16a489e465043710.png" alt="digraph cg {
+    rankdir=LR;
+    nodesep=0.15;
+    ranksep=0.35;
+    node [fontsize=14];
+    edge [fontsize=13];
+    x [label=&quot;x = 2&quot;, shape=plaintext]; w [label=&quot;w = 3&quot;, shape=plaintext];
+    b [label=&quot;b = 1&quot;, shape=plaintext]; y [label=&quot;y = 5&quot;, shape=plaintext];
+    mul [label=&quot;×&quot;, shape=circle, style=filled, fillcolor=&quot;#eef4fb&quot;];
+    add [label=&quot;+&quot;, shape=circle, style=filled, fillcolor=&quot;#eef4fb&quot;];
+    sub [label=&quot;−&quot;, shape=circle, style=filled, fillcolor=&quot;#eef4fb&quot;];
+    sq  [label=&quot;2 乗&quot;, shape=circle, style=filled, fillcolor=&quot;#eef4fb&quot;];
+    L [label=&quot;L = 4&quot;, shape=plaintext];
+    x -&gt; mul;
+    w -&gt; mul [label=&lt;&lt;font color=&quot;#d62728&quot;&gt;∂L/∂w = 8&lt;/font&gt;&gt;];
+    mul -&gt; add [label=&lt;u = 6&lt;br/&gt;&lt;font color=&quot;#d62728&quot;&gt;∂L/∂u = 4&lt;/font&gt;&gt;];
+    b -&gt; add [label=&lt;&lt;font color=&quot;#d62728&quot;&gt;∂L/∂b = 4&lt;/font&gt;&gt;];
+    add -&gt; sub [label=&lt;a = 7&lt;br/&gt;&lt;font color=&quot;#d62728&quot;&gt;∂L/∂a = 4&lt;/font&gt;&gt;];
+    y -&gt; sub;
+    sub -&gt; sq [label=&lt;e = 2&lt;br/&gt;&lt;font color=&quot;#d62728&quot;&gt;∂L/∂e = 4&lt;/font&gt;&gt;];
+    sq -&gt; L;
+}" class="graphviz" /></div>
+<figcaption>
+<p><span class="caption-number">図 9.4 </span><span class="caption-text"><span class="math notranslate nohighlight">\(L = (wx + b - y)^2\)</span> の計算グラフ。黒字は順伝播で求めた値、赤字は逆伝播で求めた勾配を表す。</span><a class="headerlink" href="#id23" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>順伝播では、左から右に値を計算する。逆伝播では、出力 <span class="math notranslate nohighlight">\(L\)</span> から入力に向かって、各ノードでの偏微分を連鎖律で順に求めていく。</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(L = e^2\)</span> より、<span class="math notranslate nohighlight">\(\partial L / \partial e = 2e = 4\)</span>。</p></li>
+<li><p><span class="math notranslate nohighlight">\(e = a - y\)</span> より <span class="math notranslate nohighlight">\(\partial e / \partial a = 1\)</span> なので、<span class="math notranslate nohighlight">\(\partial L / \partial a = 4 \times 1 = 4\)</span>。</p></li>
+<li><p><span class="math notranslate nohighlight">\(a = u + b\)</span> より <span class="math notranslate nohighlight">\(\partial a / \partial u = 1\)</span> なので、<span class="math notranslate nohighlight">\(\partial L / \partial u = 4\)</span>。同様に <span class="math notranslate nohighlight">\(\partial L / \partial b = 4\)</span>。</p></li>
+<li><p><span class="math notranslate nohighlight">\(u = wx\)</span> より <span class="math notranslate nohighlight">\(\partial u / \partial w = x = 2\)</span> なので、<span class="math notranslate nohighlight">\(\partial L / \partial w = 4 \times 2 = 8\)</span>。</p></li>
+</ol>
+<p>各ノードは、「出力側から伝わってきた勾配」に「そのノード自身の局所的な微分」を掛けて、入力側に渡すだけでよい。加算ノードは勾配をそのまま流し、乗算ノードは相手側の入力の値を掛けて流す。この局所的な計算の積み重ねで、どれほど複雑なネットワークでも勾配を求められる。また、途中の勾配（<span class="math notranslate nohighlight">\(\partial L / \partial a\)</span> など）は一度計算すれば、それより入力側のすべてのパラメータの勾配の計算で共有できる。これが誤差逆伝播法が効率的である理由である。</p>
+</section>
+<section id="id13">
+<h3><span class="section-number">9.3.3. </span>全結合層の逆伝播<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<p>同じ考え方を行列の計算に当てはめると、全結合層 <span class="math notranslate nohighlight">\(A = XW + \boldsymbol{b}\)</span> の逆伝播は次のようになる。出力側から勾配 <span class="math notranslate nohighlight">\(\partial L / \partial A\)</span> が伝わってきたとき、</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial L}{\partial W} = X^\top \frac{\partial L}{\partial A}, \qquad
+\frac{\partial L}{\partial \boldsymbol{b}} = \sum_{i=1}^{n} \left( \frac{\partial L}{\partial A} \right)_{i}, \qquad
+\frac{\partial L}{\partial X} = \frac{\partial L}{\partial A} W^\top\]</div>
+<p>最後の <span class="math notranslate nohighlight">\(\partial L / \partial X\)</span> が、さらに前の層へ伝える勾配である。活性化関数の逆伝播は、伝わってきた勾配に活性化関数の導関数を要素ごとに掛けるだけである。ReLU なら、入力が正だった要素の勾配はそのまま通し、それ以外は 0 にする。</p>
+</section>
+</section>
+<section id="numpy">
+<h2><span class="section-number">9.4. </span>NumPy による実装<a class="headerlink" href="#numpy" title="Link to this heading"></a></h2>
+<p>ここまでの内容を使い、「入力 2 → 全結合層 → ReLU → 全結合層 → シグモイド → 出力 1」という 2 層のニューラルネットワークを実装して、XOR 型のデータを学習させる。</p>
+<section id="id14">
+<h3><span class="section-number">9.4.1. </span>順伝播<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<div class="literal-block-wrapper docutils container" id="id24">
+<div class="code-block-caption"><span class="caption-number">コード 9.1 </span><span class="caption-text">順伝播（ch09_two_layer_net.py より抜粋）</span><a class="headerlink" href="#id24" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">Params</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">FloatArray</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]]:</span>
+<span class="linenos">2</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;順伝播。出力 (確率) と、逆伝播で使う中間値を返す。&quot;&quot;&quot;</span>
+<span class="linenos">3</span>    <span class="n">a1</span> <span class="o">=</span> <span class="n">x</span> <span class="o">@</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;W1&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;b1&quot;</span><span class="p">]</span>
+<span class="linenos">4</span>    <span class="n">h1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="linenos">5</span>    <span class="n">a2</span> <span class="o">=</span> <span class="n">h1</span> <span class="o">@</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;W2&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;b2&quot;</span><span class="p">]</span>
+<span class="linenos">6</span>    <span class="n">p</span><span class="p">:</span> <span class="n">FloatArray</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">a2</span><span class="p">))</span>
+<span class="linenos">7</span>    <span class="k">return</span> <span class="n">p</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="s2">&quot;a1&quot;</span><span class="p">:</span> <span class="n">a1</span><span class="p">,</span> <span class="s2">&quot;h1&quot;</span><span class="p">:</span> <span class="n">h1</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>逆伝播で使うため、中間の値（全結合層の出力 <code class="docutils literal notranslate"><span class="pre">a1</span></code> と ReLU の出力 <code class="docutils literal notranslate"><span class="pre">h1</span></code>）を <code class="docutils literal notranslate"><span class="pre">cache</span></code> に保存して返している。</p>
+</section>
+<section id="id15">
+<h3><span class="section-number">9.4.2. </span>逆伝播<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<div class="literal-block-wrapper docutils container" id="id25">
+<div class="code-block-caption"><span class="caption-number">コード 9.2 </span><span class="caption-text">誤差逆伝播法（ch09_two_layer_net.py より抜粋）</span><a class="headerlink" href="#id25" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span><span class="w"> </span><span class="nf">backward</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">Params</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Params</span><span class="p">:</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;誤差逆伝播法で各パラメータの勾配を求める。&quot;&quot;&quot;</span>
+<span class="linenos"> 3</span>    <span class="n">n</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos"> 4</span>    <span class="c1"># シグモイド + 交差エントロピーの勾配は (p - y) / n にまとまる</span>
+<span class="linenos"> 5</span>    <span class="n">d_a2</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
+<span class="linenos"> 6</span>    <span class="n">grads</span> <span class="o">=</span> <span class="p">{</span>
+<span class="linenos"> 7</span>        <span class="s2">&quot;W2&quot;</span><span class="p">:</span> <span class="n">cache</span><span class="p">[</span><span class="s2">&quot;h1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">d_a2</span><span class="p">,</span>
+<span class="linenos"> 8</span>        <span class="s2">&quot;b2&quot;</span><span class="p">:</span> <span class="n">d_a2</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+<span class="linenos"> 9</span>    <span class="p">}</span>
+<span class="linenos">10</span>    <span class="n">d_h1</span> <span class="o">=</span> <span class="n">d_a2</span> <span class="o">@</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;W2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="linenos">11</span>    <span class="n">d_a1</span> <span class="o">=</span> <span class="n">d_h1</span> <span class="o">*</span> <span class="p">(</span><span class="n">cache</span><span class="p">[</span><span class="s2">&quot;a1&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span>  <span class="c1"># ReLU の微分は入力が正なら 1、それ以外は 0</span>
+<span class="linenos">12</span>    <span class="n">grads</span><span class="p">[</span><span class="s2">&quot;W1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cache</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">d_a1</span>
+<span class="linenos">13</span>    <span class="n">grads</span><span class="p">[</span><span class="s2">&quot;b1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d_a1</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos">14</span>    <span class="k">return</span> <span class="n">grads</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>5 行目: 第 5 章で見たとおり、シグモイド関数と 2 値交差エントロピーを組み合わせると、出力層の入力についての勾配は <span class="math notranslate nohighlight">\((p - y) / n\)</span> という簡単な形になる。</p></li>
+<li><p>6〜9 行目: 2 層目の全結合層の重みとバイアスの勾配を、上の式で計算している。</p></li>
+<li><p>10 行目: 1 層目へ伝える勾配を計算している。</p></li>
+<li><p>11 行目: ReLU の逆伝播である。<code class="docutils literal notranslate"><span class="pre">cache[&quot;a1&quot;]</span> <span class="pre">&gt;</span> <span class="pre">0.0</span></code> は入力が正の要素だけが <code class="docutils literal notranslate"><span class="pre">True</span></code> になる配列であり、これを掛けることで負の要素の勾配を 0 にしている。</p></li>
+<li><p>12〜13 行目: 1 層目の全結合層の勾配を計算している。</p></li>
+</ul>
+</section>
+<section id="id16">
+<h3><span class="section-number">9.4.3. </span>勾配確認と学習<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<p>誤差逆伝播法の実装は誤りが入り込みやすい。そこで、学習の前に、第 2 章で説明した勾配確認を行い、数値微分で求めた勾配と比較して実装が正しいことを確かめる。その後、訓練データをランダムに並べ替えて 32 件ずつのミニバッチに分け、確率的勾配降下法で学習する。</p>
+<div class="literal-block-wrapper docutils container" id="id26">
+<div class="code-block-caption"><span class="caption-number">コード 9.3 </span><span class="caption-text">勾配確認と学習（ch09_two_layer_net.py より抜粋）</span><a class="headerlink" href="#id26" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos"> 2</span>    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_xor_data</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
+<span class="linenos"> 3</span>    <span class="n">params</span> <span class="o">=</span> <span class="n">init_params</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span>    <span class="c1"># 勾配確認: 誤差逆伝播法と数値微分の差が十分小さいことを確かめる</span>
+<span class="linenos"> 6</span>    <span class="n">p</span><span class="p">,</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">forward</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+<span class="linenos"> 7</span>    <span class="n">analytic</span> <span class="o">=</span> <span class="n">backward</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">y</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span> <span class="n">cache</span><span class="p">)</span>
+<span class="linenos"> 8</span>    <span class="n">numeric</span> <span class="o">=</span> <span class="n">numerical_grads</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span> <span class="n">y</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+<span class="linenos"> 9</span>    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+<span class="linenos">10</span>        <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">analytic</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">-</span> <span class="n">numeric</span><span class="p">[</span><span class="n">name</span><span class="p">]))</span>
+<span class="linenos">11</span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;勾配確認 </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: 最大誤差 = </span><span class="si">{</span><span class="n">diff</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span>    <span class="c1"># ミニバッチ確率的勾配降下法で学習する</span>
+<span class="linenos">14</span>    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">15</span>    <span class="n">lr</span><span class="p">,</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">32</span>
+<span class="linenos">16</span>    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">301</span><span class="p">):</span>
+<span class="linenos">17</span>        <span class="n">order</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="linenos">18</span>        <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">batch_size</span><span class="p">):</span>
+<span class="linenos">19</span>            <span class="n">batch</span> <span class="o">=</span> <span class="n">order</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">start</span> <span class="o">+</span> <span class="n">batch_size</span><span class="p">]</span>
+<span class="linenos">20</span>            <span class="n">p</span><span class="p">,</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">forward</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">batch</span><span class="p">])</span>
+<span class="linenos">21</span>            <span class="n">grads</span> <span class="o">=</span> <span class="n">backward</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">batch</span><span class="p">],</span> <span class="n">cache</span><span class="p">)</span>
+<span class="linenos">22</span>            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+<span class="linenos">23</span>                <span class="n">params</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">-=</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">grads</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+<span class="linenos">24</span>        <span class="k">if</span> <span class="n">epoch</span> <span class="o">%</span> <span class="mi">50</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="linenos">25</span>            <span class="n">p_all</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">forward</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="linenos">26</span>            <span class="n">accuracy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">p_all</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">==</span> <span class="n">y</span><span class="p">))</span>
+<span class="linenos">27</span>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;epoch </span><span class="si">{</span><span class="n">epoch</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2">: loss = </span><span class="si">{</span><span class="n">loss</span><span class="p">(</span><span class="n">p_all</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, 正解率 = </span><span class="si">{</span><span class="n">accuracy</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>勾配確認 W1: 最大誤差 = 9.53e-12
+<span class="linenos"> 2</span>勾配確認 b1: 最大誤差 = 1.05e-11
+<span class="linenos"> 3</span>勾配確認 W2: 最大誤差 = 7.59e-12
+<span class="linenos"> 4</span>勾配確認 b2: 最大誤差 = 5.34e-12
+<span class="linenos"> 5</span>epoch   0: loss = 0.4767, 正解率 = 0.895
+<span class="linenos"> 6</span>epoch  50: loss = 0.0574, 正解率 = 0.990
+<span class="linenos"> 7</span>epoch 100: loss = 0.0410, 正解率 = 0.993
+<span class="linenos"> 8</span>epoch 150: loss = 0.0357, 正解率 = 0.988
+<span class="linenos"> 9</span>epoch 200: loss = 0.0293, 正解率 = 0.990
+<span class="linenos">10</span>epoch 250: loss = 0.0256, 正解率 = 0.995
+<span class="linenos">11</span>epoch 300: loss = 0.0279, 正解率 = 0.983
+</pre></div>
+</div>
+<p>誤差逆伝播法と数値微分の差は <span class="math notranslate nohighlight">\(10^{-11}\)</span> 程度で、実装が正しいことが確認できる。学習後は 98〜99 % 程度の正解率で分類できており、<a class="reference internal" href="#fig-ch09-xor"><span class="std std-numref">図 9.1</span></a> の右図のように、直線では分けられなかったデータを分ける決定境界が学習されている。ミニバッチごとにランダムな誤差が入るため、損失や正解率はエポック（訓練データ全体を 1 周する単位。第 10 章で説明する）ごとに多少上下する。</p>
+<p>サンプルコードの全体は <a class="reference download internal" download="" href="_downloads/a4af4db1cfe502dd47b47f9f5f07e631/ch09_two_layer_net.py"><code class="xref download docutils literal notranslate"><span class="pre">ch09_two_layer_net.py</span></code></a> からダウンロードできる。</p>
+</section>
+</section>
+<section id="pytorch">
+<h2><span class="section-number">9.5. </span>PyTorch による自動微分<a class="headerlink" href="#pytorch" title="Link to this heading"></a></h2>
+<p>実務では、誤差逆伝播法を自分で実装することはない。PyTorch などの深層学習フレームワークは、順伝播の計算を記録して計算グラフを自動的に作り、逆伝播で勾配を自動的に計算する<strong>自動微分</strong>の機能を持つ。本章の計算グラフの例を PyTorch で書くと次のようになる。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="linenos"> 4</span><span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="linenos"> 5</span><span class="n">w</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 勾配を求めたいパラメータ</span>
+<span class="linenos"> 6</span><span class="n">b</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="n">loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">b</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>  <span class="c1"># 順伝播 (計算グラフが記録される)</span>
+<span class="linenos"> 9</span><span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>              <span class="c1"># 逆伝播</span>
+<span class="linenos">10</span><span class="nb">print</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">grad</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">grad</span><span class="p">)</span>        <span class="c1"># tensor(8.) tensor(4.)</span>
+</pre></div>
+</div>
+<p>PyTorch では、データやパラメータを<strong>テンソル</strong>（NumPy の <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> に相当する多次元配列で、GPU での計算や自動微分に対応したもの）で表す。<code class="docutils literal notranslate"><span class="pre">requires_grad=True</span></code> を指定したテンソルについて、<code class="docutils literal notranslate"><span class="pre">backward</span></code> を呼ぶと勾配が <code class="docutils literal notranslate"><span class="pre">grad</span></code> 属性に格納される。結果は、先ほど手計算で求めた <span class="math notranslate nohighlight">\(\partial L / \partial w = 8\)</span>、<span class="math notranslate nohighlight">\(\partial L / \partial b = 4\)</span> と一致する。PyTorch を使ったネットワークの学習は第 10 章で扱う。</p>
+</section>
+<section id="id17">
+<h2><span class="section-number">9.6. </span>まとめ<a class="headerlink" href="#id17" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>ニューラルネットワークは、全結合層と活性化関数を交互に重ねたモデルである。非線形の活性化関数によって、線形分類器では扱えない複雑な関係を表現できる。</p></li>
+<li><p>中間層の活性化関数には ReLU がよく使われる。出力層の活性化関数と損失関数はタスクに応じて選ぶ。</p></li>
+<li><p>誤差逆伝播法は、計算グラフを出力側から入力側へたどりながら連鎖律を適用し、すべてのパラメータの勾配を効率よく求める方法である。</p></li>
+<li><p>誤差逆伝播法を自作した場合は、数値微分による勾配確認で実装を検証する。実務では PyTorch などの自動微分を使う。</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch08_unsupervised.html" class="btn btn-neutral float-left" title="8. 教師なし学習" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch10_training_techniques.html" class="btn btn-neutral float-right" title="10. 深層学習の学習テクニック" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nunu_3060.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

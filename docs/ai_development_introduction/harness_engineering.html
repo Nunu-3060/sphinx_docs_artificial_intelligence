@@ -1,0 +1,678 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5. ハーネスエンジニアリング &mdash; AI を用いた開発</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=c9cec091" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=19757887"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=4755f45a"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="6. ループエンジニアリング" href="loop_engineering.html" />
+    <link rel="prev" title="4. コンテキストエンジニアリング" href="context_engineering.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AI を用いた開発
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">本編</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. はじめに</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id2">1.1. 本書の目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id3">1.2. 対象読者と前提知識</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id4">1.3. 本書の範囲</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id5">1.4. 本書の構成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id6">1.5. 表記とサンプルコード</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">2. AI を用いた開発の全体像</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#llm">2.1. 開発者が知っておくべき LLM の性質</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id1">2.1.1. テキストを続けて生成する</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id2">2.1.2. 一度に扱える量に上限がある</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id3">2.1.3. 記憶を持たない</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id4">2.1.4. 出力は確率的である</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id5">2.1.5. 知識に期限がある</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id6">2.1.6. ツールを呼び出せる</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id7">2.2. AI の利用形態の変遷</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id8">2.3. 各エンジニアリングの関係</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id9">2.4. AI に任せる部分と人間が責任を持つ部分</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_engineering.html">3. プロンプトエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id2">3.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id3">3.2. プロンプトの構成要素</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id4">3.3. 基本的なテクニック</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id5">3.3.1. 明確かつ具体的に書く</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id6">3.3.2. 理由を伝える</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id7">3.3.3. 例を示す</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id8">3.3.4. 考える手順を与える</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id9">3.3.5. 入力と指示を区別する</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id10">3.3.6. 出力形式を指定する</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id11">3.3.7. してほしいことを書く</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id12">3.4. サンプルコード：プロンプトのテンプレート</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id13">3.5. 開発作業でのプロンプトの例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id14">3.6. アンチパターン</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id15">3.7. プロンプトだけでは解決できないこと</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="context_engineering.html">4. コンテキストエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id2">4.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id3">4.2. コンテキストの構成要素</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id4">4.3. 基本的な考え方</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id5">4.3.1. 多ければよいわけではない</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id6">4.3.2. コンテキストの失敗の型</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id7">4.4. 主な手法</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id8">4.4.1. 規約ファイル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id9">4.4.2. 必要なときに読み込む</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id10">4.4.3. 要約と除去</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id11">4.4.4. 外部の記憶</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id12">4.4.5. コンテキストの分離</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id13">4.5. サンプルコード：予算内でのコンテキストの組み立て</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. ハーネスエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">5.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">5.2. エージェントの基本構造</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">5.3. ガイドとセンサー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">5.4. ツールの設計</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">5.5. サンプルコード：最小のエージェント</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">5.6. センサーとしての検証手段</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">5.7. 権限とサンドボックス</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">5.8. フック</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ai">5.9. AI が働きやすいリポジトリ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="loop_engineering.html">6. ループエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id2">6.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id3">6.2. ループの階層</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id4">6.3. エージェントループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id5">6.4. 自己修正のループ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="loop_engineering.html#id6">6.4.1. サンプルコード：自己修正のループ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id7">6.5. 終了条件の設計</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="loop_engineering.html#id8">6.5.1. 完了条件の抜け道に注意する</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id9">6.6. 人間のループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id10">6.7. 長時間・自律的なループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id11">6.8. ハーネス改善のループ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spec_driven.html">7. 仕様駆動開発</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id2">7.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id3">7.2. 作業の流れ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id4">7.3. 仕様書の書き方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#ai">7.4. AI と一緒に仕様を作る</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id5">7.5. 仕様と実装を同期させる</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id6">7.6. 向いている場面と向いていない場面</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="eval_driven.html">8. 評価駆動開発</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id2">8.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id3">8.2. 評価の構成要素</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id4">8.3. 採点器の種類</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id5">8.4. 指標</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id6">8.5. 評価のサイクル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id7">8.6. サンプルコード：プロンプトの比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id8">8.7. 注意点</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="multi_agent.html">9. マルチエージェントとオーケストレーション</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id2">9.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id3">9.2. 構成のパターン</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id4">9.3. サンプルコード：オーケストレーター・ワーカー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id5">9.4. 開発での使い方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id6">9.5. 注意点</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vibe_coding.html">10. Vibe Coding と規律ある AI 開発</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id1">10.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id2">10.2. 両者の比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#vibe-coding">10.3. Vibe Coding の価値と限界</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id3">10.4. 使い分けの指針</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id4">10.5. 人間に求められる能力</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="process.html">11. 開発プロセスへの適用</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id2">11.1. 工程ごとの活用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id3">11.2. テスト駆動開発との組み合わせ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id4">11.3. 作業の単位</a></li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id5">11.4. チームでの運用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="process.html#id6">11.4.1. 規約とハーネスの共有</a></li>
+<li class="toctree-l3"><a class="reference internal" href="process.html#id7">11.4.2. レビューの基準</a></li>
+<li class="toctree-l3"><a class="reference internal" href="process.html#id8">11.4.3. 責任の所在</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id9">11.5. 段階的な導入</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="practice_claude_code.html">12. 実践：Claude Code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id1">12.1. Claude Code の概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id2">12.2. コンテキストを整える</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#claude-md">12.2.1. CLAUDE.md</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id3">12.2.2. コンテキストの管理</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id4">12.2.3. スキル</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id5">12.3. 依頼の進め方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id6">12.4. ハーネスを整える</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id7">12.4.1. 権限モード</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id8">12.4.2. 権限の設定とフック</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#mcp">12.4.3. MCP サーバーとサンドボックス</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id9">12.5. ループを組む</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#stop">12.5.1. Stop フックによる自己修正のループ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#goal-loop">12.5.2. <code class="docutils literal notranslate"><span class="pre">/goal</span></code> と <code class="docutils literal notranslate"><span class="pre">/loop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#ci">12.5.3. 非対話の実行と CI</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id10">12.6. マルチエージェントを使う</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id11">12.6.1. サブエージェント</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id12">12.6.2. 並列の作業</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id13">12.7. ハーネスを改善し続ける</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="risks.html">13. リスクと品質管理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id2">13.1. もっともらしい誤り</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id3">13.2. プロンプトインジェクション</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id4">13.3. 秘密情報と機密情報</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id5">13.4. ライセンスと著作権</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id6">13.5. 費用の管理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id7">13.6. 技能の空洞化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id8">13.7. 品質管理のまとめ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="summary.html">14. まとめ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="summary.html#id2">14.1. 各手法の比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summary.html#id3">14.2. 問題が起きたときの切り分け</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summary.html#id4">14.3. 今後の展望</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">付録</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">サンプルコード一覧</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#id2">実行の準備</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#python">Python のサンプル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#id3">設定ファイルと文書のサンプル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#llm-stub-py">llm_stub.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">用語集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">参考文献</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id2">論文</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id3">記事</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id4">仕様・ツール</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#claude-code">Claude Code</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AI を用いた開発</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">5. </span>ハーネスエンジニアリング</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">5. </span>ハーネスエンジニアリング<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<section id="id2">
+<h2><span class="section-number">5.1. </span>本書の定義<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="glossary.html#term-20"><span class="xref std std-term">ハーネス</span></a>とは、エージェントのうちモデル以外のすべて、つまりモデルを動かすための道具・実行環境・制約・検証の仕組みを指す。「エージェント = モデル + ハーネス」と表現されることもある <a class="reference internal" href="references.html#ref-bockeler2026"><span class="std std-ref">[Bockeler2026]</span></a>。<a class="reference internal" href="glossary.html#term-21"><span class="xref std std-term">ハーネスエンジニアリング</span></a>とは、このハーネスを設計し、改善する技術である。</p>
+<p>ハーネスという言葉は、もとは馬具（馬の力を荷車に伝え、向きを制御する道具）を意味する。モデルという強力だが気まぐれな力を、目的の方向に安全に引き出すための仕組み、という意味合いである。</p>
+<p>ハーネスには 2 つの層がある。</p>
+<table class="docutils align-default" id="id10">
+<caption><span class="caption-number">表 5.1 </span><span class="caption-text">ハーネスの 2 つの層</span><a class="headerlink" href="#id10" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 43.0%" />
+<col style="width: 35.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>層</p></th>
+<th class="head"><p>内容</p></th>
+<th class="head"><p>作る人</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>内側のハーネス</p></td>
+<td><p>システムプロンプト、組み込みのツール、エージェントループ、権限の仕組み</p></td>
+<td><p>Claude Code などのエージェント製品の開発者</p></td>
+</tr>
+<tr class="row-odd"><td><p>外側のハーネス</p></td>
+<td><p>規約ファイル、テスト、リンター、型検査、フック、権限の設定、CI、追加のツール</p></td>
+<td><p>エージェントを使う開発者（本書の読者）</p></td>
+</tr>
+</tbody>
+</table>
+<p>本書が主に扱うのは、外側のハーネスである。同じエージェント製品を使っていても、外側のハーネスの出来によって、得られる結果は大きく変わる。</p>
+<p>ハーネスの考え方は、「エージェントが誤りを犯したら、その誤りが二度と起きない仕組みを作る」と要約できる <a class="reference internal" href="references.html#ref-hashimoto2026"><span class="std std-ref">[Hashimoto2026]</span></a>。誤りのたびにプロンプトで注意するのではなく、規約ファイルに追記する、検査を追加する、ツールを用意するといった形で、仕組みとして解決する。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">5.2. </span>エージェントの基本構造<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="#fig-agent-structure"><span class="std std-numref">図 5.1</span></a> は、エージェントの基本構造である。モデルは、ハーネスから受け取ったコンテキストをもとに、次の行動（テキストの応答またはツール呼び出し）を決める。ハーネスはツールを実行し、その結果を次のコンテキストに加えてモデルに返す。</p>
+<figure class="align-center" id="id11">
+<span id="fig-agent-structure"></span><div class="graphviz"><object data="_images/graphviz-59b229a8d898bbb8bdf1f4cdc9b9c050636773bc.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph agent {
+  rankdir=TB;
+  graph [fontsize=11, nodesep=0.5, ranksep=0.45];
+  node [shape=box, style=&quot;rounded,filled&quot;, fillcolor=&quot;#EEF3FA&quot;, color=&quot;#4C78A8&quot;, fontsize=10];
+  edge [color=&quot;#555555&quot;, fontsize=9];
+
+  human [label=&quot;人間\n目的・制約・承認&quot;, fillcolor=&quot;#FFF6E5&quot;, color=&quot;#C98500&quot;];
+  model [label=&quot;LLM&quot;, shape=ellipse, fillcolor=&quot;#FFFFFF&quot;, color=&quot;#333333&quot;];
+
+  subgraph cluster_harness {
+    label=&quot;ハーネス&quot;; style=&quot;rounded,filled&quot;; fillcolor=&quot;#EAF4EA&quot;; color=&quot;#2E7D32&quot;;
+    loop    [label=&quot;エージェントループ\nコンテキストの組み立て&quot;];
+    perm    [label=&quot;権限・サンドボックス&quot;];
+    tools   [label=&quot;ツール\nファイル操作・シェル・検索・MCP&quot;];
+    sensors [label=&quot;検証\nテスト・型検査・リンター&quot;];
+    { rank=same; perm; sensors; }
+  }
+
+  env [label=&quot;作業環境\nリポジトリ・OS・外部サービス&quot;, fillcolor=&quot;#F5F5F5&quot;, color=&quot;#777777&quot;];
+
+  { rank=same; human; model; }
+  human -&gt; loop [label=&quot;依頼&quot;];
+  loop -&gt; human [label=&quot;報告・承認の依頼&quot;];
+  loop -&gt; model [label=&quot;コンテキスト&quot;];
+  model -&gt; loop [label=&quot;応答・ツール呼び出し&quot;];
+  loop -&gt; perm [label=&quot;ツール呼び出し&quot;];
+  perm -&gt; tools;
+  tools -&gt; env [label=&quot;操作&quot;];
+  env -&gt; sensors [label=&quot;状態&quot;];
+  sensors -&gt; loop [label=&quot;結果&quot;];
+}</p></object></div>
+<figcaption>
+<p><span class="caption-number">図 5.1 </span><span class="caption-text">エージェントの基本構造</span><a class="headerlink" href="#id11" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="id4">
+<h2><span class="section-number">5.3. </span>ガイドとセンサー<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<p>外側のハーネスの仕組みは、働きによって 2 種類に分けられる <a class="reference internal" href="references.html#ref-bockeler2026"><span class="std std-ref">[Bockeler2026]</span></a>。</p>
+<ul class="simple">
+<li><p><strong>ガイド</strong>：エージェントが行動する前に、正しい方向へ導く仕組み。規約ファイル、手順書、コードの雛形、型定義など。最初の試行で正しい結果が出る確率を上げる。</p></li>
+<li><p><strong>センサー</strong>：エージェントが行動した後に、結果を観測して誤りを知らせる仕組み。テスト、型検査、リンター、レビューなど。エージェントが自分で誤りに気付き、修正できるようにする。</p></li>
+</ul>
+<p>ガイドだけでは、規則が実際に守られたかを確かめられない。センサーだけでは、同じ誤りを毎回繰り返し、修正に時間がかかる。両方を組み合わせる必要がある。</p>
+<p>さらに、それぞれを「計算による仕組み」と「推論による仕組み」に分けられる。</p>
+<table class="docutils align-default" id="id12">
+<caption><span class="caption-number">表 5.2 </span><span class="caption-text">ガイドとセンサーの分類</span><a class="headerlink" href="#id12" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>計算による仕組み（決定的）</p></th>
+<th class="head"><p>推論による仕組み（LLM を使う）</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ガイド</p></td>
+<td><p>型定義、コードの雛形、プロジェクトの生成ツール</p></td>
+<td><p>規約ファイル、手順書、設計文書</p></td>
+</tr>
+<tr class="row-odd"><td><p>センサー</p></td>
+<td><p>テスト、型検査、リンター、ビルド、構造の検査</p></td>
+<td><p>AI によるコードレビュー、LLM による採点</p></td>
+</tr>
+</tbody>
+</table>
+<p>計算による仕組みは速く、結果が確実で、変更のたびに実行できる。推論による仕組みは遅く、費用がかかり、結果が揺らぐが、意味的な判断（設計の妥当性など）ができる。まず計算による仕組みで確かめられることを最大限に確かめ、残りを推論による仕組みと人間が補う、という順序で考えるとよい。</p>
+</section>
+<section id="id5">
+<h2><span class="section-number">5.4. </span>ツールの設計<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<p>エージェントに独自のツールを提供する場合（後述する MCP サーバーを作る場合を含む）には、ツールの設計が結果を左右する <a class="reference internal" href="references.html#ref-anthropic-tools"><span class="std std-ref">[Anthropic-Tools]</span></a>。</p>
+<ul class="simple">
+<li><p><strong>名前と説明を明確にする</strong>：モデルは名前と説明だけを見て、ツールを使うかどうか、どう使うかを判断する。何をするツールか、いつ使うべきか、引数の意味と形式を説明に書く。</p></li>
+<li><p><strong>粒度を作業に合わせる</strong>：API の各エンドポイントをそのままツールにするより、「顧客の注文履歴を取得する」のように、エージェントが行いたい作業の単位でツールを作るほうが、呼び出しの回数と誤りが減る。</p></li>
+<li><p><strong>出力を絞る</strong>：大量の出力はコンテキストを圧迫する。必要な項目だけを返す、件数を制限する、ページ分割するなどの工夫をする。</p></li>
+<li><p><strong>エラーを行動につながる文章で返す</strong>：「エラー: 404」ではなく、「ファイル config.toml は存在しない。list_files でファイル名を確認すること」のように、原因と次に取るべき行動を返す。</p></li>
+</ul>
+<p>外部のツールやデータを接続するための標準規格として <a class="reference internal" href="glossary.html#term-MCP"><span class="xref std std-term">MCP</span></a>（Model Context Protocol）がある <a class="reference internal" href="references.html#ref-mcp"><span class="std std-ref">[MCP]</span></a>。MCP に対応したエージェントであれば、課題管理サービス、データベース、ブラウザの操作などを、MCP サーバーを登録するだけで使えるようになる。ただし、ツールを増やすほどツール定義がコンテキストを占め、ツールの選択も誤りやすくなる。使うものだけを登録する。</p>
+</section>
+<section id="id6">
+<h2><span class="section-number">5.5. </span>サンプルコード：最小のエージェント<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="#code-ex03"><span class="std std-numref">コード 5.1</span></a> は、ツールを使う最小のエージェントである。</p>
+<div class="literal-block-wrapper docutils container" id="id13">
+<span id="code-ex03"></span><div class="code-block-caption"><span class="caption-number">コード 5.1 </span><span class="caption-text">ツールを使う最小のエージェント（ex03_tool_agent.py）</span><a class="headerlink" href="#id13" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="sd">&quot;&quot;&quot;ツールを使う最小のエージェントの例。</span>
+<span class="linenos">  2</span>
+<span class="linenos">  3</span><span class="sd">モデルの応答にツール呼び出しが含まれていればツールを実行し、結果を会話履歴に</span>
+<span class="linenos">  4</span><span class="sd">追加して再びモデルを呼ぶ。ツール呼び出しがなくなったら、その応答を最終回答とする。</span>
+<span class="linenos">  5</span><span class="sd">ツールの失敗は例外にせず、モデルが読んで次の行動を選べる文章として返す。</span>
+<span class="linenos">  6</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="linenos">  7</span>
+<span class="linenos">  8</span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="linenos">  9</span>
+<span class="linenos"> 10</span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="linenos"> 11</span><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="linenos"> 12</span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="linenos"> 13</span>
+<span class="linenos"> 14</span><span class="kn">from</span><span class="w"> </span><span class="nn">llm_stub</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLMClient</span><span class="p">,</span> <span class="n">Message</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">RuleBasedLLM</span><span class="p">,</span> <span class="n">ToolCall</span>
+<span class="linenos"> 15</span>
+<span class="linenos"> 16</span>
+<span class="linenos"> 17</span><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos"> 18</span><span class="k">class</span><span class="w"> </span><span class="nc">Tool</span><span class="p">:</span>
+<span class="linenos"> 19</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;モデルに提供するツール。parameters は引数名と説明の対応。&quot;&quot;&quot;</span>
+<span class="linenos"> 20</span>
+<span class="linenos"> 21</span>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+<span class="linenos"> 22</span>    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+<span class="linenos"> 23</span>    <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+<span class="linenos"> 24</span>    <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span> <span class="nb">str</span><span class="p">]</span>
+<span class="linenos"> 25</span>
+<span class="linenos"> 26</span>
+<span class="linenos"> 27</span><span class="k">class</span><span class="w"> </span><span class="nc">ToolRegistry</span><span class="p">:</span>
+<span class="linenos"> 28</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;ツールの登録・説明文の生成・実行を受け持つ。&quot;&quot;&quot;</span>
+<span class="linenos"> 29</span>
+<span class="linenos"> 30</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tools</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Tool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos"> 31</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_tools</span> <span class="o">=</span> <span class="p">{</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tools</span><span class="p">}</span>
+<span class="linenos"> 32</span>
+<span class="linenos"> 33</span>    <span class="k">def</span><span class="w"> </span><span class="nf">describe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="linenos"> 34</span><span class="w">        </span><span class="sd">&quot;&quot;&quot;システムプロンプトに含めるツールの説明を返す。&quot;&quot;&quot;</span>
+<span class="linenos"> 35</span>        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;# 使えるツール&quot;</span><span class="p">]</span>
+<span class="linenos"> 36</span>        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tools</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+<span class="linenos"> 37</span>            <span class="n">params</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="linenos"> 38</span>            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="n">params</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos"> 39</span>        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+<span class="linenos"> 40</span>
+<span class="linenos"> 41</span>    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">call</span><span class="p">:</span> <span class="n">ToolCall</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="linenos"> 42</span>        <span class="n">tool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tools</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">call</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="linenos"> 43</span>        <span class="k">if</span> <span class="n">tool</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos"> 44</span>            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;エラー: ツール </span><span class="si">{</span><span class="n">call</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> は存在しない。使えるツール: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tools</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="linenos"> 45</span>        <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">tool</span><span class="o">.</span><span class="n">parameters</span> <span class="k">if</span> <span class="n">p</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">call</span><span class="o">.</span><span class="n">arguments</span><span class="p">]</span>
+<span class="linenos"> 46</span>        <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+<span class="linenos"> 47</span>            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;エラー: 引数 </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span><span class="si">}</span><span class="s2"> が不足している&quot;</span>
+<span class="linenos"> 48</span>        <span class="k">return</span> <span class="n">tool</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">call</span><span class="o">.</span><span class="n">arguments</span><span class="p">)</span>
+<span class="linenos"> 49</span>
+<span class="linenos"> 50</span>
+<span class="linenos"> 51</span><span class="k">def</span><span class="w"> </span><span class="nf">run_agent</span><span class="p">(</span><span class="n">llm</span><span class="p">:</span> <span class="n">LLMClient</span><span class="p">,</span> <span class="n">system</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">registry</span><span class="p">:</span> <span class="n">ToolRegistry</span><span class="p">,</span> <span class="n">max_turns</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="linenos"> 52</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;エージェントループ。max_turns 回モデルを呼んでも終わらなければ打ち切る。&quot;&quot;&quot;</span>
+<span class="linenos"> 53</span>    <span class="n">messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Message</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Message</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">task</span><span class="p">)]</span>
+<span class="linenos"> 54</span>    <span class="n">full_system</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">system</span><span class="si">}</span><span class="se">\n\n</span><span class="si">{</span><span class="n">registry</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="linenos"> 55</span>    <span class="k">for</span> <span class="n">turn</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_turns</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+<span class="linenos"> 56</span>        <span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">complete</span><span class="p">(</span><span class="n">full_system</span><span class="p">,</span> <span class="n">messages</span><span class="p">)</span>
+<span class="linenos"> 57</span>        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Message</span><span class="p">(</span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">tool_calls</span><span class="p">))</span>
+<span class="linenos"> 58</span>        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">tool_calls</span><span class="p">:</span>
+<span class="linenos"> 59</span>            <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+<span class="linenos"> 60</span>        <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">tool_calls</span><span class="p">:</span>
+<span class="linenos"> 61</span>            <span class="n">result</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">call</span><span class="p">)</span>
+<span class="linenos"> 62</span>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">turn</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">call</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="n">call</span><span class="o">.</span><span class="n">arguments</span><span class="si">}</span><span class="s2">) -&gt; </span><span class="si">{</span><span class="n">result</span><span class="p">[:</span><span class="mi">60</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos"> 63</span>            <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Message</span><span class="p">(</span><span class="s2">&quot;tool&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">tool_call_id</span><span class="o">=</span><span class="n">call</span><span class="o">.</span><span class="n">call_id</span><span class="p">))</span>
+<span class="linenos"> 64</span>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">max_turns</span><span class="si">}</span><span class="s2"> 回で完了しなかったため打ち切った&quot;</span>
+<span class="linenos"> 65</span>
+<span class="linenos"> 66</span>
+<span class="linenos"> 67</span><span class="c1"># ---- ツールの実装（ファイルシステムの代わりに辞書を使う） ----</span>
+<span class="linenos"> 68</span>
+<span class="linenos"> 69</span><span class="n">FILES</span> <span class="o">=</span> <span class="p">{</span>
+<span class="linenos"> 70</span>    <span class="s2">&quot;README.md&quot;</span><span class="p">:</span> <span class="s2">&quot;サンプルアプリ。設定は config/ 配下にある。&quot;</span><span class="p">,</span>
+<span class="linenos"> 71</span>    <span class="s2">&quot;config/app.toml&quot;</span><span class="p">:</span> <span class="s2">&quot;[server]</span><span class="se">\n</span><span class="s2">port = 8080</span><span class="se">\n</span><span class="s2">timeout = 30</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="linenos"> 72</span>    <span class="s2">&quot;src/main.py&quot;</span><span class="p">:</span> <span class="s2">&quot;print(&#39;hello&#39;)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="linenos"> 73</span><span class="p">}</span>
+<span class="linenos"> 74</span>
+<span class="linenos"> 75</span>
+<span class="linenos"> 76</span><span class="k">def</span><span class="w"> </span><span class="nf">list_files</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="linenos"> 77</span>    <span class="n">prefix</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s2">&quot;prefix&quot;</span><span class="p">]</span>
+<span class="linenos"> 78</span>    <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">FILES</span> <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">)]</span>
+<span class="linenos"> 79</span>    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="k">if</span> <span class="n">names</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2"> で始まるファイルはない&quot;</span>
+<span class="linenos"> 80</span>
+<span class="linenos"> 81</span>
+<span class="linenos"> 82</span><span class="k">def</span><span class="w"> </span><span class="nf">read_file</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="linenos"> 83</span>    <span class="n">path</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span>
+<span class="linenos"> 84</span>    <span class="k">if</span> <span class="n">path</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">FILES</span><span class="p">:</span>
+<span class="linenos"> 85</span>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;エラー: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2"> は存在しない。list_files でファイル名を確認すること&quot;</span>
+<span class="linenos"> 86</span>    <span class="k">return</span> <span class="n">FILES</span><span class="p">[</span><span class="n">path</span><span class="p">]</span>
+<span class="linenos"> 87</span>
+<span class="linenos"> 88</span>
+<span class="linenos"> 89</span><span class="c1"># ---- モデルの代わり：直前のツール結果を読んで次の行動を決める ----</span>
+<span class="linenos"> 90</span>
+<span class="linenos"> 91</span><span class="k">def</span><span class="w"> </span><span class="nf">agent_rule</span><span class="p">(</span><span class="n">system</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Message</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<span class="linenos"> 92</span>    <span class="n">last</span> <span class="o">=</span> <span class="n">messages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="linenos"> 93</span>    <span class="k">if</span> <span class="n">last</span><span class="o">.</span><span class="n">role</span> <span class="o">==</span> <span class="s2">&quot;user&quot;</span><span class="p">:</span>
+<span class="linenos"> 94</span>        <span class="c1"># 推測したパスを読みに行く（ここでは誤ったパスを推測する）</span>
+<span class="linenos"> 95</span>        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;設定ファイルを読む&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">ToolCall</span><span class="p">(</span><span class="s2">&quot;c1&quot;</span><span class="p">,</span> <span class="s2">&quot;read_file&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;config.toml&quot;</span><span class="p">}),))</span>
+<span class="linenos"> 96</span>    <span class="k">if</span> <span class="n">last</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;エラー&quot;</span><span class="p">):</span>
+<span class="linenos"> 97</span>        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;ファイル一覧を確認する&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">ToolCall</span><span class="p">(</span><span class="s2">&quot;c2&quot;</span><span class="p">,</span> <span class="s2">&quot;list_files&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;prefix&quot;</span><span class="p">:</span> <span class="s2">&quot;config/&quot;</span><span class="p">}),))</span>
+<span class="linenos"> 98</span>    <span class="k">if</span> <span class="n">last</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;config/&quot;</span><span class="p">):</span>
+<span class="linenos"> 99</span>        <span class="n">path</span> <span class="o">=</span> <span class="n">last</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos">100</span>        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;見つかったファイルを読む&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">ToolCall</span><span class="p">(</span><span class="s2">&quot;c3&quot;</span><span class="p">,</span> <span class="s2">&quot;read_file&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">path</span><span class="p">}),))</span>
+<span class="linenos">101</span>    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;timeout = (\d+)&quot;</span><span class="p">,</span> <span class="n">last</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+<span class="linenos">102</span>    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+<span class="linenos">103</span>        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;timeout の設定値は </span><span class="si">{</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="s2"> 秒である（config/app.toml）。&quot;</span><span class="p">)</span>
+<span class="linenos">104</span>    <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;timeout の設定は見つからなかった。&quot;</span><span class="p">)</span>
+<span class="linenos">105</span>
+<span class="linenos">106</span>
+<span class="linenos">107</span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos">108</span>    <span class="n">registry</span> <span class="o">=</span> <span class="n">ToolRegistry</span><span class="p">([</span>
+<span class="linenos">109</span>        <span class="n">Tool</span><span class="p">(</span><span class="s2">&quot;list_files&quot;</span><span class="p">,</span> <span class="s2">&quot;指定した接頭辞で始まるファイルの一覧を返す&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;prefix&quot;</span><span class="p">:</span> <span class="s2">&quot;パスの接頭辞&quot;</span><span class="p">},</span> <span class="n">list_files</span><span class="p">),</span>
+<span class="linenos">110</span>        <span class="n">Tool</span><span class="p">(</span><span class="s2">&quot;read_file&quot;</span><span class="p">,</span> <span class="s2">&quot;ファイルの内容を返す&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;ファイルのパス&quot;</span><span class="p">},</span> <span class="n">read_file</span><span class="p">),</span>
+<span class="linenos">111</span>    <span class="p">])</span>
+<span class="linenos">112</span>    <span class="n">answer</span> <span class="o">=</span> <span class="n">run_agent</span><span class="p">(</span>
+<span class="linenos">113</span>        <span class="n">RuleBasedLLM</span><span class="p">(</span><span class="n">agent_rule</span><span class="p">),</span>
+<span class="linenos">114</span>        <span class="n">system</span><span class="o">=</span><span class="s2">&quot;あなたはリポジトリを調査するエージェントである。&quot;</span><span class="p">,</span>
+<span class="linenos">115</span>        <span class="n">task</span><span class="o">=</span><span class="s2">&quot;サーバーの timeout の設定値を調べて&quot;</span><span class="p">,</span>
+<span class="linenos">116</span>        <span class="n">registry</span><span class="o">=</span><span class="n">registry</span><span class="p">,</span>
+<span class="linenos">117</span>    <span class="p">)</span>
+<span class="linenos">118</span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;最終回答: </span><span class="si">{</span><span class="n">answer</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos">119</span>
+<span class="linenos">120</span>
+<span class="linenos">121</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="linenos">122</span>    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ToolRegistry</span></code>（27 〜 48 行目）は、ツールの説明文の生成と実行を受け持つ。存在しないツールや引数の不足は、例外ではなく、モデルが読める文章として返している。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">run_agent</span></code>（51 〜 64 行目）がエージェントループである。モデルの応答にツール呼び出しがあれば実行し、結果を履歴に加えて再びモデルを呼ぶ。ツール呼び出しがなくなったら終了する。<code class="docutils literal notranslate"><span class="pre">max_turns</span></code> で反復の上限を設けている。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">read_file</span></code>（82 〜 86 行目）は、ファイルが見つからないとき、次に取るべき行動をエラーメッセージに含めている。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">agent_rule</span></code>（91 〜 104 行目）は、モデルの代わりに、直前のツールの結果を読んで次の行動を決める。</p></li>
+</ul>
+<p>実行結果は次のとおりである。最初に誤ったパスを読もうとして失敗するが、エラーメッセージの指示に従ってファイルの一覧を確認し、正しいファイルにたどり着いている。</p>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-number">コード 5.2 </span><span class="caption-text">ex03_tool_agent.py の出力</span><a class="headerlink" href="#id14" title="Link to this code"></a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>[1] read_file({&#39;path&#39;: &#39;config.toml&#39;}) -&gt; エラー: config.toml は存在しない。list_files でファイル名を確認すること
+<span class="linenos">2</span>[2] list_files({&#39;prefix&#39;: &#39;config/&#39;}) -&gt; config/app.toml
+<span class="linenos">3</span>[3] read_file({&#39;path&#39;: &#39;config/app.toml&#39;}) -&gt; [server]
+<span class="linenos">4</span>port = 8080
+<span class="linenos">5</span>timeout = 30
+<span class="linenos">6</span>
+<span class="linenos">7</span>最終回答: timeout の設定値は 30 秒である（config/app.toml）。
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id7">
+<h2><span class="section-number">5.6. </span>センサーとしての検証手段<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<p>コーディングエージェントにとって最も重要なハーネスは、エージェント自身が実行できる検証手段である。人間が「動かしてみたら壊れていた」と伝える代わりに、エージェントが自分でテストを実行し、失敗を見て修正できれば、人間の手を介さずに品質を上げられる。</p>
+<table class="docutils align-default" id="id15">
+<caption><span class="caption-number">表 5.3 </span><span class="caption-text">主な検証手段</span><a class="headerlink" href="#id15" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 45.0%" />
+<col style="width: 35.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>手段</p></th>
+<th class="head"><p>検出できるもの</p></th>
+<th class="head"><p>備考</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>型検査</p></td>
+<td><p>存在しない属性や関数の使用、型の不一致</p></td>
+<td><p>ハルシネーションによる誤りの多くを、実行前に検出できる</p></td>
+</tr>
+<tr class="row-odd"><td><p>リンター</p></td>
+<td><p>未使用の変数、危険な書き方、規約違反</p></td>
+<td><p>独自の規則を追加すると、プロジェクト固有の規約も機械的に守らせられる</p></td>
+</tr>
+<tr class="row-even"><td><p>単体テスト</p></td>
+<td><p>関数やクラスの振る舞いの誤り</p></td>
+<td><p>速く実行できるため、変更のたびに実行させる</p></td>
+</tr>
+<tr class="row-odd"><td><p>結合テスト、E2E テスト</p></td>
+<td><p>部品をつないだときの誤り、画面の操作の誤り</p></td>
+<td><p>時間がかかるため、作業の区切りで実行させる</p></td>
+</tr>
+<tr class="row-even"><td><p>ビルド、CI</p></td>
+<td><p>環境の差による誤り、他の変更との衝突</p></td>
+<td><p>最後の砦として、人間のレビューの前に実行する</p></td>
+</tr>
+</tbody>
+</table>
+<p>検証手段は、次の性質を満たすほど、エージェントにとって使いやすい。</p>
+<ul class="simple">
+<li><p><strong>1 つのコマンドで実行できる</strong>：手順が複雑だと、エージェントは実行を省略したり、誤った方法で実行したりする。</p></li>
+<li><p><strong>速い</strong>：数秒で結果が出れば、変更のたびに実行できる。</p></li>
+<li><p><strong>結果が安定している</strong>：実行のたびに結果が変わる不安定なテストは、エージェントを誤った修正に導く。</p></li>
+<li><p><strong>メッセージが具体的である</strong>：どこが、なぜ、どう間違っているかが分かるメッセージは、修正の手がかりになる。リンターの独自規則では、エラーメッセージに修正の方法まで書いておくと効果的である。</p></li>
+</ul>
+</section>
+<section id="id8">
+<h2><span class="section-number">5.7. </span>権限とサンドボックス<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<p>エージェントにファイルの編集やコマンドの実行を任せる以上、誤った操作や悪意ある指示による被害を防ぐ仕組みが必要である。</p>
+<ul class="simple">
+<li><p><strong>権限の設定</strong>：許可なしで実行してよい操作（テストの実行など）、確認を求める操作（ファイルの編集など）、禁止する操作（本番環境への接続、秘密情報の読み取りなど）を区別する。</p></li>
+<li><p><strong>サンドボックス</strong>：エージェントが動く環境を、コンテナや仮想マシンなどで隔離し、ファイルシステムやネットワークへのアクセスを制限する。自律的に長時間動かす場合には、特に重要である。</p></li>
+<li><p><strong>承認</strong>：取り消せない操作（本番へのデプロイ、データの削除、外部への送信など）は、人間の承認を必須にする。</p></li>
+</ul>
+<p>権限を最初から広く与えるのではなく、エージェントの振る舞いを確認しながら、信頼できる操作から段階的に許可していくのが安全である。</p>
+</section>
+<section id="id9">
+<h2><span class="section-number">5.8. </span>フック<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="glossary.html#term-24"><span class="xref std std-term">フック</span></a>は、エージェントの動作の特定の時点（ツールを使う前後、応答を終える時など）で、指定した処理を自動的に実行する仕組みである。</p>
+<p>規約ファイルに書いた指示は、モデルが判断して従うものであり、守られないことがある。フックは、モデルの判断と関係なく必ず実行される。「ファイルを編集したら必ず整形する」「秘密情報を含むファイルへの書き込みを止める」のように、例外なく守らせたい規則はフックで実現する。フックは、決定的なガイドとセンサーを、エージェントの動作の中に組み込む手段だといえる。具体的な設定は<a class="reference internal" href="practice_claude_code.html"><span class="doc">実践：Claude Code</span></a> で示す。</p>
+</section>
+<section id="ai">
+<h2><span class="section-number">5.9. </span>AI が働きやすいリポジトリ<a class="headerlink" href="#ai" title="Link to this heading"></a></h2>
+<p>ハーネスを整えやすいかどうかは、リポジトリそのものの性質にも左右される。人間の新しいメンバーが参加しやすいリポジトリは、AI にとっても働きやすい。</p>
+<table class="docutils align-default" id="id16">
+<caption><span class="caption-number">表 5.4 </span><span class="caption-text">AI が働きやすいリポジトリの性質</span><a class="headerlink" href="#id16" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>性質</p></th>
+<th class="head"><p>理由</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>型が付いている</p></td>
+<td><p>型検査が強力なセンサーになる。型そのものがガイドとして、関数の使い方を伝える</p></td>
+</tr>
+<tr class="row-odd"><td><p>テストが充実している</p></td>
+<td><p>変更が既存の振る舞いを壊していないかを、エージェント自身が確かめられる</p></td>
+</tr>
+<tr class="row-even"><td><p>構造が一貫している</p></td>
+<td><p>既存のコードを手本にでき、どこに何を書けばよいかを推測しやすい</p></td>
+</tr>
+<tr class="row-odd"><td><p>環境構築とビルドが自動化されている</p></td>
+<td><p>エージェントが環境を再現でき、実行結果が人間の環境と一致する</p></td>
+</tr>
+<tr class="row-even"><td><p>判断の理由が文書化されている</p></td>
+<td><p>コードから読み取れない「なぜ」を、エージェントが参照できる</p></td>
+</tr>
+</tbody>
+</table>
+<p>逆に、テストがなく、手作業の手順が多く、暗黙の決まりが多いリポジトリでは、エージェントは誤りに気付けず、人間の確認の負担が大きくなる。AI を活用するための投資は、そのまま人間にとっての開発のしやすさにもつながる。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="context_engineering.html" class="btn btn-neutral float-left" title="4. コンテキストエンジニアリング" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="loop_engineering.html" class="btn btn-neutral float-right" title="6. ループエンジニアリング" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nunu_3060.
+      <span class="lastupdated">最終更新: 2026-10-26
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

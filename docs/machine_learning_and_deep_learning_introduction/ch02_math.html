@@ -1,0 +1,357 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2. 数学の準備 &mdash; 機械学習・深層学習入門</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=f043dae3" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=19757887"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=4755f45a"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="3. データと前処理" href="ch03_data.html" />
+    <link rel="prev" title="1. 機械学習の全体像" href="ch01_overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            機械学習・深層学習入門
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">はじめに</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">はじめに</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">本編</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ch01_overview.html">1. 機械学習の全体像</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. 数学の準備</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">2.1. ベクトルと行列</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">2.1.1. ベクトル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">2.1.2. 行列</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#numpy">2.1.3. NumPy での計算</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">2.2. 微分と勾配</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">2.2.1. 微分</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">2.2.2. 連鎖律</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">2.2.3. 偏微分と勾配</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">2.2.4. 数値微分</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">2.3. 確率と統計の基本</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id11">2.3.1. 平均と分散</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">2.3.2. 確率分布と正規分布</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">2.3.3. 条件付き確率</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">2.3.4. 最尤推定の考え方</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id15">2.4. まとめ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_data.html">3. データと前処理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_regression.html">4. 回帰</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_classification.html">5. 分類</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_evaluation.html">6. モデルの評価と改善</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_tree_ensemble.html">7. 決定木とアンサンブル学習</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_unsupervised.html">8. 教師なし学習</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_neural_network.html">9. ニューラルネットワークの基礎</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_training_techniques.html">10. 深層学習の学習テクニック</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_cnn.html">11. 畳み込みニューラルネットワーク</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch12_sequence_transformer.html">12. 系列データと Transformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch13_practice.html">13. 実務への適用</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">付録</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendix_glossary.html">用語集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_symbols.html">記号一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_examples.html">サンプルコード一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_references.html">参考文献</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">機械学習・深層学習入門</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">2. </span>数学の準備</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">2. </span>数学の準備<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>機械学習の手法を理解するには、ベクトルと行列、微分、確率と統計の基本が必要になる。この章では、以降の章で使う範囲に絞ってこれらを復習し、NumPy のコードとの対応を示す。すでに知っている読者は読み飛ばして構わない。</p>
+<section id="id2">
+<h2><span class="section-number">2.1. </span>ベクトルと行列<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3><span class="section-number">2.1.1. </span>ベクトル<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>機械学習では、1 件のデータを数値の並びとして表す。たとえば物件の「広さ（m<sup>2</sup>）」「築年数」「駅からの徒歩分数」を並べた</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\boldsymbol{x} = \begin{pmatrix} 45.0 \\ 12 \\ 8 \end{pmatrix}\end{split}\]</div>
+<p>のような数値の組を<strong>ベクトル</strong>と呼ぶ。並んでいる数値の個数をベクトルの<strong>次元</strong>という。この例は 3 次元のベクトルである。本書では、ベクトルを太字の小文字（<span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span>、<span class="math notranslate nohighlight">\(\boldsymbol{w}\)</span> など）で表し、その <span class="math notranslate nohighlight">\(i\)</span> 番目の要素を <span class="math notranslate nohighlight">\(x_i\)</span> のように書く。</p>
+<p>2 つのベクトル <span class="math notranslate nohighlight">\(\boldsymbol{w}\)</span> と <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span> の<strong>内積</strong>は、対応する要素どうしの積の和である。</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{w}^\top \boldsymbol{x} = w_1 x_1 + w_2 x_2 + \cdots + w_d x_d = \sum_{i=1}^{d} w_i x_i\]</div>
+<p>ここで <span class="math notranslate nohighlight">\(\top\)</span> は転置を表す。内積は「各特徴量に重みを掛けて足し合わせる」計算であり、第 4 章の線形回帰や第 9 章のニューラルネットワークの基本となる。</p>
+</section>
+<section id="id4">
+<h3><span class="section-number">2.1.2. </span>行列<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>数値を縦横の表の形に並べたものを<strong>行列</strong>と呼ぶ。<span class="math notranslate nohighlight">\(n\)</span> 件のデータがそれぞれ <span class="math notranslate nohighlight">\(d\)</span> 次元のベクトルで表されるとき、これらを縦に積み重ねた <span class="math notranslate nohighlight">\(n\)</span> 行 <span class="math notranslate nohighlight">\(d\)</span> 列の行列 <span class="math notranslate nohighlight">\(X\)</span> でデータ全体を表す。この形を <span class="math notranslate nohighlight">\(n \times d\)</span> と書く。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}X = \begin{pmatrix}
+    x_{11} &amp; x_{12} &amp; \cdots &amp; x_{1d} \\
+    x_{21} &amp; x_{22} &amp; \cdots &amp; x_{2d} \\
+    \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+    x_{n1} &amp; x_{n2} &amp; \cdots &amp; x_{nd}
+    \end{pmatrix}\end{split}\]</div>
+<p>本書では行列を大文字（<span class="math notranslate nohighlight">\(X\)</span>、<span class="math notranslate nohighlight">\(W\)</span> など）で表す。行列の 1 行が 1 件のデータ（サンプル）、1 列が 1 つの特徴量に対応する。この「行がサンプル、列が特徴量」という配置は、scikit-learn や PyTorch でも共通の約束である。</p>
+<p><span class="math notranslate nohighlight">\(n \times d\)</span> の行列 <span class="math notranslate nohighlight">\(X\)</span> と <span class="math notranslate nohighlight">\(d\)</span> 次元のベクトル <span class="math notranslate nohighlight">\(\boldsymbol{w}\)</span> の積 <span class="math notranslate nohighlight">\(X\boldsymbol{w}\)</span> は、<span class="math notranslate nohighlight">\(X\)</span> の各行と <span class="math notranslate nohighlight">\(\boldsymbol{w}\)</span> の内積を並べた <span class="math notranslate nohighlight">\(n\)</span> 次元のベクトルになる。つまり、<span class="math notranslate nohighlight">\(n\)</span> 件のデータそれぞれについて重み付きの和を一度に計算できる。一般に、<span class="math notranslate nohighlight">\(n \times d\)</span> の行列と <span class="math notranslate nohighlight">\(d \times m\)</span> の行列の積は <span class="math notranslate nohighlight">\(n \times m\)</span> の行列になる。左の行列の列数と右の行列の行数が一致しなければ積は定義されない。</p>
+</section>
+<section id="numpy">
+<h3><span class="section-number">2.1.3. </span>NumPy での計算<a class="headerlink" href="#numpy" title="Link to this heading"></a></h3>
+<p>NumPy では、ベクトルや行列を <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> 型の配列で表し、内積や行列の積を <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> 演算子で計算する。</p>
+<div class="literal-block-wrapper docutils container" id="id16">
+<div class="code-block-caption"><span class="caption-number">コード 2.1 </span><span class="caption-text">ベクトルと行列の計算（ch02_numpy_basics.py より抜粋）</span><a class="headerlink" href="#id16" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span><span class="w"> </span><span class="nf">show_vector_and_matrix</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;ベクトルの内積、行列とベクトルの積、ブロードキャストを確認する。&quot;&quot;&quot;</span>
+<span class="linenos"> 3</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>
+<span class="linenos"> 4</span>    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">])</span>
+<span class="linenos"> 5</span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;内積 w・x =&quot;</span><span class="p">,</span> <span class="n">w</span> <span class="o">@</span> <span class="n">x</span><span class="p">)</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span>    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">],</span>
+<span class="linenos"> 8</span>                  <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]])</span>
+<span class="linenos"> 9</span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;行列とベクトルの積 A x =&quot;</span><span class="p">,</span> <span class="n">a</span> <span class="o">@</span> <span class="n">x</span><span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="c1"># 各行 (サンプル) から列ごとの平均を引く。形状 (2, 3) と (3,) の演算がブロードキャストされる。</span>
+<span class="linenos">12</span>    <span class="n">centered</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos">13</span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;列ごとに平均を引いた行列:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">centered</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>実行結果は次のとおりである。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>内積 w・x = 4.5
+<span class="linenos">2</span>行列とベクトルの積 A x = [14. 32.]
+<span class="linenos">3</span>列ごとに平均を引いた行列:
+<span class="linenos">4</span> [[-1.5 -1.5 -1.5]
+<span class="linenos">5</span> [ 1.5  1.5  1.5]]
+</pre></div>
+</div>
+<p>最後の例では、形状が <span class="math notranslate nohighlight">\(2 \times 3\)</span> の行列から形状が <span class="math notranslate nohighlight">\((3,)\)</span> のベクトルを引いている。NumPy は形状の異なる配列どうしの演算で、小さい方の配列を自動的に繰り返して形状をそろえる。これを<strong>ブロードキャスト</strong>と呼ぶ。ブロードキャストを使うと、ループを書かずに「各サンプルから平均を引く」といった処理を書ける。機械学習のコードでは頻繁に使われるので、配列の形状（<code class="docutils literal notranslate"><span class="pre">shape</span></code> 属性）を常に意識するとよい。</p>
+</section>
+</section>
+<section id="id5">
+<h2><span class="section-number">2.2. </span>微分と勾配<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<section id="id6">
+<h3><span class="section-number">2.2.1. </span>微分<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>機械学習の学習は「予測の誤りを表す関数の値が小さくなる方向にパラメータを少しずつ動かす」ことで行う。この「どちらの方向に動かせば値が小さくなるか」を教えてくれるのが微分である。</p>
+<p>関数 <span class="math notranslate nohighlight">\(f(x)\)</span> の点 <span class="math notranslate nohighlight">\(x\)</span> における<strong>微分</strong>（導関数の値）は、<span class="math notranslate nohighlight">\(x\)</span> をわずかに動かしたときの <span class="math notranslate nohighlight">\(f(x)\)</span> の変化の割合であり、次のように定義される。</p>
+<div class="math notranslate nohighlight">
+\[f'(x) = \frac{df}{dx} = \lim_{h \to 0} \frac{f(x + h) - f(x)}{h}\]</div>
+<p>図形的には、<span class="math notranslate nohighlight">\(f'(x)\)</span> は点 <span class="math notranslate nohighlight">\(x\)</span> における接線の傾きである（<a class="reference internal" href="#fig-ch02-derivative"><span class="std std-numref">図 2.1</span></a>）。<span class="math notranslate nohighlight">\(f'(x) &gt; 0\)</span> なら <span class="math notranslate nohighlight">\(x\)</span> を増やすと <span class="math notranslate nohighlight">\(f(x)\)</span> は増え、<span class="math notranslate nohighlight">\(f'(x) &lt; 0\)</span> なら減る。したがって、<span class="math notranslate nohighlight">\(f(x)\)</span> を小さくしたいときは、微分の符号と逆の方向に <span class="math notranslate nohighlight">\(x\)</span> を動かせばよい。</p>
+<figure class="align-center" id="id17">
+<span id="fig-ch02-derivative"></span><a class="reference internal image-reference" href="_images/ch02_derivative.png"><img alt="_images/ch02_derivative.png" src="_images/ch02_derivative.png" style="width: 480px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 2.1 </span><span class="caption-text"><span class="math notranslate nohighlight">\(f(x) = x^2\)</span> の <span class="math notranslate nohighlight">\(x = 1\)</span> における接線。<span class="math notranslate nohighlight">\(h\)</span> を 0 に近づけると、2 点を結ぶ直線の傾きは接線の傾き 2 に近づく。</span><a class="headerlink" href="#id17" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>本書でよく使う関数の微分を次に示す。</p>
+<table class="docutils align-default" id="id18">
+<caption><span class="caption-number">表 2.1 </span><span class="caption-text">主な関数の微分</span><a class="headerlink" href="#id18" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>関数 <span class="math notranslate nohighlight">\(f(x)\)</span></p></th>
+<th class="head"><p>微分 <span class="math notranslate nohighlight">\(f'(x)\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(c\)</span>（定数）</p></td>
+<td><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(x^n\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(n x^{n-1}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(e^x\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(e^x\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\log x\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1 / x\)</span></p></td>
+</tr>
+</tbody>
+</table>
+<p>本書では <span class="math notranslate nohighlight">\(\log\)</span> は自然対数（底が <span class="math notranslate nohighlight">\(e\)</span> の対数）を表す。</p>
+</section>
+<section id="id7">
+<h3><span class="section-number">2.2.2. </span>連鎖律<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>関数を組み合わせた合成関数 <span class="math notranslate nohighlight">\(y = f(g(x))\)</span> の微分は、<span class="math notranslate nohighlight">\(u = g(x)\)</span> とおくと、それぞれの微分の積になる。</p>
+<div class="math notranslate nohighlight">
+\[\frac{dy}{dx} = \frac{dy}{du} \cdot \frac{du}{dx}\]</div>
+<p>これを<strong>連鎖律</strong>と呼ぶ。たとえば <span class="math notranslate nohighlight">\(y = (3x + 1)^2\)</span> は <span class="math notranslate nohighlight">\(u = 3x + 1\)</span>、<span class="math notranslate nohighlight">\(y = u^2\)</span> の合成であり、<span class="math notranslate nohighlight">\(dy/dx = 2u \cdot 3 = 6(3x + 1)\)</span> となる。ニューラルネットワークは多数の関数を何段にも合成したものであり、その学習に使う誤差逆伝播法（第 9 章）は連鎖律を効率よく計算する方法にほかならない。</p>
+</section>
+<section id="id8">
+<h3><span class="section-number">2.2.3. </span>偏微分と勾配<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p>機械学習のモデルは多数のパラメータを持つため、多変数の関数を扱う必要がある。2 変数の関数 <span class="math notranslate nohighlight">\(f(x, y)\)</span> について、<span class="math notranslate nohighlight">\(y\)</span> を固定して <span class="math notranslate nohighlight">\(x\)</span> だけで微分したものを <span class="math notranslate nohighlight">\(x\)</span> についての<strong>偏微分</strong>と呼び、<span class="math notranslate nohighlight">\(\partial f / \partial x\)</span> と書く。</p>
+<p>各変数についての偏微分を並べたベクトルを<a class="reference internal" href="appendix_glossary.html#term-16"><span class="xref std std-term">勾配</span></a>と呼び、<span class="math notranslate nohighlight">\(\nabla f\)</span> と書く。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\nabla f(x, y) = \begin{pmatrix} \dfrac{\partial f}{\partial x} \\[2mm] \dfrac{\partial f}{\partial y} \end{pmatrix}\end{split}\]</div>
+<p>たとえば <span class="math notranslate nohighlight">\(f(x, y) = x^2 + 3y^2\)</span> の勾配は <span class="math notranslate nohighlight">\(\nabla f = (2x, 6y)^\top\)</span> である。勾配は、その点で関数の値が最も急激に増加する方向を向いている。したがって、勾配と逆の方向 <span class="math notranslate nohighlight">\(-\nabla f\)</span> に進めば、関数の値を最も効率よく減らせる（<a class="reference internal" href="#fig-ch02-gradient"><span class="std std-numref">図 2.2</span></a>）。この性質を使って関数の最小値を探す方法が、第 4 章で説明する勾配降下法である。</p>
+<figure class="align-center" id="id19">
+<span id="fig-ch02-gradient"></span><a class="reference internal image-reference" href="_images/ch02_gradient.png"><img alt="_images/ch02_gradient.png" src="_images/ch02_gradient.png" style="width: 520px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 2.2 </span><span class="caption-text">等高線と勾配の逆方向。矢印は各点で関数の値が最も急に減る方向を指し、等高線と直交する。</span><a class="headerlink" href="#id19" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="id9">
+<h3><span class="section-number">2.2.4. </span>数値微分<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<p>微分の定義式で <span class="math notranslate nohighlight">\(h\)</span> を十分小さな値（たとえば <span class="math notranslate nohighlight">\(10^{-5}\)</span>）にすれば、微分を数値的に近似できる。これを<strong>数値微分</strong>と呼ぶ。実用上は、<span class="math notranslate nohighlight">\(x\)</span> の前後に <span class="math notranslate nohighlight">\(h\)</span> ずつずらした次の<strong>中心差分</strong>の方が誤差が小さい。</p>
+<div class="math notranslate nohighlight">
+\[f'(x) \approx \frac{f(x + h) - f(x - h)}{2h}\]</div>
+<p>数値微分は簡単だが、パラメータ 1 個ごとに関数を 2 回計算する必要があり、パラメータが多いモデルの学習に使うには遅すぎる。実際には、手計算や誤差逆伝播法で求めた勾配が正しいかを確かめる<strong>勾配確認</strong>に使う。次のコードは、中心差分で勾配を求める関数である。各変数を 1 つずつ <span class="math notranslate nohighlight">\(\pm h\)</span> だけずらして関数の値の差を取っている。サンプルコードでは、この関数で <span class="math notranslate nohighlight">\(f(x, y) = x^2 + 3y^2\)</span> の勾配を求め、手計算の結果と比較している。</p>
+<div class="literal-block-wrapper docutils container" id="id20">
+<div class="code-block-caption"><span class="caption-number">コード 2.2 </span><span class="caption-text">数値微分による勾配の計算（ch02_numpy_basics.py より抜粋）</span><a class="headerlink" href="#id20" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">def</span><span class="w"> </span><span class="nf">numerical_grad</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">FloatArray</span><span class="p">],</span> <span class="nb">float</span><span class="p">],</span> <span class="n">p</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatArray</span><span class="p">:</span>
+<span class="linenos">2</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;中心差分で勾配を近似する。&quot;&quot;&quot;</span>
+<span class="linenos">3</span>    <span class="n">grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="linenos">4</span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+<span class="linenos">5</span>        <span class="n">step</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="linenos">6</span>        <span class="n">step</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span>
+<span class="linenos">7</span>        <span class="n">grad</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="n">step</span><span class="p">)</span> <span class="o">-</span> <span class="n">func</span><span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="n">step</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span>
+<span class="linenos">8</span>    <span class="k">return</span> <span class="n">grad</span>
+</pre></div>
+</div>
+</div>
+<p>点 <span class="math notranslate nohighlight">\((1, 2)\)</span> での結果は、手計算の <span class="math notranslate nohighlight">\((2, 12)\)</span> と一致する。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>解析的な勾配: [ 2. 12.]
+<span class="linenos">2</span>数値微分による勾配: [ 2. 12.]
+</pre></div>
+</div>
+<p>サンプルコードの全体は <a class="reference download internal" download="" href="_downloads/7a2bfb4e47b9d01734f5fb84b5715cbe/ch02_numpy_basics.py"><code class="xref download docutils literal notranslate"><span class="pre">ch02_numpy_basics.py</span></code></a> からダウンロードできる。</p>
+</section>
+</section>
+<section id="id10">
+<h2><span class="section-number">2.3. </span>確率と統計の基本<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<section id="id11">
+<h3><span class="section-number">2.3.1. </span>平均と分散<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<p><span class="math notranslate nohighlight">\(n\)</span> 個の値 <span class="math notranslate nohighlight">\(x_1, \ldots, x_n\)</span> の<strong>平均</strong> <span class="math notranslate nohighlight">\(\bar{x}\)</span> と<strong>分散</strong> <span class="math notranslate nohighlight">\(s^2\)</span> は次のように定義される。</p>
+<div class="math notranslate nohighlight">
+\[\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i, \qquad
+s^2 = \frac{1}{n} \sum_{i=1}^{n} (x_i - \bar{x})^2\]</div>
+<p>分散は値のばらつきの大きさを表し、その平方根 <span class="math notranslate nohighlight">\(s\)</span> を<strong>標準偏差</strong>と呼ぶ。標準偏差は元のデータと同じ単位を持つため、ばらつきの大きさを直感的に把握しやすい。NumPy では <code class="docutils literal notranslate"><span class="pre">np.mean</span></code> と <code class="docutils literal notranslate"><span class="pre">np.var</span></code>、<code class="docutils literal notranslate"><span class="pre">np.std</span></code> で計算できる。</p>
+</section>
+<section id="id12">
+<h3><span class="section-number">2.3.2. </span>確率分布と正規分布<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<p>ある値がどのくらいの確率で現れるかを表したものを<strong>確率分布</strong>と呼ぶ。連続的な値については、確率の密度を表す<strong>確率密度関数</strong>で分布を表す。</p>
+<p>最も重要な確率分布が<strong>正規分布</strong>（ガウス分布）である。平均 <span class="math notranslate nohighlight">\(\mu\)</span>、標準偏差 <span class="math notranslate nohighlight">\(\sigma\)</span> の正規分布の確率密度関数は次の式で表され、<span class="math notranslate nohighlight">\(\mu\)</span> を中心とする左右対称な釣り鐘形になる（<a class="reference internal" href="#fig-ch02-normal"><span class="std std-numref">図 2.3</span></a>）。</p>
+<div class="math notranslate nohighlight">
+\[p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left( -\frac{(x - \mu)^2}{2\sigma^2} \right)\]</div>
+<figure class="align-center" id="id21">
+<span id="fig-ch02-normal"></span><a class="reference internal image-reference" href="_images/ch02_normal.png"><img alt="_images/ch02_normal.png" src="_images/ch02_normal.png" style="width: 520px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 2.3 </span><span class="caption-text">正規分布の確率密度関数。<span class="math notranslate nohighlight">\(\sigma\)</span> が大きいほど広がった形になる。</span><a class="headerlink" href="#id21" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>測定誤差のように多数の小さな要因が積み重なって生じる値は、正規分布に近い分布に従うことが多い。本書のサンプルコードでも、データに加えるノイズを正規分布から生成している（<code class="docutils literal notranslate"><span class="pre">rng.normal</span></code>）。</p>
+</section>
+<section id="id13">
+<h3><span class="section-number">2.3.3. </span>条件付き確率<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<p>分類のモデルは「入力 <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span> が与えられたとき、ラベルが <span class="math notranslate nohighlight">\(y\)</span> である確率」を出力することが多い。このように、ある条件の下での確率を<strong>条件付き確率</strong>と呼び、<span class="math notranslate nohighlight">\(P(y \mid \boldsymbol{x})\)</span> と書く。たとえば <span class="math notranslate nohighlight">\(P(\text{迷惑メール} \mid \text{このメール}) = 0.9\)</span> は、「このメールが迷惑メールである確率は 0.9」という意味である。</p>
+</section>
+<section id="id14">
+<h3><span class="section-number">2.3.4. </span>最尤推定の考え方<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<p>モデルのパラメータを決める基本的な考え方の 1 つに<strong>最尤推定</strong>がある。最尤推定では、「手元のデータが観測される確率が最も高くなるようにパラメータを選ぶ」。</p>
+<p>たとえば、コインを 10 回投げて表が 7 回出たとする。表が出る確率を <span class="math notranslate nohighlight">\(p\)</span> とすると、この結果が得られる確率は <span class="math notranslate nohighlight">\(p^7 (1 - p)^3\)</span> に比例する。これを最大にする <span class="math notranslate nohighlight">\(p\)</span> を求めると <span class="math notranslate nohighlight">\(p = 0.7\)</span> となり、直感どおりの結果が得られる。</p>
+<p>最尤推定は、第 4 章の平均二乗誤差や第 5 章の交差エントロピーといった損失関数の理論的な根拠になっている。ノイズが正規分布に従うと仮定して最尤推定を行うと平均二乗誤差の最小化と同じ問題になり、ラベルがベルヌーイ分布（2 値の確率分布）に従うと仮定すると交差エントロピーの最小化と同じ問題になる。本書では詳しい導出は省略するが、損失関数は場当たり的に決められたものではないことを覚えておいてほしい。</p>
+</section>
+</section>
+<section id="id15">
+<h2><span class="section-number">2.4. </span>まとめ<a class="headerlink" href="#id15" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>データは「行がサンプル、列が特徴量」の行列で表す。行列とベクトルの積で、全サンプルの重み付きの和を一度に計算できる。</p></li>
+<li><p>微分は関数の変化の割合であり、勾配は多変数関数の値が最も急に増える方向を表す。勾配の逆方向に進めば関数の値を減らせる。</p></li>
+<li><p>合成関数の微分は連鎖律で計算できる。</p></li>
+<li><p>数値微分は実装が簡単だが遅いため、主に勾配確認に使う。</p></li>
+<li><p>平均二乗誤差や交差エントロピーといった損失関数は、最尤推定の考え方から導かれる。</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch01_overview.html" class="btn btn-neutral float-left" title="1. 機械学習の全体像" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch03_data.html" class="btn btn-neutral float-right" title="3. データと前処理" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nunu_3060.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,411 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>12. 系列データと Transformer &mdash; 機械学習・深層学習入門</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=f043dae3" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=19757887"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=4755f45a"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="13. 実務への適用" href="ch13_practice.html" />
+    <link rel="prev" title="11. 畳み込みニューラルネットワーク" href="ch11_cnn.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            機械学習・深層学習入門
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">はじめに</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">はじめに</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">本編</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ch01_overview.html">1. 機械学習の全体像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_math.html">2. 数学の準備</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_data.html">3. データと前処理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_regression.html">4. 回帰</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_classification.html">5. 分類</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_evaluation.html">6. モデルの評価と改善</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_tree_ensemble.html">7. 決定木とアンサンブル学習</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_unsupervised.html">8. 教師なし学習</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_neural_network.html">9. ニューラルネットワークの基礎</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_training_techniques.html">10. 深層学習の学習テクニック</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_cnn.html">11. 畳み込みニューラルネットワーク</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">12. 系列データと Transformer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">12.1. 系列データの特徴</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">12.2. トークンと埋め込み</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rnn">12.3. RNN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">12.3.1. 再帰型ニューラルネットワーク</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">12.3.2. RNN の問題点</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#attention">12.4. Attention</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id8">12.4.1. Attention の考え方</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scaled-dot-product-attention">12.4.2. Scaled Dot-Product Attention</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">12.4.3. 因果マスク</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multi-head-attention">12.4.4. Multi-Head Attention</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id11">12.5. Transformer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id12">12.5.1. 全体の構造</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">12.5.2. 位置エンコーディング</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id15">12.5.3. エンコーダとデコーダ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pytorch-transformer">12.6. PyTorch による Transformer の実装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id17">12.7. 大規模言語モデルとの関係</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id18">12.7.1. 事前学習</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id19">12.7.2. 事前学習の後</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id20">12.7.3. 注意点</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id21">12.8. まとめ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch13_practice.html">13. 実務への適用</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">付録</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendix_glossary.html">用語集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_symbols.html">記号一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_examples.html">サンプルコード一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_references.html">参考文献</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">機械学習・深層学習入門</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">12. </span>系列データと Transformer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="transformer">
+<h1><span class="section-number">12. </span>系列データと Transformer<a class="headerlink" href="#transformer" title="Link to this heading"></a></h1>
+<p>この章では、文章や音声、時系列のように、要素の並び順に意味がある<strong>系列データ</strong>を扱うモデルを説明する。従来使われてきた RNN を簡単に紹介した後、現在の自然言語処理の中心であり、大規模言語モデルの基盤となっている Attention と Transformer の仕組みを説明する。</p>
+<section id="id1">
+<h2><span class="section-number">12.1. </span>系列データの特徴<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>系列データには次のような特徴がある。</p>
+<ul class="simple">
+<li><p><strong>順序に意味がある</strong>: 「犬が猫を追う」と「猫が犬を追う」は、同じ単語からなるが意味が異なる。</p></li>
+<li><p><strong>長さが一定ではない</strong>: 文章の長さは文ごとに異なる。</p></li>
+<li><p><strong>離れた要素どうしが関係する</strong>: 「私は昨日、駅前の新しくできた店で買った本を読んだ」という文では、「私は」と「読んだ」が、間に多くの語を挟んで関係している。</p></li>
+</ul>
+<p>第 9 章の全結合層は固定長の入力しか扱えず、要素の順序や位置関係を構造として持たない。系列データには、これらの特徴に対応したモデルが必要である。</p>
+</section>
+<section id="id2">
+<h2><span class="section-number">12.2. </span>トークンと埋め込み<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>文章をモデルに入力するには、まず文章を<strong>トークン</strong>と呼ばれる単位に分割し、各トークンに番号（ID）を割り当てる。トークンは単語や文字のこともあるが、現在の言語モデルでは、出現頻度にもとづいて単語をさらに細かく分けた<strong>サブワード</strong>がよく使われる。</p>
+<p>トークンの ID は単なる番号であり、大小関係に意味はない。そこで、各トークンを学習可能な実数のベクトルに対応させる。これを<a class="reference internal" href="appendix_glossary.html#term-1"><span class="xref std std-term">埋め込み</span></a>（embedding）と呼ぶ。語彙数 <span class="math notranslate nohighlight">\(V\)</span>、ベクトルの次元 <span class="math notranslate nohighlight">\(d\)</span> の埋め込みは、<span class="math notranslate nohighlight">\(V \times d\)</span> の行列として表され、トークン ID に対応する行を取り出すことで埋め込みベクトルを得る。PyTorch では <code class="docutils literal notranslate"><span class="pre">nn.Embedding</span></code> で実現できる。</p>
+<p>これは、第 3 章で説明した one-hot 符号化したベクトルに重み行列を掛けることと同じだが、行を取り出すだけなので効率がよい。埋め込みベクトルは学習によって調整され、意味の近いトークンどうしが近いベクトルになることが知られている <a class="reference internal" href="appendix_references.html#mikolov2013" id="id3"><span>[Mikolov2013]</span></a>。</p>
+</section>
+<section id="rnn">
+<h2><span class="section-number">12.3. </span>RNN<a class="headerlink" href="#rnn" title="Link to this heading"></a></h2>
+<section id="id4">
+<h3><span class="section-number">12.3.1. </span>再帰型ニューラルネットワーク<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p><strong>RNN</strong>（Recurrent Neural Network、再帰型ニューラルネットワーク）は、系列の要素を先頭から 1 つずつ読み込み、それまでの情報を<strong>隠れ状態</strong>と呼ばれるベクトルに蓄えながら処理するモデルである。時刻 <span class="math notranslate nohighlight">\(t\)</span> の入力 <span class="math notranslate nohighlight">\(\boldsymbol{x}_t\)</span> と 1 つ前の隠れ状態 <span class="math notranslate nohighlight">\(\boldsymbol{h}_{t-1}\)</span> から、新しい隠れ状態 <span class="math notranslate nohighlight">\(\boldsymbol{h}_t\)</span> を計算する。</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{h}_t = \tanh(W_x \boldsymbol{x}_t + W_h \boldsymbol{h}_{t-1} + \boldsymbol{b})\]</div>
+<p>すべての時刻で同じ重み <span class="math notranslate nohighlight">\(W_x\)</span>、<span class="math notranslate nohighlight">\(W_h\)</span> を使うため、任意の長さの系列を扱える。時間方向に展開すると、次の図のように同じ層を何段にも重ねた深いネットワークとみなせる。</p>
+<figure class="align-center" id="id22">
+<div class="graphviz"><img src="_images/graphviz-d409460c1ff5c090df6b030edab2eb12863e56c4.png" alt="digraph rnn {
+    rankdir=LR;
+    node [fontsize=11];
+    h0 [label=&quot;h0&quot;, shape=plaintext];
+    c1 [label=&quot;RNN&quot;, shape=box, style=&quot;rounded,filled&quot;, fillcolor=&quot;#eef4fb&quot;];
+    c2 [label=&quot;RNN&quot;, shape=box, style=&quot;rounded,filled&quot;, fillcolor=&quot;#eef4fb&quot;];
+    c3 [label=&quot;RNN&quot;, shape=box, style=&quot;rounded,filled&quot;, fillcolor=&quot;#eef4fb&quot;];
+    h3 [label=&quot;h3&quot;, shape=plaintext];
+    x1 [label=&quot;x1: 犬が&quot;, shape=plaintext]; x2 [label=&quot;x2: 猫を&quot;, shape=plaintext]; x3 [label=&quot;x3: 追う&quot;, shape=plaintext];
+    h0 -&gt; c1; c1 -&gt; c2 [label=&quot;h1&quot;]; c2 -&gt; c3 [label=&quot;h2&quot;]; c3 -&gt; h3;
+    x1 -&gt; c1; x2 -&gt; c2; x3 -&gt; c3;
+    {rank=same; c1; x1;} {rank=same; c2; x2;} {rank=same; c3; x3;}
+}" class="graphviz" /></div>
+<figcaption>
+<p><span class="caption-number">図 12.1 </span><span class="caption-text">時間方向に展開した RNN</span><a class="headerlink" href="#id22" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="id5">
+<h3><span class="section-number">12.3.2. </span>RNN の問題点<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>RNN には次の問題がある。</p>
+<ul class="simple">
+<li><p><strong>長い系列で勾配が消失しやすい</strong>: 時間方向に展開した RNN は非常に深いネットワークと同じであり、第 10 章で説明した勾配消失が起こりやすい。そのため、遠く離れた要素どうしの関係を学習しにくい。</p></li>
+<li><p><strong>並列計算ができない</strong>: 時刻 <span class="math notranslate nohighlight">\(t\)</span> の計算には時刻 <span class="math notranslate nohighlight">\(t - 1\)</span> の結果が必要なため、系列の要素を順番にしか処理できない。GPU の並列計算能力を生かせず、学習に時間がかかる。</p></li>
+</ul>
+<p>勾配消失の問題を緩和するため、情報をどの程度残すか・忘れるかを制御する「ゲート」の仕組みを持つ <strong>LSTM</strong>（Long Short-Term Memory）<a class="reference internal" href="appendix_references.html#hochreiter1997" id="id6"><span>[Hochreiter1997]</span></a> や、それを簡略化した GRU <a class="reference internal" href="appendix_references.html#cho2014" id="id7"><span>[Cho2014]</span></a> が考案され、2010 年代の自然言語処理や音声認識で広く使われた。しかし、並列計算ができない問題は残った。</p>
+</section>
+</section>
+<section id="attention">
+<h2><span class="section-number">12.4. </span>Attention<a class="headerlink" href="#attention" title="Link to this heading"></a></h2>
+<section id="id8">
+<h3><span class="section-number">12.4.1. </span>Attention の考え方<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p><a class="reference internal" href="appendix_glossary.html#term-Attention"><span class="xref std std-term">Attention</span></a>（注意機構）は、系列の各要素が、系列の中のどの要素にどれだけ注目するかを計算し、注目度に応じて情報を集める仕組みである <a class="reference internal" href="appendix_references.html#bahdanau2014" id="id9"><span>[Bahdanau2014]</span></a>。RNN のように情報を順に受け渡すのではなく、離れた要素どうしを直接結び付けられる。</p>
+<p>Attention は、辞書の検索にたとえると分かりやすい。各要素は、次の 3 つのベクトルを持つ。</p>
+<ul class="simple">
+<li><p><strong>クエリ</strong>（query）: 「自分はどのような情報を探しているか」を表す。</p></li>
+<li><p><strong>キー</strong>（key）: 「自分はどのような情報を持っているか」を表す見出し。</p></li>
+<li><p><strong>バリュー</strong>（value）: 実際に渡す情報の中身。</p></li>
+</ul>
+<p>ある要素のクエリと、すべての要素のキーとの類似度（内積）を計算し、類似度が高い要素のバリューほど大きな重みで足し合わせる。通常の辞書では見出しが完全に一致した 1 つの項目だけを取り出すが、Attention では類似度に応じてすべての項目を少しずつ混ぜ合わせる「柔らかい検索」を行う。</p>
+</section>
+<section id="scaled-dot-product-attention">
+<h3><span class="section-number">12.4.2. </span>Scaled Dot-Product Attention<a class="headerlink" href="#scaled-dot-product-attention" title="Link to this heading"></a></h3>
+<p>系列の長さを <span class="math notranslate nohighlight">\(n\)</span> とし、各要素のクエリ・キー・バリューを行として並べた行列を <span class="math notranslate nohighlight">\(Q\)</span>、<span class="math notranslate nohighlight">\(K\)</span>、<span class="math notranslate nohighlight">\(V\)</span> とする。Transformer で使われる <strong>Scaled Dot-Product Attention</strong> は次の式で計算される。</p>
+<div class="math notranslate nohighlight">
+\[\text{Attention}(Q, K, V) = \text{softmax}\left( \frac{Q K^\top}{\sqrt{d_k}} \right) V\]</div>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(Q K^\top\)</span> は <span class="math notranslate nohighlight">\(n \times n\)</span> の行列で、<span class="math notranslate nohighlight">\(i\)</span> 行 <span class="math notranslate nohighlight">\(j\)</span> 列の要素は「要素 <span class="math notranslate nohighlight">\(i\)</span> のクエリ」と「要素 <span class="math notranslate nohighlight">\(j\)</span> のキー」の内積（類似度）である。</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sqrt{d_k}\)</span>（<span class="math notranslate nohighlight">\(d_k\)</span> はキーの次元）で割って値の大きさを調整する。次元が大きいと内積の値が大きくなり、ソフトマックス関数の出力が 1 つの要素に極端に偏って勾配が小さくなるのを防ぐためである。</p></li>
+<li><p>行ごとにソフトマックス関数を適用して、合計が 1 になる重み（<strong>Attention の重み</strong>）に変換する。</p></li>
+<li><p>重みを使ってバリューの加重平均を取る。</p></li>
+</ol>
+<p>クエリ・キー・バリューは、入力の埋め込みベクトルを並べた行列 <span class="math notranslate nohighlight">\(X\)</span> に、それぞれ学習可能な重み行列を掛けて作る（<span class="math notranslate nohighlight">\(Q = X W_Q\)</span>、<span class="math notranslate nohighlight">\(K = X W_K\)</span>、<span class="math notranslate nohighlight">\(V = X W_V\)</span>）。このように、同じ系列の中で要素どうしが注目し合う Attention を <strong>Self-Attention</strong>（自己注意）と呼ぶ。</p>
+<p>NumPy で実装すると次のようになる。</p>
+<div class="literal-block-wrapper docutils container" id="id23">
+<div class="code-block-caption"><span class="caption-number">コード 12.1 </span><span class="caption-text">Scaled Dot-Product Attention の実装（ch12_attention.py より抜粋）</span><a class="headerlink" href="#id23" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span><span class="w"> </span><span class="nf">scaled_dot_product_attention</span><span class="p">(</span><span class="n">q</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span>
+<span class="linenos"> 2</span>                                 <span class="n">causal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">FloatArray</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]:</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;Attention(Q, K, V) = softmax(Q K^T / sqrt(d_k)) V を計算し、出力と重みを返す。&quot;&quot;&quot;</span>
+<span class="linenos"> 4</span>    <span class="n">d_k</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="linenos"> 5</span>    <span class="n">scores</span> <span class="o">=</span> <span class="n">q</span> <span class="o">@</span> <span class="n">k</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">d_k</span><span class="p">)</span>
+<span class="linenos"> 6</span>    <span class="k">if</span> <span class="n">causal</span><span class="p">:</span>
+<span class="linenos"> 7</span>        <span class="c1"># 未来の位置を参照しないよう、対角より上を -inf にする</span>
+<span class="linenos"> 8</span>        <span class="n">n</span> <span class="o">=</span> <span class="n">scores</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="linenos"> 9</span>        <span class="n">scores</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+<span class="linenos">10</span>    <span class="n">weights</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+<span class="linenos">11</span>    <span class="k">return</span> <span class="n">weights</span> <span class="o">@</span> <span class="n">v</span><span class="p">,</span> <span class="n">weights</span>
+</pre></div>
+</div>
+</div>
+<p>4 個のトークンに対する Attention の重みの例を次に示す。各行が 1 つのトークン（クエリ）に対応し、行の和は 1 になる。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>Attention の重み (各行の和は 1):
+<span class="linenos">2</span> [[0.344 0.127 0.332 0.198]
+<span class="linenos">3</span> [0.775 0.004 0.053 0.168]
+<span class="linenos">4</span> [0.252 0.278 0.286 0.184]
+<span class="linenos">5</span> [0.216 0.278 0.211 0.295]]
+<span class="linenos">6</span>出力の形状: (4, 8)
+</pre></div>
+</div>
+<p>この例では重み行列を乱数で作っているため、重みの値自体に意味はない。学習によって重み行列が調整されると、たとえば代名詞のトークンが、それが指す名詞のトークンに大きな重みを置くようになる。</p>
+<p>サンプルコードの全体は <a class="reference download internal" download="" href="_downloads/015d6850cb93cb9b76cd145319be26b4/ch12_attention.py"><code class="xref download docutils literal notranslate"><span class="pre">ch12_attention.py</span></code></a> からダウンロードできる。サンプルコードでは、結果が PyTorch の <code class="docutils literal notranslate"><span class="pre">torch.nn.functional.scaled_dot_product_attention</span></code> と一致することも確認している。</p>
+</section>
+<section id="id10">
+<h3><span class="section-number">12.4.3. </span>因果マスク<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<p>文章を先頭から 1 トークンずつ生成するモデルでは、あるトークンを予測するときに、それより後ろのトークンを見てはいけない。そこで、Attention の重みを計算する前に、自分より後ろの位置の類似度を <span class="math notranslate nohighlight">\(-\infty\)</span> にしておく。ソフトマックス関数を通すと、それらの位置の重みは 0 になる（<a class="reference internal" href="#fig-ch12-causal-mask"><span class="std std-numref">図 12.2</span></a>）。これを<strong>因果マスク</strong>と呼ぶ。</p>
+<figure class="align-center" id="id24">
+<span id="fig-ch12-causal-mask"></span><a class="reference internal image-reference" href="_images/ch12_causal_mask.png"><img alt="_images/ch12_causal_mask.png" src="_images/ch12_causal_mask.png" style="width: 640px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 12.2 </span><span class="caption-text">Attention の重みの例。因果マスクを適用すると、各トークンは自分自身とそれより前のトークンだけに注目する。</span><a class="headerlink" href="#id24" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="multi-head-attention">
+<h3><span class="section-number">12.4.4. </span>Multi-Head Attention<a class="headerlink" href="#multi-head-attention" title="Link to this heading"></a></h3>
+<p>1 組のクエリ・キー・バリューでは、1 種類の観点でしか注目先を選べない。そこで、異なる重み行列で作った複数組のクエリ・キー・バリューで並行して Attention を計算し、結果を連結する。これを <strong>Multi-Head Attention</strong> と呼び、各組を<strong>ヘッド</strong>と呼ぶ。ヘッドごとに、文法的な関係や意味的な関係など、異なる種類の関係に注目できるようになる。</p>
+</section>
+</section>
+<section id="id11">
+<h2><span class="section-number">12.5. </span>Transformer<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
+<section id="id12">
+<h3><span class="section-number">12.5.1. </span>全体の構造<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<p><a class="reference internal" href="appendix_glossary.html#term-Transformer"><span class="xref std std-term">Transformer</span></a> <a class="reference internal" href="appendix_references.html#vaswani2017" id="id13"><span>[Vaswani2017]</span></a> は、RNN を使わず、Attention を中心に構成されたモデルである。もともとは機械翻訳のために提案されたが、現在では自然言語処理だけでなく、画像や音声などさまざまな分野で使われている。</p>
+<p>Transformer は、次の図のブロックを何層も重ねた構造を持つ。</p>
+<figure class="align-center" id="id25">
+<div class="graphviz"><img src="_images/graphviz-2ac20040d0c45175afd7dde456f56a7bccbe03bc.png" alt="digraph tblock {
+    rankdir=BT;
+    node [shape=box, style=&quot;rounded,filled&quot;, fillcolor=&quot;#eef4fb&quot;, fontsize=10, width=2.4];
+    in [label=&quot;入力（系列長 × d_model）&quot;, fillcolor=&quot;#fdf0e0&quot;];
+    ln1 [label=&quot;レイヤー正規化&quot;];
+    mha [label=&quot;Multi-Head Attention&quot;, fillcolor=&quot;#dbe9f6&quot;];
+    add1 [label=&quot;+&quot;, shape=circle, width=0.3];
+    ln2 [label=&quot;レイヤー正規化&quot;];
+    ffn [label=&quot;全結合層 → 活性化関数 → 全結合層\n（位置ごとに適用）&quot;, fillcolor=&quot;#dbe9f6&quot;];
+    add2 [label=&quot;+&quot;, shape=circle, width=0.3];
+    out [label=&quot;出力（系列長 × d_model）&quot;, fillcolor=&quot;#fdf0e0&quot;];
+    in -&gt; ln1 -&gt; mha -&gt; add1 -&gt; ln2 -&gt; ffn -&gt; add2 -&gt; out;
+    in -&gt; add1 [label=&quot;残差接続&quot;, fontsize=9, style=dashed];
+    add1 -&gt; add2 [label=&quot;残差接続&quot;, fontsize=9, style=dashed];
+}" class="graphviz" /></div>
+<figcaption>
+<p><span class="caption-number">図 12.3 </span><span class="caption-text">Transformer のブロックの構造（入力側に正規化を置く方式）</span><a class="headerlink" href="#id25" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<ul class="simple">
+<li><p><strong>Multi-Head Attention</strong>: トークンどうしで情報をやり取りする。</p></li>
+<li><p><strong>位置ごとの全結合層</strong>（Feed-Forward Network）: 各トークンのベクトルを個別に変換する。2 層の全結合層からなり、中間層の次元は入力の 4 倍程度にすることが多い。</p></li>
+<li><p><strong>残差接続</strong>（第 11 章）と<strong>レイヤー正規化</strong>（第 10 章）: 深いネットワークを安定して学習するために使う。正規化を各処理の前に置く方式と後に置く方式があり、図は前に置く方式である。</p></li>
+</ul>
+<p>Attention は系列内のすべての要素の組み合わせを一度に計算するため、RNN と違って系列全体を並列に処理できる。これにより、GPU を使って大量のデータで効率よく学習できるようになった。一方、計算量が系列の長さの 2 乗に比例するため、非常に長い系列の扱いは課題となる。</p>
+</section>
+<section id="id14">
+<h3><span class="section-number">12.5.2. </span>位置エンコーディング<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<p>Attention の計算は、要素の並び順を入れ替えても、出力の並び順が同じように入れ替わるだけで、各要素の出力自体は変わらない。つまり、Attention だけではトークンの順序を区別できない。そこで、各位置に固有のベクトルを埋め込みベクトルに足して、位置の情報を与える。これを<strong>位置エンコーディング</strong>と呼ぶ。</p>
+<p>元の Transformer では、<a class="reference internal" href="#fig-ch12-positional-encoding"><span class="std std-numref">図 12.4</span></a> のように、周期の異なる sin 関数と cos 関数を組み合わせたベクトルを使った。位置ごとに学習可能なベクトルを使う方法や、Attention の計算の中で相対的な位置を考慮する方法もある。</p>
+<figure class="align-center" id="id26">
+<span id="fig-ch12-positional-encoding"></span><a class="reference internal image-reference" href="_images/ch12_positional_encoding.png"><img alt="_images/ch12_positional_encoding.png" src="_images/ch12_positional_encoding.png" style="width: 640px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 12.4 </span><span class="caption-text">sin 関数と cos 関数による位置エンコーディング。次元ごとに周期が異なり、各位置が固有のパターンを持つ。</span><a class="headerlink" href="#id26" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="id15">
+<h3><span class="section-number">12.5.3. </span>エンコーダとデコーダ<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<p>元の Transformer は、入力文を処理する<strong>エンコーダ</strong>と、出力文を生成する<strong>デコーダ</strong>からなる。エンコーダは因果マスクなしの Self-Attention で入力文全体を見渡し、デコーダは因果マスク付きの Self-Attention で生成済みのトークンを参照しながら、次のトークンを予測する。</p>
+<p>その後、エンコーダだけを使うモデル（文章の分類や情報抽出に向く。BERT <a class="reference internal" href="appendix_references.html#devlin2019" id="id16"><span>[Devlin2019]</span></a> など）や、デコーダだけを使うモデル（文章の生成に向く。GPT など）が登場した。現在の大規模言語モデルの多くは、デコーダだけを使う構造である。</p>
+</section>
+</section>
+<section id="pytorch-transformer">
+<h2><span class="section-number">12.6. </span>PyTorch による Transformer の実装<a class="headerlink" href="#pytorch-transformer" title="Link to this heading"></a></h2>
+<p>PyTorch には Transformer の部品が用意されている。次のサンプルでは、長さ 8 のトークン列（0〜9 の整数）について、「先頭のトークンが 2 番目以降にもう一度現れるか」を判定する分類問題を、小さな Transformer エンコーダで学習する。答えるには、先頭と離れた位置のトークンを比較する必要がある。</p>
+<div class="literal-block-wrapper docutils container" id="id27">
+<div class="code-block-caption"><span class="caption-number">コード 12.2 </span><span class="caption-text">小さな Transformer エンコーダ（ch12_transformer_pytorch.py より抜粋）</span><a class="headerlink" href="#id27" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">class</span><span class="w"> </span><span class="nc">TinyTransformer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="linenos"> 2</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d_model</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">32</span><span class="p">,</span> <span class="n">n_heads</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos"> 3</span>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<span class="linenos"> 4</span>        <span class="bp">self</span><span class="o">.</span><span class="n">token_emb</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">VOCAB</span><span class="p">,</span> <span class="n">d_model</span><span class="p">)</span>
+<span class="linenos"> 5</span>        <span class="c1"># 位置ごとに学習可能なベクトルを足して、トークンの順序の情報を与える</span>
+<span class="linenos"> 6</span>        <span class="bp">self</span><span class="o">.</span><span class="n">pos_emb</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">SEQ_LEN</span><span class="p">,</span> <span class="n">d_model</span><span class="p">))</span>
+<span class="linenos"> 7</span>        <span class="n">layer</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">TransformerEncoderLayer</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">n_heads</span><span class="p">,</span> <span class="n">dim_feedforward</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos"> 8</span>        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">TransformerEncoder</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">)</span>
+<span class="linenos"> 9</span>        <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="linenos">12</span>        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_emb</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos_emb</span>  <span class="c1"># (バッチ, 系列長, d_model)</span>
+<span class="linenos">13</span>        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+<span class="linenos">14</span>        <span class="n">out</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">h</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># 先頭位置の出力ベクトルで分類する</span>
+<span class="linenos">15</span>        <span class="k">return</span> <span class="n">out</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>4 行目の <code class="docutils literal notranslate"><span class="pre">nn.Embedding</span></code> でトークンを埋め込みベクトルに変換し、6 行目で位置ごとに学習可能な位置エンコーディングを用意している。</p></li>
+<li><p>7〜8 行目で、Multi-Head Attention（4 ヘッド）と位置ごとの全結合層からなるブロックを 2 層重ねている。<code class="docutils literal notranslate"><span class="pre">batch_first=True</span></code> は、入力の形状を「バッチ × 系列長 × 次元」とする指定である。なお、<code class="docutils literal notranslate"><span class="pre">nn.TransformerEncoderLayer</span></code> は、既定ではレイヤー正規化を各処理の後に置く方式であり、<code class="docutils literal notranslate"><span class="pre">norm_first=True</span></code> を指定すると前に置く方式になる。</p></li>
+<li><p>14 行目で、先頭の位置の出力ベクトルを使って 2 クラスに分類している。Attention によって、先頭の位置の出力には系列全体の情報が集められている。</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>検証データで正例 (再出現する) の割合 = 0.531
+<span class="linenos">2</span>step  400: loss = 0.0269, 検証正解率 = 0.994
+<span class="linenos">3</span>step  800: loss = 0.0005, 検証正解率 = 0.999
+<span class="linenos">4</span>step 1200: loss = 0.0003, 検証正解率 = 1.000
+<span class="linenos">5</span>step 1600: loss = 0.1507, 検証正解率 = 0.982
+<span class="linenos">6</span>step 2000: loss = 0.0002, 検証正解率 = 1.000
+</pre></div>
+</div>
+<p>ほぼ 100 % の正解率で判定できるようになっている。step 1600 で損失が一時的に上がっているのは、学習率を一定にしているために学習が一時的に不安定になったものと考えられる。実際の Transformer の学習では、第 10 章で説明したウォームアップや学習率の減衰を組み合わせることが多い。</p>
+<p>サンプルコードの全体は <a class="reference download internal" download="" href="_downloads/6c227e86bcb0411e1009e5fc119319c5/ch12_transformer_pytorch.py"><code class="xref download docutils literal notranslate"><span class="pre">ch12_transformer_pytorch.py</span></code></a> からダウンロードできる。</p>
+</section>
+<section id="id17">
+<h2><span class="section-number">12.7. </span>大規模言語モデルとの関係<a class="headerlink" href="#id17" title="Link to this heading"></a></h2>
+<section id="id18">
+<h3><span class="section-number">12.7.1. </span>事前学習<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<p><a class="reference internal" href="appendix_glossary.html#term-30"><span class="xref std std-term">大規模言語モデル</span></a>（Large Language Model、LLM）は、デコーダ型の Transformer を、膨大な量の文章で学習したモデルである。学習のタスクは「それまでのトークン列から、次のトークンを予測する」という単純なもので、損失関数は第 5 章の多クラス分類の交差エントロピー（クラス数は語彙数）である。</p>
+<p>この学習では、文章そのものから正解（次のトークン）を作れるため、人手でラベルを付ける必要がない。第 1 章で触れた自己教師あり学習の一種であり、インターネット上の大量の文章をそのまま学習に使える。このように、特定のタスクに使う前に大量のデータで行う汎用的な学習を<strong>事前学習</strong>と呼ぶ。</p>
+<p>次のトークンを正確に予測するには、文法だけでなく、単語の意味、世の中の知識、文脈の流れなどを捉える必要がある。モデルの規模（パラメータ数）、データ量、計算量を大きくするほど性能が向上することが経験的に知られており、数十億〜数兆個のパラメータを持つモデルが作られている。</p>
+</section>
+<section id="id19">
+<h3><span class="section-number">12.7.2. </span>事前学習の後<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<p>事前学習だけのモデルは「もっともらしい続きの文章を書く」ことはできるが、質問に答えたり指示に従ったりするのは得意ではない。そこで、次のような追加の学習を行う。</p>
+<ul class="simple">
+<li><p><strong>ファインチューニング</strong>: 第 11 章の転移学習と同じく、事前学習したモデルを出発点として、特定のタスクのデータで追加学習する。指示と望ましい応答の組で学習することを<strong>インストラクションチューニング</strong>と呼ぶ。</p></li>
+<li><p><strong>人間のフィードバックによる強化学習</strong>: 複数の応答のうちどれが良いかという人間の評価を使い、より好ましい応答を出力するように調整する。</p></li>
+</ul>
+<p>また、学習済みのモデルは、入力文（プロンプト）の中にいくつかの例を示すだけで、パラメータを更新せずに新しいタスクをこなせることがある。これを<strong>文脈内学習</strong>（in-context learning）と呼ぶ。</p>
+</section>
+<section id="id20">
+<h3><span class="section-number">12.7.3. </span>注意点<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
+<p>大規模言語モデルは、事前学習のデータに含まれるパターンにもとづいて、もっともらしいトークンの並びを生成している。そのため、事実と異なる内容をもっともらしく生成することがある（<strong>ハルシネーション</strong>）。また、訓練データに含まれる偏りを反映することもある。業務で利用する場合は、出力を検証する仕組みや、外部の信頼できる情報を検索して入力に加える方法（検索拡張生成、RAG）などを組み合わせることが重要である。</p>
+</section>
+</section>
+<section id="id21">
+<h2><span class="section-number">12.8. </span>まとめ<a class="headerlink" href="#id21" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>系列データは順序に意味があり、長さが一定でない。トークンは埋め込みによってベクトルに変換する。</p></li>
+<li><p>RNN は隠れ状態を受け渡しながら系列を順に処理するが、長い系列の学習と並列化に課題がある。</p></li>
+<li><p>Attention は、クエリとキーの類似度にもとづいてバリューを加重平均し、離れた要素どうしを直接結び付ける。</p></li>
+<li><p>Transformer は Multi-Head Attention、位置ごとの全結合層、残差接続、レイヤー正規化からなるブロックを重ねたモデルで、系列全体を並列に処理できる。</p></li>
+<li><p>大規模言語モデルは、デコーダ型の Transformer を大量の文章で次のトークンの予測によって事前学習したモデルである。</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch11_cnn.html" class="btn btn-neutral float-left" title="11. 畳み込みニューラルネットワーク" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch13_practice.html" class="btn btn-neutral float-right" title="13. 実務への適用" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nunu_3060.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

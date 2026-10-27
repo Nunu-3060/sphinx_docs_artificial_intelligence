@@ -1,0 +1,461 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>10. 深層学習の学習テクニック &mdash; 機械学習・深層学習入門</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=f043dae3" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=19757887"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=4755f45a"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="11. 畳み込みニューラルネットワーク" href="ch11_cnn.html" />
+    <link rel="prev" title="9. ニューラルネットワークの基礎" href="ch09_neural_network.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            機械学習・深層学習入門
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">はじめに</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">はじめに</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">本編</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ch01_overview.html">1. 機械学習の全体像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_math.html">2. 数学の準備</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_data.html">3. データと前処理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_regression.html">4. 回帰</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_classification.html">5. 分類</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_evaluation.html">6. モデルの評価と改善</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_tree_ensemble.html">7. 決定木とアンサンブル学習</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_unsupervised.html">8. 教師なし学習</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_neural_network.html">9. ニューラルネットワークの基礎</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">10. 深層学習の学習テクニック</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">10.1. ミニバッチ学習</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">10.2. 最適化手法</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sgd">10.2.1. SGD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">10.2.2. モメンタム</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adam">10.2.3. Adam</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">10.3. 重みの初期化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">10.4. 勾配消失と勾配爆発</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id11">10.5. バッチ正規化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id14">10.6. 深層学習での過学習対策</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id15">10.6.1. 重み減衰</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id16">10.6.2. ドロップアウト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id18">10.6.3. 早期終了</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id19">10.6.4. データ拡張</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id20">10.7. 学習率のスケジューリング</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pytorch">10.8. PyTorch による学習の実装</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id22">10.8.1. データの準備</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id23">10.8.2. モデルの定義</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id24">10.8.3. 学習ループ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id25">10.9. 学習がうまくいかないときは</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id26">10.10. まとめ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_cnn.html">11. 畳み込みニューラルネットワーク</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch12_sequence_transformer.html">12. 系列データと Transformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch13_practice.html">13. 実務への適用</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">付録</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendix_glossary.html">用語集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_symbols.html">記号一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_examples.html">サンプルコード一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_references.html">参考文献</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">機械学習・深層学習入門</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">10. </span>深層学習の学習テクニック</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">10. </span>深層学習の学習テクニック<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>第 9 章で、ニューラルネットワークを誤差逆伝播法と勾配降下法で学習できることを説明した。しかし、層を深くしたネットワークを実際にうまく学習させるには、さまざまな工夫が必要になる。この章では、深層学習で標準的に使われる学習のテクニックを説明し、PyTorch による学習の実装方法を示す。</p>
+<section id="id2">
+<h2><span class="section-number">10.1. </span>ミニバッチ学習<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>深層学習では、第 4 章で紹介した確率的勾配降下法を使い、訓練データを小さなまとまり（<a class="reference internal" href="appendix_glossary.html#term-46"><span class="xref std std-term">ミニバッチ</span></a>）に分けてパラメータを更新する。</p>
+<ul class="simple">
+<li><p><strong>バッチサイズ</strong>: 1 つのミニバッチに含めるサンプル数。32〜512 程度がよく使われる。</p></li>
+<li><p><strong>イテレーション</strong>: パラメータの更新 1 回。</p></li>
+<li><p><a class="reference internal" href="appendix_glossary.html#term-2"><span class="xref std std-term">エポック</span></a>: 訓練データ全体を 1 周すること。訓練データが 1000 件、バッチサイズが 100 なら、1 エポックは 10 イテレーションである。</p></li>
+</ul>
+<p>各エポックの最初に訓練データの順序をシャッフルし、毎回異なる組み合わせのミニバッチを作る。ミニバッチから求めた勾配は全データでの勾配の近似なのでノイズを含むが、このノイズには、損失関数の浅い谷に捕まるのを防ぎ、汎化性能の高い解を見つけやすくする効果もあるとされる。</p>
+<p>バッチサイズを大きくすると、GPU で並列に計算できるため 1 エポックの計算は速くなるが、メモリの消費が増える。また、バッチサイズを変えたときは、学習率も合わせて調整する必要があることが多い。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">10.2. </span>最適化手法<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>勾配を使ってパラメータを更新する方法を<strong>最適化手法</strong>（オプティマイザ）と呼ぶ。単純な SGD は、損失関数の形によっては学習が非常に遅くなる。<a class="reference internal" href="#fig-ch10-optimizers"><span class="std std-numref">図 10.1</span></a> は、横方向にはゆるやかで縦方向には急な、細長い谷の形をした関数の最小値（★印）を探す様子である。</p>
+<figure class="align-center" id="id27">
+<span id="fig-ch10-optimizers"></span><a class="reference internal image-reference" href="_images/ch10_optimizers.png"><img alt="_images/ch10_optimizers.png" src="_images/ch10_optimizers.png" style="width: 640px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 10.1 </span><span class="caption-text">最適化手法による更新の軌跡の違い</span><a class="headerlink" href="#id27" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<section id="sgd">
+<h3><span class="section-number">10.2.1. </span>SGD<a class="headerlink" href="#sgd" title="Link to this heading"></a></h3>
+<p>SGD（確率的勾配降下法）は、勾配に学習率を掛けて引くだけの最も単純な方法である。</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{w} \leftarrow \boldsymbol{w} - \eta \boldsymbol{g}\]</div>
+<p>ここで <span class="math notranslate nohighlight">\(\boldsymbol{g}\)</span> はミニバッチから求めた勾配である。図の SGD は、縦方向には勾配が大きいため最初に振動し、横方向には勾配が小さいためなかなか進まない。縦方向の振動を抑えようとして学習率を下げると、横方向の進みがさらに遅くなる。</p>
+</section>
+<section id="id4">
+<h3><span class="section-number">10.2.2. </span>モメンタム<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p><strong>モメンタム</strong>は、ボールが坂を転がるように、過去の更新の方向を「速度」として引き継ぐ方法である。</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{v} \leftarrow \beta \boldsymbol{v} - \eta \boldsymbol{g}, \qquad
+\boldsymbol{w} \leftarrow \boldsymbol{w} + \boldsymbol{v}\]</div>
+<p><span class="math notranslate nohighlight">\(\beta\)</span> は過去の速度をどれだけ残すかを決める値で、0.9 がよく使われる。一貫して同じ方向を向く勾配（図の横方向）は積み重なって加速し、向きが交互に変わる勾配（縦方向）は打ち消し合う。図では、勢いがついて最小値を行き過ぎる動きも見られるが、SGD よりも早く最小値に近づいている。</p>
+</section>
+<section id="adam">
+<h3><span class="section-number">10.2.3. </span>Adam<a class="headerlink" href="#adam" title="Link to this heading"></a></h3>
+<p><strong>Adam</strong> <a class="reference internal" href="appendix_references.html#kingma2015" id="id5"><span>[Kingma2015]</span></a> は、モメンタムの考え方に加えて、パラメータごとに学習率を自動的に調整する方法である。勾配の移動平均 <span class="math notranslate nohighlight">\(\boldsymbol{m}\)</span> と、勾配の 2 乗の移動平均 <span class="math notranslate nohighlight">\(\boldsymbol{v}\)</span> を記録し、<span class="math notranslate nohighlight">\(\boldsymbol{m}\)</span> を <span class="math notranslate nohighlight">\(\sqrt{\boldsymbol{v}}\)</span> で割った値で更新する。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\boldsymbol{m} &amp;\leftarrow \beta_1 \boldsymbol{m} + (1 - \beta_1) \boldsymbol{g} \\
+\boldsymbol{v} &amp;\leftarrow \beta_2 \boldsymbol{v} + (1 - \beta_2) \boldsymbol{g}^2 \\
+\boldsymbol{w} &amp;\leftarrow \boldsymbol{w} - \eta \frac{\hat{\boldsymbol{m}}}{\sqrt{\hat{\boldsymbol{v}}} + \epsilon}\end{split}\]</div>
+<p><span class="math notranslate nohighlight">\(\hat{\boldsymbol{m}}\)</span> と <span class="math notranslate nohighlight">\(\hat{\boldsymbol{v}}\)</span> は、<span class="math notranslate nohighlight">\(\boldsymbol{m}\)</span> と <span class="math notranslate nohighlight">\(\boldsymbol{v}\)</span> を 0 で初期化したことによる偏りを補正した値である（実装を参照）。2 乗や割り算は要素ごとに行う。勾配の大きい方向では更新幅が抑えられ、勾配の小さい方向では更新幅が相対的に大きくなるため、方向によって勾配の大きさが異なる場合でも効率よく進める。</p>
+<div class="literal-block-wrapper docutils container" id="id28">
+<div class="code-block-caption"><span class="caption-number">コード 10.1 </span><span class="caption-text">Adam の実装（ch10_optimizers.py より抜粋）</span><a class="headerlink" href="#id28" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">class</span><span class="w"> </span><span class="nc">Adam</span><span class="p">:</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;Adam: 勾配の移動平均 (1 次モーメント) と勾配の 2 乗の移動平均 (2 次モーメント) を使う。&quot;&quot;&quot;</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lr</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">beta1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span> <span class="n">beta2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.999</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos"> 5</span>        <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">=</span> <span class="n">lr</span>
+<span class="linenos"> 6</span>        <span class="bp">self</span><span class="o">.</span><span class="n">beta1</span> <span class="o">=</span> <span class="n">beta1</span>
+<span class="linenos"> 7</span>        <span class="bp">self</span><span class="o">.</span><span class="n">beta2</span> <span class="o">=</span> <span class="n">beta2</span>
+<span class="linenos"> 8</span>        <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="n">eps</span>
+<span class="linenos"> 9</span>        <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">:</span> <span class="n">FloatArray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="linenos">10</span>        <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">:</span> <span class="n">FloatArray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="linenos">11</span>        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span>    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatArray</span><span class="p">:</span>
+<span class="linenos">14</span>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos">15</span>            <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="linenos">16</span>            <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="linenos">17</span>        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="linenos">18</span>        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta1</span><span class="p">)</span> <span class="o">*</span> <span class="n">g</span>
+<span class="linenos">19</span>        <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta2</span><span class="p">)</span> <span class="o">*</span> <span class="n">g</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="linenos">20</span>        <span class="c1"># 初期値を 0 にしたことによる偏りを補正する</span>
+<span class="linenos">21</span>        <span class="n">m_hat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta1</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+<span class="linenos">22</span>        <span class="n">v_hat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta2</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+<span class="linenos">23</span>        <span class="n">result</span><span class="p">:</span> <span class="n">FloatArray</span> <span class="o">=</span> <span class="n">p</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">*</span> <span class="n">m_hat</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">v_hat</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span>
+<span class="linenos">24</span>        <span class="k">return</span> <span class="n">result</span>
+</pre></div>
+</div>
+</div>
+<p>各手法で 100 ステップ更新した後の位置を次に示す。最小値は <span class="math notranslate nohighlight">\((0, 0)\)</span> である。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>SGD (lr=0.4): 100 ステップ後の位置 = (-0.1350,  0.0000), f = 0.000911
+<span class="linenos">2</span>モメンタム (lr=0.1): 100 ステップ後の位置 = ( 0.0211, -0.0105), f = 0.000241
+<span class="linenos">3</span>Adam (lr=0.5): 100 ステップ後の位置 = (-0.0408,  0.0060), f = 0.000156
+</pre></div>
+</div>
+<p>サンプルコードの全体は <a class="reference download internal" download="" href="_downloads/d53e2143c7088151f43d95ca2704f7bc/ch10_optimizers.py"><code class="xref download docutils literal notranslate"><span class="pre">ch10_optimizers.py</span></code></a> からダウンロードできる。</p>
+<p>Adam はハイパーパラメータの調整をあまりしなくても安定して学習できるため、深層学習で最もよく使われる最適化手法の 1 つである。<span class="math notranslate nohighlight">\(\beta_1 = 0.9\)</span>、<span class="math notranslate nohighlight">\(\beta_2 = 0.999\)</span> が標準的な値で、学習率は 0.001 前後から試すことが多い。正則化（重み減衰）を Adam と正しく組み合わせた <strong>AdamW</strong> <a class="reference internal" href="appendix_references.html#loshchilov2019" id="id6"><span>[Loshchilov2019]</span></a> も広く使われている。一方、画像認識の分野では、モメンタム付きの SGD を丁寧に調整した方が汎化性能が高くなることもある。</p>
+</section>
+</section>
+<section id="id7">
+<h2><span class="section-number">10.3. </span>重みの初期化<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<p>重みをすべて 0 で初期化すると、同じ層のユニットがすべて同じ値を出力し、同じ勾配を受け取るため、いつまでも同じ値のまま学習が進まない。そこで、重みは乱数で初期化する。</p>
+<p>乱数の大きさ（分散）も重要である。大きすぎると層を通るたびに値が大きくなって発散し、小さすぎると値が 0 に近づいて信号が消えてしまう。層を通っても出力の分散が保たれるように、前の層のユニット数 <span class="math notranslate nohighlight">\(n_{\text{in}}\)</span> に応じて分散を決める方法が使われる。</p>
+<ul class="simple">
+<li><p><strong>Xavier の初期化</strong>（Glorot の初期化）<a class="reference internal" href="appendix_references.html#glorot2010" id="id8"><span>[Glorot2010]</span></a>: 分散を <span class="math notranslate nohighlight">\(2 / (n_{\text{in}} + n_{\text{out}})\)</span> にする（<span class="math notranslate nohighlight">\(n_{\text{out}}\)</span> は次の層のユニット数）。簡略化して <span class="math notranslate nohighlight">\(1 / n_{\text{in}}\)</span> とすることもある。シグモイドや tanh に適している。</p></li>
+<li><p><strong>He の初期化</strong> <a class="reference internal" href="appendix_references.html#he2015" id="id9"><span>[He2015]</span></a>: 分散を <span class="math notranslate nohighlight">\(2 / n_{\text{in}}\)</span> にする。ReLU は入力の半分を 0 にするため、その分だけ分散を大きくしている。ReLU に適している。</p></li>
+</ul>
+<p>第 9 章のサンプルコードでは He の初期化を使っている。PyTorch の全結合層（<code class="docutils literal notranslate"><span class="pre">nn.Linear</span></code>）は、これらに近い方法で自動的に初期化される。</p>
+</section>
+<section id="id10">
+<h2><span class="section-number">10.4. </span>勾配消失と勾配爆発<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<p>誤差逆伝播法では、出力側から入力側へ、各層の局所的な微分を次々と掛け合わせていく。層が深いと、この掛け算の回数が多くなる。</p>
+<ul class="simple">
+<li><p>掛け合わせる値が 1 より小さいと、入力側の層に届く勾配が指数的に小さくなり、入力に近い層がほとんど学習されなくなる。これを<a class="reference internal" href="appendix_glossary.html#term-18"><span class="xref std std-term">勾配消失</span></a>と呼ぶ。導関数の最大値が 0.25 のシグモイド関数を中間層に使うと起こりやすい。</p></li>
+<li><p>逆に、掛け合わせる値が 1 より大きいと、勾配が指数的に大きくなって学習が発散する。これを<strong>勾配爆発</strong>と呼ぶ。</p></li>
+</ul>
+<p>勾配消失・勾配爆発への対策として、次のようなものがある。</p>
+<ul class="simple">
+<li><p>中間層の活性化関数に ReLU を使う。</p></li>
+<li><p>適切な重みの初期化を使う。</p></li>
+<li><p>次節のバッチ正規化などの正規化層を使う。</p></li>
+<li><p>層を飛び越えて入力を出力に足し合わせる残差接続を使う（第 11 章）。</p></li>
+<li><p>勾配の大きさ（ノルム）が上限を超えたら縮小する<strong>勾配クリッピング</strong>を使う。系列データを扱うモデルで特に有効である。</p></li>
+</ul>
+</section>
+<section id="id11">
+<h2><span class="section-number">10.5. </span>バッチ正規化<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="appendix_glossary.html#term-42"><span class="xref std std-term">バッチ正規化</span></a> <a class="reference internal" href="appendix_references.html#ioffe2015" id="id12"><span>[Ioffe2015]</span></a> は、中間層の出力を、ミニバッチごとに平均 0、分散 1 になるように正規化する層である。第 3 章で入力の特徴量を標準化したのと同じことを、ネットワークの内部でも行うと考えればよい。正規化の後に、学習可能なパラメータ <span class="math notranslate nohighlight">\(\gamma\)</span>、<span class="math notranslate nohighlight">\(\beta\)</span> で <span class="math notranslate nohighlight">\(\gamma \hat{x} + \beta\)</span> と変換し、必要なら元の分布に戻せるようにしている。</p>
+<p>バッチ正規化には、学習を安定させ、大きな学習率を使えるようにし、初期値への依存を減らす効果がある。全結合層や畳み込み層の後、活性化関数の前に挿入することが多い。</p>
+<p>注意点として、バッチ正規化は学習時と推論時で動作が異なる。学習時はミニバッチの平均と分散を使うが、推論時は 1 件ずつ予測することもあるため、学習中に記録しておいた平均と分散の移動平均を使う。PyTorch では、<code class="docutils literal notranslate"><span class="pre">model.train()</span></code> と <code class="docutils literal notranslate"><span class="pre">model.eval()</span></code> でこの切り替えを行う。</p>
+<p>ミニバッチの統計量に依存しない<strong>レイヤー正規化</strong> <a class="reference internal" href="appendix_references.html#ba2016" id="id13"><span>[Ba2016]</span></a> という方法もあり、第 12 章の Transformer ではこちらが使われる。</p>
+</section>
+<section id="id14">
+<h2><span class="section-number">10.6. </span>深層学習での過学習対策<a class="headerlink" href="#id14" title="Link to this heading"></a></h2>
+<p>深層学習のモデルは非常に多くのパラメータを持つため、過学習しやすい。第 6 章で説明した正則化に加えて、次の方法がよく使われる。</p>
+<section id="id15">
+<h3><span class="section-number">10.6.1. </span>重み減衰<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<p><strong>重み減衰</strong>（weight decay）は、更新のたびに重みを少しずつ 0 に近づける方法である。SGD では L2 正則化と同じ効果を持つ。PyTorch では、最適化手法の <code class="docutils literal notranslate"><span class="pre">weight_decay</span></code> 引数で指定する。</p>
+</section>
+<section id="id16">
+<h3><span class="section-number">10.6.2. </span>ドロップアウト<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<p><a class="reference internal" href="appendix_glossary.html#term-38"><span class="xref std std-term">ドロップアウト</span></a> <a class="reference internal" href="appendix_references.html#srivastava2014" id="id17"><span>[Srivastava2014]</span></a> は、学習時に中間層のユニットをランダムに一定の割合（例: 30 %）で無効化する（出力を 0 にする）方法である。毎回異なるユニットの組み合わせで学習することになるため、特定のユニットに頼りきった学習が防がれ、多数のネットワークを平均するアンサンブル学習（第 7 章）に似た効果が得られる。推論時にはすべてのユニットを使う。PyTorch の <code class="docutils literal notranslate"><span class="pre">nn.Dropout</span></code> は、学習時に残したユニットの出力を <span class="math notranslate nohighlight">\(1 / (1 - \text{割合})\)</span> 倍することで、推論時との出力の大きさの違いを補正している。</p>
+</section>
+<section id="id18">
+<h3><span class="section-number">10.6.3. </span>早期終了<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<p><a class="reference internal" href="appendix_glossary.html#term-27"><span class="xref std std-term">早期終了</span></a>は、エポックごとに検証データでの性能を測り、性能が一定のエポック数（<strong>patience</strong>）の間改善しなければ学習を打ち切る方法である。学習を続けると訓練データでの損失は下がり続けるが、ある時点から検証データでの性能が悪化し始める。早期終了を使うと、検証データでの性能が最も良かった時点のモデルを得られる。</p>
+</section>
+<section id="id19">
+<h3><span class="section-number">10.6.4. </span>データ拡張<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<p>訓練データに意味を変えない範囲の変換を加えてデータを水増しする方法である。詳しくは第 11 章で説明する。</p>
+</section>
+</section>
+<section id="id20">
+<h2><span class="section-number">10.7. </span>学習率のスケジューリング<a class="headerlink" href="#id20" title="Link to this heading"></a></h2>
+<p>学習の初期は大きな学習率で素早く進み、終盤は小さな学習率で細かく調整するのが効果的である。そこで、学習の進行に応じて学習率を変える<strong>学習率スケジューリング</strong>がよく使われる（<a class="reference internal" href="#fig-ch10-lr-schedule"><span class="std std-numref">図 10.2</span></a>）。</p>
+<figure class="align-center" id="id29">
+<span id="fig-ch10-lr-schedule"></span><a class="reference internal image-reference" href="_images/ch10_lr_schedule.png"><img alt="_images/ch10_lr_schedule.png" src="_images/ch10_lr_schedule.png" style="width: 560px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 10.2 </span><span class="caption-text">代表的な学習率スケジュール</span><a class="headerlink" href="#id29" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<ul class="simple">
+<li><p><strong>ステップ減衰</strong>: 決められたエポックごとに学習率を一定の倍率（例: 0.1 倍）で下げる。</p></li>
+<li><p><strong>コサイン減衰</strong> <a class="reference internal" href="appendix_references.html#loshchilov2017" id="id21"><span>[Loshchilov2017]</span></a>: コサイン関数の形に沿って、学習率を滑らかに 0 付近まで下げる。</p></li>
+<li><p><strong>ウォームアップ</strong>: 学習の最初の数エポックは小さな学習率から始めて徐々に上げる。学習の初期はパラメータがランダムで勾配が不安定なため、大きな学習率をいきなり使うと発散することがある。Transformer の学習ではほぼ必須である。</p></li>
+</ul>
+</section>
+<section id="pytorch">
+<h2><span class="section-number">10.8. </span>PyTorch による学習の実装<a class="headerlink" href="#pytorch" title="Link to this heading"></a></h2>
+<p>ここまでのテクニックを組み合わせて、PyTorch で多層パーセプトロンを学習する。データには、scikit-learn に付属する手書き数字のデータセット（8 × 8 画素のグレースケール画像 1797 枚、0〜9 の 10 クラス）を使う。各画像を 64 次元のベクトルとして扱う。</p>
+<section id="id22">
+<h3><span class="section-number">10.8.1. </span>データの準備<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
+<p>PyTorch では、データセットを <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> クラスで表し、<code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> でミニバッチに分割して取り出す。</p>
+<div class="literal-block-wrapper docutils container" id="id30">
+<div class="code-block-caption"><span class="caption-number">コード 10.2 </span><span class="caption-text">DataLoader の作成（ch10_pytorch_mlp.py より抜粋）</span><a class="headerlink" href="#id30" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span><span class="w"> </span><span class="nf">make_loaders</span><span class="p">(</span><span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DataLoader</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">]],</span> <span class="o">...</span><span class="p">]:</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;訓練・検証・テスト用の DataLoader を作る。&quot;&quot;&quot;</span>
+<span class="linenos"> 3</span>    <span class="n">digits</span> <span class="o">=</span> <span class="n">load_digits</span><span class="p">()</span>
+<span class="linenos"> 4</span>    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">digits</span><span class="o">.</span><span class="n">data</span> <span class="o">/</span> <span class="mf">16.0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>  <span class="c1"># 画素値 0〜16 を 0〜1 に収める</span>
+<span class="linenos"> 5</span>    <span class="n">y</span> <span class="o">=</span> <span class="n">digits</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+<span class="linenos"> 6</span>    <span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="n">x_train</span><span class="p">,</span> <span class="n">x_val</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_val</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">y_train</span><span class="p">,</span>
+<span class="linenos"> 8</span>                                                      <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span>    <span class="k">def</span><span class="w"> </span><span class="nf">to_dataset</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">],</span> <span class="n">b</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">TensorDataset</span><span class="p">:</span>
+<span class="linenos">11</span>        <span class="k">return</span> <span class="n">TensorDataset</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span>    <span class="k">return</span> <span class="p">(</span>
+<span class="linenos">14</span>        <span class="n">DataLoader</span><span class="p">(</span><span class="n">to_dataset</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="linenos">15</span>        <span class="n">DataLoader</span><span class="p">(</span><span class="n">to_dataset</span><span class="p">(</span><span class="n">x_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">),</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">256</span><span class="p">),</span>
+<span class="linenos">16</span>        <span class="n">DataLoader</span><span class="p">(</span><span class="n">to_dataset</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">),</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">256</span><span class="p">),</span>
+<span class="linenos">17</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>6〜8 行目で、データを訓練・検証・テストに分割している。</p></li>
+<li><p>14 行目の <code class="docutils literal notranslate"><span class="pre">shuffle=True</span></code> により、訓練データはエポックごとにシャッフルされる。</p></li>
+</ul>
+</section>
+<section id="id23">
+<h3><span class="section-number">10.8.2. </span>モデルの定義<a class="headerlink" href="#id23" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code> を使うと、層を順に並べるだけでモデルを定義できる。</p>
+<div class="literal-block-wrapper docutils container" id="id31">
+<div class="code-block-caption"><span class="caption-number">コード 10.3 </span><span class="caption-text">モデルの定義（ch10_pytorch_mlp.py より抜粋）</span><a class="headerlink" href="#id31" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span><span class="w"> </span><span class="nf">build_model</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="linenos"> 2</span>    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+<span class="linenos"> 3</span>        <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span>
+<span class="linenos"> 4</span>        <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm1d</span><span class="p">(</span><span class="mi">128</span><span class="p">),</span>
+<span class="linenos"> 5</span>        <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+<span class="linenos"> 6</span>        <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.3</span><span class="p">),</span>
+<span class="linenos"> 7</span>        <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
+<span class="linenos"> 8</span>        <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm1d</span><span class="p">(</span><span class="mi">64</span><span class="p">),</span>
+<span class="linenos"> 9</span>        <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+<span class="linenos">10</span>        <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.3</span><span class="p">),</span>
+<span class="linenos">11</span>        <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>  <span class="c1"># 出力はソフトマックス前の値 (ロジット)</span>
+<span class="linenos">12</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>全結合層（<code class="docutils literal notranslate"><span class="pre">nn.Linear</span></code>）、バッチ正規化（<code class="docutils literal notranslate"><span class="pre">nn.BatchNorm1d</span></code>）、ReLU、ドロップアウト（<code class="docutils literal notranslate"><span class="pre">nn.Dropout</span></code>）を 2 回繰り返し、最後に 10 クラスのロジットを出力する全結合層を置いている。出力層にソフトマックス関数がないのは、損失関数の <code class="docutils literal notranslate"><span class="pre">nn.CrossEntropyLoss</span></code> がソフトマックス関数と交差エントロピーをまとめて計算するためである。まとめて計算した方が数値的に安定する。</p>
+</section>
+<section id="id24">
+<h3><span class="section-number">10.8.3. </span>学習ループ<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
+<div class="literal-block-wrapper docutils container" id="id32">
+<div class="code-block-caption"><span class="caption-number">コード 10.4 </span><span class="caption-text">学習ループ（ch10_pytorch_mlp.py より抜粋）</span><a class="headerlink" href="#id32" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos"> 2</span>    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos"> 3</span>    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+<span class="linenos"> 4</span>    <span class="n">train_loader</span><span class="p">,</span> <span class="n">val_loader</span><span class="p">,</span> <span class="n">test_loader</span> <span class="o">=</span> <span class="n">make_loaders</span><span class="p">()</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span>    <span class="n">model</span> <span class="o">=</span> <span class="n">build_model</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="n">loss_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>  <span class="c1"># ソフトマックスと交差エントロピーをまとめて計算する</span>
+<span class="linenos"> 8</span>    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">weight_decay</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
+<span class="linenos"> 9</span>    <span class="n">scheduler</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">CosineAnnealingLR</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">T_max</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="n">best_acc</span><span class="p">,</span> <span class="n">best_state</span><span class="p">,</span> <span class="n">patience</span><span class="p">,</span> <span class="n">wait</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()),</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span>
+<span class="linenos">12</span>    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">101</span><span class="p">):</span>
+<span class="linenos">13</span>        <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+<span class="linenos">14</span>        <span class="n">total_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="linenos">15</span>        <span class="n">n_samples</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">16</span>        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">train_loader</span><span class="p">:</span>
+<span class="linenos">17</span>            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="linenos">18</span>            <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>        <span class="c1"># 1. 前回の勾配を消す</span>
+<span class="linenos">19</span>            <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">y</span><span class="p">)</span>  <span class="c1"># 2. 順伝播して損失を求める</span>
+<span class="linenos">20</span>            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>              <span class="c1"># 3. 誤差逆伝播法で勾配を求める</span>
+<span class="linenos">21</span>            <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>             <span class="c1"># 4. パラメータを更新する</span>
+<span class="linenos">22</span>            <span class="n">total_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="linenos">23</span>            <span class="n">n_samples</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="linenos">24</span>        <span class="n">scheduler</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span>        <span class="n">val_acc</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">val_loader</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+<span class="linenos">27</span>        <span class="k">if</span> <span class="n">epoch</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">epoch</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="linenos">28</span>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;epoch </span><span class="si">{</span><span class="n">epoch</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2">: 訓練損失 = </span><span class="si">{</span><span class="n">total_loss</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">n_samples</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, 検証正解率 = </span><span class="si">{</span><span class="n">val_acc</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span>        <span class="c1"># 早期終了: 検証正解率が patience エポック改善しなければ打ち切る</span>
+<span class="linenos">31</span>        <span class="k">if</span> <span class="n">val_acc</span> <span class="o">&gt;</span> <span class="n">best_acc</span><span class="p">:</span>
+<span class="linenos">32</span>            <span class="n">best_acc</span><span class="p">,</span> <span class="n">best_state</span><span class="p">,</span> <span class="n">wait</span> <span class="o">=</span> <span class="n">val_acc</span><span class="p">,</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()),</span> <span class="mi">0</span>
+<span class="linenos">33</span>        <span class="k">else</span><span class="p">:</span>
+<span class="linenos">34</span>            <span class="n">wait</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="linenos">35</span>            <span class="k">if</span> <span class="n">wait</span> <span class="o">&gt;=</span> <span class="n">patience</span><span class="p">:</span>
+<span class="linenos">36</span>                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s2"> エポック目で早期終了&quot;</span><span class="p">)</span>
+<span class="linenos">37</span>                <span class="k">break</span>
+<span class="linenos">38</span>
+<span class="linenos">39</span>    <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">best_state</span><span class="p">)</span>
+<span class="linenos">40</span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;最良の検証正解率 = </span><span class="si">{</span><span class="n">best_acc</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos">41</span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;テストデータでの正解率 = </span><span class="si">{</span><span class="n">evaluate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">test_loader</span><span class="p">,</span><span class="w"> </span><span class="n">device</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>8 行目で最適化手法として AdamW を、9 行目で学習率のスケジュールとしてコサイン減衰を指定している。</p></li>
+<li><p>13 行目の <code class="docutils literal notranslate"><span class="pre">model.train()</span></code> で、ドロップアウトとバッチ正規化を学習時の動作にしている。</p></li>
+<li><p>18〜21 行目が学習の中心となる 4 つの手順である。PyTorch では勾配が累積される仕様のため、18 行目でミニバッチごとに勾配をリセットする必要がある。</p></li>
+<li><p>26 行目で検証データの正解率を計算している。<code class="docutils literal notranslate"><span class="pre">evaluate</span></code> 関数の中では <code class="docutils literal notranslate"><span class="pre">model.eval()</span></code> で推論時の動作に切り替え、<code class="docutils literal notranslate"><span class="pre">torch.no_grad()</span></code> で計算グラフの記録を止めてメモリと計算を節約している。</p></li>
+<li><p>31〜37 行目は早期終了の処理である。検証正解率が最良になったときのパラメータを保存しておき、39 行目で読み戻している。</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>epoch   1: 訓練損失 = 1.9782, 検証正解率 = 0.799
+<span class="linenos">2</span>epoch  10: 訓練損失 = 0.2675, 検証正解率 = 0.958
+<span class="linenos">3</span>epoch  20: 訓練損失 = 0.1176, 検証正解率 = 0.972
+<span class="linenos">4</span>epoch  30: 訓練損失 = 0.0603, 検証正解率 = 0.972
+<span class="linenos">5</span>38 エポック目で早期終了
+<span class="linenos">6</span>最良の検証正解率 = 0.983
+<span class="linenos">7</span>テストデータでの正解率 = 0.983
+</pre></div>
+</div>
+<p>38 エポック目で早期終了し、テストデータで 98.3 % の正解率が得られた。</p>
+<p>サンプルコードの全体は <a class="reference download internal" download="" href="_downloads/b094eb8e0732b2fa5290fce4488de8e2/ch10_pytorch_mlp.py"><code class="xref download docutils literal notranslate"><span class="pre">ch10_pytorch_mlp.py</span></code></a> からダウンロードできる。</p>
+</section>
+</section>
+<section id="id25">
+<h2><span class="section-number">10.9. </span>学習がうまくいかないときは<a class="headerlink" href="#id25" title="Link to this heading"></a></h2>
+<p>深層学習では、コードにエラーがなくても、学習が進まない、性能が出ないということがよく起こる。次の順に確認するとよい。</p>
+<ol class="arabic simple">
+<li><p><strong>最初の損失の値を確認する</strong>: <span class="math notranslate nohighlight">\(K\)</span> クラス分類で、初期状態の予測がほぼ一様なら、交差エントロピーは <span class="math notranslate nohighlight">\(\log K\)</span> 程度になるはずである（10 クラスなら約 2.3）。大きく異なる場合は、ラベルや損失関数の使い方を疑う。</p></li>
+<li><p><strong>少量のデータで過学習させてみる</strong>: 数十件程度の訓練データで学習し、損失がほぼ 0 になることを確認する。ここで損失が下がらなければ、モデルや学習ループのどこかに誤りがある。</p></li>
+<li><p><strong>学習率を変えてみる</strong>: 損失が発散する（<code class="docutils literal notranslate"><span class="pre">nan</span></code> になる）なら学習率を下げ、損失がほとんど変化しないなら上げる。</p></li>
+<li><p><strong>入力データを確認する</strong>: 正規化を忘れていないか、画像とラベルの対応がずれていないか、データ拡張で意味が変わっていないかを確認する。</p></li>
+<li><p><strong>訓練データと検証データの損失の推移（学習曲線）を見る</strong>: 両方とも高いなら未学習なのでモデルを大きくするか学習を長くする。訓練データの損失だけが下がるなら過学習なので、正則化やデータ拡張を強める。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model.train()</span></code> と <code class="docutils literal notranslate"><span class="pre">model.eval()</span></code> の切り替えを忘れていないか確認する。</p></li>
+</ol>
+</section>
+<section id="id26">
+<h2><span class="section-number">10.10. </span>まとめ<a class="headerlink" href="#id26" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>深層学習では、ミニバッチ単位でパラメータを更新し、データ全体を 1 周する単位をエポックと呼ぶ。</p></li>
+<li><p>最適化手法には SGD、モメンタム、Adam などがあり、Adam（AdamW）は調整の手間が少なく広く使われる。</p></li>
+<li><p>重みの初期化、ReLU、バッチ正規化、残差接続などにより、勾配消失・勾配爆発を防いで深いネットワークを学習できる。</p></li>
+<li><p>重み減衰、ドロップアウト、早期終了、データ拡張で過学習を防ぐ。</p></li>
+<li><p>PyTorch の学習ループは「勾配のリセット → 順伝播と損失の計算 → 逆伝播 → パラメータの更新」の繰り返しである。</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch09_neural_network.html" class="btn btn-neutral float-left" title="9. ニューラルネットワークの基礎" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch11_cnn.html" class="btn btn-neutral float-right" title="11. 畳み込みニューラルネットワーク" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nunu_3060.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

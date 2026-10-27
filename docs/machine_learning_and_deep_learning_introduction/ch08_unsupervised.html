@@ -1,0 +1,267 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>8. 教師なし学習 &mdash; 機械学習・深層学習入門</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=f043dae3" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=19757887"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=4755f45a"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="9. ニューラルネットワークの基礎" href="ch09_neural_network.html" />
+    <link rel="prev" title="7. 決定木とアンサンブル学習" href="ch07_tree_ensemble.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            機械学習・深層学習入門
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">はじめに</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">はじめに</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">本編</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ch01_overview.html">1. 機械学習の全体像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_math.html">2. 数学の準備</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_data.html">3. データと前処理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_regression.html">4. 回帰</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_classification.html">5. 分類</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_evaluation.html">6. モデルの評価と改善</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_tree_ensemble.html">7. 決定木とアンサンブル学習</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">8. 教師なし学習</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">8.1. クラスタリング</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#k-means">8.1.1. k-means 法</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">8.2. 次元削減</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">8.2.1. 主成分分析</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">8.3. 異常検知</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">8.4. まとめ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_neural_network.html">9. ニューラルネットワークの基礎</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_training_techniques.html">10. 深層学習の学習テクニック</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_cnn.html">11. 畳み込みニューラルネットワーク</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch12_sequence_transformer.html">12. 系列データと Transformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch13_practice.html">13. 実務への適用</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">付録</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendix_glossary.html">用語集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_symbols.html">記号一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_examples.html">サンプルコード一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_references.html">参考文献</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">機械学習・深層学習入門</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">8. </span>教師なし学習</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">8. </span>教師なし学習<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>この章では、正解ラベルを使わずにデータの構造を見つける教師なし学習のうち、代表的な 3 つのタスクであるクラスタリング、次元削減、異常検知を説明する。教師なし学習は、それ単体で使うだけでなく、データの理解や教師あり学習の前処理としても役立つ。</p>
+<section id="id2">
+<h2><span class="section-number">8.1. </span>クラスタリング<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>似たサンプルどうしを集めてグループ（<strong>クラスタ</strong>）に分けることを<a class="reference internal" href="appendix_glossary.html#term-10"><span class="xref std std-term">クラスタリング</span></a>と呼ぶ。購買履歴から顧客をいくつかのタイプに分ける、似た文書をまとめる、といった用途に使われる。分類と似ているが、あらかじめ決められたクラスやラベルはなく、どのようなグループができるかはデータ次第である。</p>
+<section id="k-means">
+<h3><span class="section-number">8.1.1. </span>k-means 法<a class="headerlink" href="#k-means" title="Link to this heading"></a></h3>
+<p>最も基本的なクラスタリングの手法が <strong>k-means 法</strong>である。クラスタの数 <span class="math notranslate nohighlight">\(k\)</span> をあらかじめ決めておき、次の手順を繰り返す。</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(k\)</span> 個のクラスタの中心を、ランダムに選んだサンプルの位置で初期化する。</p></li>
+<li><p>各サンプルを、最も近い中心のクラスタに割り当てる。</p></li>
+<li><p>各クラスタに属するサンプルの平均を、そのクラスタの新しい中心とする。</p></li>
+<li><p>中心が変化しなくなるまで 2〜3 を繰り返す。</p></li>
+</ol>
+<p>この手順は、各サンプルと所属するクラスタの中心との距離の 2 乗和を、少しずつ小さくしていく。<a class="reference internal" href="#fig-ch08-kmeans"><span class="std std-numref">図 8.1</span></a> に、3 つのまとまりを持つデータに k-means 法を適用した様子を示す。中心（黒い × 印）の初期位置が偏っていても、数回の更新で各まとまりの中心に移動している。</p>
+<figure class="align-center" id="id7">
+<span id="fig-ch08-kmeans"></span><img alt="_images/ch08_kmeans.png" src="_images/ch08_kmeans.png" />
+<figcaption>
+<p><span class="caption-number">図 8.1 </span><span class="caption-text">k-means 法によるクラスタリングの過程。点の色は割り当てられたクラスタを表す。</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>k-means 法を NumPy で実装すると次のようになる。</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-number">コード 8.1 </span><span class="caption-text">k-means 法の実装（ch08_unsupervised.py より抜粋）</span><a class="headerlink" href="#id8" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span><span class="w"> </span><span class="nf">kmeans</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">iters</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">FloatArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">]:</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;k-means 法。クラスタ中心と各サンプルの所属クラスタを返す。&quot;&quot;&quot;</span>
+<span class="linenos"> 3</span>    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+<span class="linenos"> 4</span>    <span class="n">centers</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+<span class="linenos"> 5</span>    <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+<span class="linenos"> 6</span>    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iters</span><span class="p">):</span>
+<span class="linenos"> 7</span>        <span class="c1"># 1. 各サンプルを最も近い中心のクラスタに割り当てる</span>
+<span class="linenos"> 8</span>        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">centers</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="linenos"> 9</span>        <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">10</span>        <span class="c1"># 2. 各クラスタの平均を新しい中心とする</span>
+<span class="linenos">11</span>        <span class="n">new_centers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="n">labels</span> <span class="o">==</span> <span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)])</span>
+<span class="linenos">12</span>        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">new_centers</span><span class="p">,</span> <span class="n">centers</span><span class="p">):</span>
+<span class="linenos">13</span>            <span class="k">break</span>
+<span class="linenos">14</span>        <span class="n">centers</span> <span class="o">=</span> <span class="n">new_centers</span>
+<span class="linenos">15</span>    <span class="k">return</span> <span class="n">centers</span><span class="p">,</span> <span class="n">labels</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>8 行目では、ブロードキャストを使って全サンプルと全中心の距離を一度に計算している。<code class="docutils literal notranslate"><span class="pre">x[:,</span> <span class="pre">None,</span> <span class="pre">:]</span></code> は形状 <span class="math notranslate nohighlight">\((n, 1, d)\)</span>、<code class="docutils literal notranslate"><span class="pre">centers[None,</span> <span class="pre">:,</span> <span class="pre">:]</span></code> は形状 <span class="math notranslate nohighlight">\((1, k, d)\)</span> であり、差を取ると形状 <span class="math notranslate nohighlight">\((n, k, d)\)</span> の配列になる。</p></li>
+<li><p>11 行目で、各クラスタの平均を新しい中心としている。</p></li>
+</ul>
+<p>k-means 法には次の注意点がある。</p>
+<ul class="simple">
+<li><p>クラスタの数 <span class="math notranslate nohighlight">\(k\)</span> を事前に決める必要がある。<span class="math notranslate nohighlight">\(k\)</span> を変えながら距離の 2 乗和の減り方を見る<strong>エルボー法</strong>や、クラスタのまとまりの良さを測る<strong>シルエット係数</strong>などを参考にして決める。</p></li>
+<li><p>結果が初期値に依存する。scikit-learn の <code class="docutils literal notranslate"><span class="pre">KMeans</span></code> は、初期の中心どうしが離れるように選ぶ k-means++ という方法を使う。また、引数 <code class="docutils literal notranslate"><span class="pre">n_init</span></code> で試行回数を指定すれば、複数回の試行から最良の結果を選べる。</p></li>
+<li><p>距離を使うため、特徴量の標準化が必要である。</p></li>
+<li><p>球状で大きさのそろったクラスタを想定しているため、細長いクラスタや入り組んだ形のクラスタはうまく分けられない。そのような場合は、密度にもとづく DBSCAN などの手法を使う。</p></li>
+</ul>
+</section>
+</section>
+<section id="id3">
+<h2><span class="section-number">8.2. </span>次元削減<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>特徴量の数（次元）が多いデータを、情報をなるべく失わずに少ない次元で表すことを<a class="reference internal" href="appendix_glossary.html#term-24"><span class="xref std std-term">次元削減</span></a>と呼ぶ。次元削減には次のような目的がある。</p>
+<ul class="simple">
+<li><p>2 次元や 3 次元に削減して、データを可視化する。</p></li>
+<li><p>互いに相関の強い特徴量をまとめ、ノイズを除く。</p></li>
+<li><p>特徴量を減らして、後に続く機械学習の計算を軽くし、過学習を防ぐ。</p></li>
+</ul>
+<section id="id4">
+<h3><span class="section-number">8.2.1. </span>主成分分析<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>最も基本的な次元削減の手法が<a class="reference internal" href="appendix_glossary.html#term-25"><span class="xref std std-term">主成分分析</span></a>（Principal Component Analysis、PCA）である。主成分分析では、データのばらつき（分散）が最も大きい方向を第 1 主成分とし、それと直交する方向の中で分散が最も大きい方向を第 2 主成分とする、というように新しい座標軸を順に求める。そして、上位のいくつかの主成分だけを残すことで次元を削減する。</p>
+<p>分散が大きい方向にはデータの違いがよく表れており、分散が小さい方向は情報が少ないと考えられる。主成分分析は、情報の多い方向だけを残す手法といえる。各主成分の分散が全体の分散に占める割合を<strong>寄与率</strong>と呼ぶ。上位の主成分の寄与率を足し合わせた<strong>累積寄与率</strong>を見れば、何次元まで残せば十分かの目安になる。</p>
+<p><a class="reference internal" href="#fig-ch08-pca-digits"><span class="std std-numref">図 8.2</span></a> は、8 × 8 画素の手書き数字画像（64 次元）を主成分分析で 2 次元に削減して描いたものである。</p>
+<figure class="align-center" id="id9">
+<span id="fig-ch08-pca-digits"></span><a class="reference internal image-reference" href="_images/ch08_pca_digits.png"><img alt="_images/ch08_pca_digits.png" src="_images/ch08_pca_digits.png" style="width: 560px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 8.2 </span><span class="caption-text">手書き数字データを主成分分析で 2 次元に削減した結果</span><a class="headerlink" href="#id9" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>主成分分析自体は正解ラベルを使っていないが、同じ数字どうしがある程度まとまって配置されている。一方、上位 2 成分の累積寄与率は 0.285 にすぎず、多くの情報が失われているため、一部の数字は重なり合っている。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>各主成分の寄与率: [0.149 0.136 0.118 0.084 0.058 0.049 0.043 0.037 0.034 0.031]
+<span class="linenos">2</span>上位 2 成分の累積寄与率 = 0.285, 上位 10 成分 = 0.738
+</pre></div>
+</div>
+<p>主成分分析は線形の変換なので、データが曲がった構造を持つ場合には限界がある。可視化が目的であれば、非線形の手法である t-SNE や UMAP もよく使われる。ただし、これらで得られた図の距離や大きさは、元のデータの距離を正確には反映しないことに注意が必要である。</p>
+</section>
+</section>
+<section id="id5">
+<h2><span class="section-number">8.3. </span>異常検知<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<p>大多数のデータと異なる振る舞いをするデータを見つけることを<strong>異常検知</strong>と呼ぶ。設備の故障の予兆の検出、クレジットカードの不正利用の検出、システムの異常監視などに使われる。</p>
+<p>異常のデータは数が少なく、種類もさまざまで、事前にすべてを集めることが難しい。そのため、教師あり学習で「異常」というクラスを学習させるのではなく、正常なデータの性質を学習し、そこから外れたものを異常とみなす教師なし学習のアプローチがよく使われる。</p>
+<ul class="simple">
+<li><p><strong>距離・密度にもとづく方法</strong>: 近くに他のサンプルが少ないサンプルを異常とする（k 近傍法の距離、Local Outlier Factor など）。</p></li>
+<li><p><strong>Isolation Forest</strong>: ランダムな分割を繰り返したとき、少ない回数の分割で他から切り離されるサンプルを異常とする。異常なサンプルは他から離れているため、早く孤立するという考え方である。</p></li>
+<li><p><strong>再構成誤差にもとづく方法</strong>: 主成分分析やニューラルネットワーク（オートエンコーダ）でデータを圧縮・復元し、うまく復元できないサンプルを異常とする。</p></li>
+</ul>
+<p>次のサンプルでは、3 つのまとまりからなる正常なデータに外れ値を 10 件加え、Isolation Forest で異常を検出している。<code class="docutils literal notranslate"><span class="pre">contamination</span></code> は異常の割合の想定値で、異常と判定するしきい値を決めるのに使われる。</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-number">コード 8.2 </span><span class="caption-text">Isolation Forest による異常検知（ch08_unsupervised.py より抜粋）</span><a class="headerlink" href="#id10" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="c1"># 正常データから大きく外れた点を Isolation Forest で検出する</span>
+<span class="linenos">2</span><span class="n">outliers</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="linenos">3</span><span class="n">x_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">outliers</span><span class="p">])</span>
+<span class="linenos">4</span><span class="n">detector</span> <span class="o">=</span> <span class="n">IsolationForest</span><span class="p">(</span><span class="n">contamination</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_all</span><span class="p">)</span>
+<span class="linenos">5</span><span class="n">flags</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_all</span><span class="p">)</span>  <span class="c1"># 1: 正常, -1: 異常</span>
+<span class="linenos">6</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;異常と判定された件数:&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">flags</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+<span class="linenos">7</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;追加した外れ値のうち異常と判定された件数:&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">flags</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>異常と判定された件数: 10
+<span class="linenos">2</span>追加した外れ値のうち異常と判定された件数: 8
+</pre></div>
+</div>
+<p>追加した外れ値 10 件のうち 8 件を検出できている。外れ値は一様乱数で生成しているため、たまたま正常なデータの近くに生成されたものは検出しにくい。また、異常と判定された 10 件のうち 2 件は、正常なデータのうち分布の端にあるものである。</p>
+<p>サンプルコードの全体は <a class="reference download internal" download="" href="_downloads/0d262de34f43a777061033a152b07f41/ch08_unsupervised.py"><code class="xref download docutils literal notranslate"><span class="pre">ch08_unsupervised.py</span></code></a> からダウンロードできる。</p>
+<p>異常検知の評価は難しい。異常のラベルが少しでも得られるなら、それを使って適合率・再現率（第 6 章）を確認するとよい。</p>
+</section>
+<section id="id6">
+<h2><span class="section-number">8.4. </span>まとめ<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>クラスタリングは似たサンプルをグループに分ける。k-means 法は中心への割り当てと中心の更新を繰り返す。</p></li>
+<li><p>次元削減は、情報をなるべく保ったまま特徴量の数を減らす。主成分分析は分散の大きい方向を残す線形の手法である。</p></li>
+<li><p>異常検知では、正常なデータの性質を学習し、そこから外れたものを異常とみなすことが多い。</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch07_tree_ensemble.html" class="btn btn-neutral float-left" title="7. 決定木とアンサンブル学習" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch09_neural_network.html" class="btn btn-neutral float-right" title="9. ニューラルネットワークの基礎" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nunu_3060.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

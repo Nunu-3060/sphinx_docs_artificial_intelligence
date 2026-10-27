@@ -1,0 +1,403 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3. データと前処理 &mdash; 機械学習・深層学習入門</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=f043dae3" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=19757887"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=4755f45a"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="4. 回帰" href="ch04_regression.html" />
+    <link rel="prev" title="2. 数学の準備" href="ch02_math.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            機械学習・深層学習入門
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">はじめに</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">はじめに</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">本編</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ch01_overview.html">1. 機械学習の全体像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_math.html">2. 数学の準備</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. データと前処理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">3.1. 特徴量とラベル</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">3.1.1. 表形式以外のデータ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">3.2. 欠損値と外れ値</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">3.2.1. 欠損値の扱い</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">3.2.2. 外れ値の扱い</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">3.3. 数値の特徴量のスケーリング</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">3.4. カテゴリの特徴量の符号化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">3.5. データの分割</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id10">3.5.1. 分割のときの注意</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id11">3.6. データリーク</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scikit-learn">3.7. scikit-learn による前処理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id12">3.8. まとめ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_regression.html">4. 回帰</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_classification.html">5. 分類</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_evaluation.html">6. モデルの評価と改善</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_tree_ensemble.html">7. 決定木とアンサンブル学習</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_unsupervised.html">8. 教師なし学習</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_neural_network.html">9. ニューラルネットワークの基礎</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_training_techniques.html">10. 深層学習の学習テクニック</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_cnn.html">11. 畳み込みニューラルネットワーク</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch12_sequence_transformer.html">12. 系列データと Transformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch13_practice.html">13. 実務への適用</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">付録</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendix_glossary.html">用語集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_symbols.html">記号一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_examples.html">サンプルコード一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_references.html">参考文献</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">機械学習・深層学習入門</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3. </span>データと前処理</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">3. </span>データと前処理<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>機械学習のモデルの性能は、モデルの選択以上にデータの質と扱い方に左右される。この章では、機械学習で扱うデータの形式と、モデルに入力する前に行う前処理、そしてデータの分割方法を説明する。</p>
+<section id="id2">
+<h2><span class="section-number">3.1. </span>特徴量とラベル<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>教師あり学習では、1 件のデータ（<strong>サンプル</strong>）は特徴量とラベルの組からなる。家賃の予測であれば、次のような表形式のデータになる。</p>
+<table class="docutils align-default" id="id13">
+<caption><span class="caption-number">表 3.1 </span><span class="caption-text">表形式データの例（家賃の予測）</span><a class="headerlink" href="#id13" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>広さ（m<sup>2</sup>）</p></th>
+<th class="head"><p>築年数</p></th>
+<th class="head"><p>最寄り駅</p></th>
+<th class="head"><p>駅徒歩（分）</p></th>
+<th class="head"><p>家賃（万円）</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>45.0</p></td>
+<td><p>12</p></td>
+<td><p>A 駅</p></td>
+<td><p>8</p></td>
+<td><p>8.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>22.5</p></td>
+<td><p>30</p></td>
+<td><p>C 駅</p></td>
+<td><p>15</p></td>
+<td><p>4.1</p></td>
+</tr>
+<tr class="row-even"><td><p>60.3</p></td>
+<td><p>（空欄）</p></td>
+<td><p>B 駅</p></td>
+<td><p>5</p></td>
+<td><p>11.5</p></td>
+</tr>
+</tbody>
+</table>
+<p>この例では、「家賃」が予測したいラベル、それ以外の列が特徴量である。特徴量には、広さのような<strong>数値の特徴量</strong>と、最寄り駅のような<strong>カテゴリの特徴量</strong>がある。また、3 行目の築年数のように値が記録されていない<strong>欠損値</strong>を含むこともある。</p>
+<p>多くの機械学習のモデルは数値の行列しか扱えないため、データをモデルに渡す前に、欠損値を処理し、カテゴリを数値に変換し、数値の範囲をそろえる必要がある。これらの作業を<strong>前処理</strong>と呼ぶ。</p>
+<section id="id3">
+<h3><span class="section-number">3.1.1. </span>表形式以外のデータ<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>画像や文章も、最終的には数値の配列としてモデルに入力する。</p>
+<ul class="simple">
+<li><p><strong>画像</strong>: 各画素の明るさを数値で表した配列である。グレースケール画像なら「高さ × 幅」、カラー画像なら「チャネル（赤・緑・青）× 高さ × 幅」の形状を持つ（第 11 章）。</p></li>
+<li><p><strong>文章</strong>: 文章を単語などの単位（トークン）に分割し、各トークンに番号を割り当てて整数の列として表す。さらに、各トークンを数値のベクトルに変換して使う（第 12 章）。</p></li>
+</ul>
+<p>深層学習が登場する以前は、画像や文章からどのような数値を取り出すか（<strong>特徴量エンジニアリング</strong>）を人間が工夫する必要があった。深層学習の大きな利点は、生の画素値やトークンの列から有用な特徴を自動的に学習できることにある。</p>
+</section>
+</section>
+<section id="id4">
+<h2><span class="section-number">3.2. </span>欠損値と外れ値<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<section id="id5">
+<h3><span class="section-number">3.2.1. </span>欠損値の扱い<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>欠損値の扱い方には主に次の方法がある。</p>
+<ul class="simple">
+<li><p><strong>欠損値を含むサンプルを削除する</strong>: 最も簡単だが、欠損値が多いとデータが大きく減る。また、欠損が特定の条件で起こりやすい場合（例: 古い物件ほど築年数が記録されていない）、削除によってデータに偏りが生じる。</p></li>
+<li><p><strong>代表値で補完する</strong>: その列の平均値や中央値、最頻値で埋める。外れ値の影響を受けにくい中央値がよく使われる。</p></li>
+<li><p><strong>欠損していたことを特徴量として追加する</strong>: 「築年数が欠損しているか」を表す 0 / 1 の列を追加する。欠損そのものが予測の手がかりになる場合に有効である。</p></li>
+</ul>
+<p>なお、第 7 章で説明する勾配ブースティングのライブラリの多くは、欠損値をそのまま扱える。</p>
+</section>
+<section id="id6">
+<h3><span class="section-number">3.2.2. </span>外れ値の扱い<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>他の値から極端に離れた値を<strong>外れ値</strong>と呼ぶ。外れ値には、入力の誤り（例: 広さが 4500 m<sup>2</sup> と記録されている）のように修正・削除すべきものと、まれだが正しい値のように残すべきものがある。機械的に削除せず、まずはデータを可視化して原因を確認することが重要である。</p>
+</section>
+</section>
+<section id="id7">
+<h2><span class="section-number">3.3. </span>数値の特徴量のスケーリング<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<p>特徴量ごとに値の範囲（スケール）が大きく異なると、多くの手法で問題が生じる。たとえば k 近傍法（第 5 章）のように距離を使う手法では、値の範囲が大きい特徴量が距離をほぼ決めてしまう。また、勾配降下法（第 4 章）では、スケールの違いによって学習が遅くなる。</p>
+<p>そこで、特徴量のスケールをそろえる<strong>スケーリング</strong>を行う。代表的な方法は次の 2 つである。</p>
+<ul>
+<li><p><a class="reference internal" href="appendix_glossary.html#term-44"><span class="xref std std-term">標準化</span></a>: 各特徴量から平均 <span class="math notranslate nohighlight">\(\mu\)</span> を引き、標準偏差 <span class="math notranslate nohighlight">\(\sigma\)</span> で割る。変換後の平均は 0、標準偏差は 1 になる。</p>
+<div class="math notranslate nohighlight">
+\[x' = \frac{x - \mu}{\sigma}\]</div>
+</li>
+<li><p><strong>正規化</strong>（min-max スケーリング）: 各特徴量を最小値が 0、最大値が 1 になるように変換する。</p>
+<div class="math notranslate nohighlight">
+\[x' = \frac{x - x_{\min}}{x_{\max} - x_{\min}}\]</div>
+</li>
+</ul>
+<p>一般には標準化がよく使われる。正規化は外れ値があると、ほとんどの値が狭い範囲に押し込められてしまう。<a class="reference internal" href="#fig-ch03-scaling"><span class="std std-numref">図 3.1</span></a> に標準化の効果を示す。</p>
+<figure class="align-center" id="id14">
+<span id="fig-ch03-scaling"></span><a class="reference internal image-reference" href="_images/ch03_scaling.png"><img alt="_images/ch03_scaling.png" src="_images/ch03_scaling.png" style="width: 640px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 3.1 </span><span class="caption-text">標準化の前後。左図では特徴量 2 の値の範囲が特徴量 1 に比べて非常に狭いため、点が横一列に並んで見える。標準化すると両方の特徴量が同じ程度の範囲に収まる。</span><a class="headerlink" href="#id14" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>なお、決定木やそれにもとづく手法（第 7 章）は特徴量の大小関係しか使わないため、スケーリングの影響を受けない。</p>
+</section>
+<section id="id8">
+<h2><span class="section-number">3.4. </span>カテゴリの特徴量の符号化<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<p>「A 駅」「B 駅」「C 駅」のようなカテゴリを数値に変換することを<strong>符号化</strong>と呼ぶ。単純に A 駅 = 0、B 駅 = 1、C 駅 = 2 と番号を振ると、モデルは「C 駅は A 駅の 2 倍」「B 駅は A 駅と C 駅の中間」のような、本来存在しない大小関係を読み取ってしまう。</p>
+<p>そこで、カテゴリの種類ごとに列を用意し、該当する列だけを 1、それ以外を 0 とする <a class="reference internal" href="appendix_glossary.html#term-one-hot"><span class="xref std std-term">one-hot 符号化</span></a>がよく使われる。</p>
+<table class="docutils align-default" id="id15">
+<caption><span class="caption-number">表 3.2 </span><span class="caption-text">one-hot 符号化の例</span><a class="headerlink" href="#id15" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>最寄り駅</p></th>
+<th class="head"><p>A 駅</p></th>
+<th class="head"><p>B 駅</p></th>
+<th class="head"><p>C 駅</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A 駅</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>C 駅</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>B 駅</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+<p>one-hot 符号化は、カテゴリの種類が数千を超えるような場合には列が多くなりすぎる。その場合は、出現頻度の低いカテゴリを「その他」にまとめる、決定木系の手法でカテゴリを直接扱う、深層学習の埋め込み（第 12 章）を使う、などの方法を取る。</p>
+<p>一方、「小・中・大」のように順序に意味があるカテゴリは、0、1、2 のような番号に変換してもよい。</p>
+</section>
+<section id="id9">
+<h2><span class="section-number">3.5. </span>データの分割<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
+<p>モデルの目的は、学習に使ったデータではなく、<strong>将来の未知のデータ</strong>に対して正しく予測することである。この能力を<a class="reference internal" href="appendix_glossary.html#term-43"><span class="xref std std-term">汎化性能</span></a>と呼ぶ。学習に使ったデータで性能を測ると、モデルがデータを丸暗記しているだけでも高い性能が出てしまうため、汎化性能を正しく見積もれない。</p>
+<p>そこで、手元のデータを次の 3 つに分割する。</p>
+<table class="docutils align-default" id="id16">
+<caption><span class="caption-number">表 3.3 </span><span class="caption-text">データの分割</span><a class="headerlink" href="#id16" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 50.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>名称</p></th>
+<th class="head"><p>用途</p></th>
+<th class="head"><p>割合の目安</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>訓練データ</p></td>
+<td><p>モデルのパラメータを学習する。</p></td>
+<td><p>60〜80 %</p></td>
+</tr>
+<tr class="row-odd"><td><p>検証データ</p></td>
+<td><p>ハイパーパラメータの調整やモデルの選択に使う。</p></td>
+<td><p>10〜20 %</p></td>
+</tr>
+<tr class="row-even"><td><p>テストデータ</p></td>
+<td><p>最終的な性能の評価に一度だけ使う。</p></td>
+<td><p>10〜20 %</p></td>
+</tr>
+</tbody>
+</table>
+<p><a class="reference internal" href="appendix_glossary.html#term-11"><span class="xref std std-term">訓練データ</span></a>でモデルのパラメータを学習し、<a class="reference internal" href="appendix_glossary.html#term-13"><span class="xref std std-term">検証データ</span></a>でモデルの設定（第 4 章で説明するハイパーパラメータ）を調整する。<a class="reference internal" href="appendix_glossary.html#term-35"><span class="xref std std-term">テストデータ</span></a>は、すべての調整が終わった後に、最終的な性能を見積もるためだけに使う。テストデータの結果を見てモデルを調整し直すと、テストデータに合わせ込んだことになり、性能を楽観的に見積もってしまう。</p>
+<p>データが少ない場合は、検証データを固定せずに交差検証（第 6 章）を使うことも多い。</p>
+<section id="id10">
+<h3><span class="section-number">3.5.1. </span>分割のときの注意<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>ランダムに分割する</strong>: データが何らかの順序（例: ラベルの順）で並んでいることがあるため、シャッフルしてから分割する。</p></li>
+<li><p><strong>クラスの比率を保つ</strong>: 分類問題で特定のクラスが少ない場合、訓練・検証・テストの各データにクラスが同じ比率で含まれるように分割する（<strong>層化抽出</strong>）。scikit-learn の <code class="docutils literal notranslate"><span class="pre">train_test_split</span></code> では <code class="docutils literal notranslate"><span class="pre">stratify</span></code> 引数で指定できる。</p></li>
+<li><p><strong>時系列データは時間で分割する</strong>: 売上の予測のように過去から未来を予測する問題では、ランダムに分割すると「未来のデータで学習して過去を予測する」ことになってしまう。ある時点より前を訓練データ、後をテストデータとする。</p></li>
+<li><p><strong>関連のあるサンプルを分ける</strong>: 同じ患者から複数のデータを取った場合などは、同じ患者のデータが訓練データとテストデータの両方に入らないようにする（グループ単位で分割する）。</p></li>
+</ul>
+</section>
+</section>
+<section id="id11">
+<h2><span class="section-number">3.6. </span>データリーク<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
+<p>本来は予測時に使えないはずの情報が学習に紛れ込んでしまうことを<a class="reference internal" href="appendix_glossary.html#term-33"><span class="xref std std-term">データリーク</span></a>と呼ぶ。データリークがあると、評価では非常に高い性能が出るのに、運用を始めると性能が出ないという事態が起こる。典型的な例を次に示す。</p>
+<ul class="simple">
+<li><p><strong>ラベルから作られた特徴量</strong>: たとえば「解約するか」を予測するモデルに「解約手続きの日付」を特徴量として入れてしまう。</p></li>
+<li><p><strong>前処理での情報の漏れ</strong>: 標準化に使う平均と標準偏差を、テストデータを含むデータ全体から計算してしまう。前処理の統計量は訓練データだけから求め、同じ値を使って検証データやテストデータを変換しなければならない。</p></li>
+<li><p><strong>分割の誤り</strong>: 前節で述べた、時系列データのランダムな分割や、関連のあるサンプルの分割の誤り。</p></li>
+</ul>
+<p>データリークは見つけにくい。性能が「良すぎる」と感じたら、まずデータリークを疑うとよい。</p>
+</section>
+<section id="scikit-learn">
+<h2><span class="section-number">3.7. </span>scikit-learn による前処理<a class="headerlink" href="#scikit-learn" title="Link to this heading"></a></h2>
+<p>scikit-learn では、前処理もモデルと同じく「<code class="docutils literal notranslate"><span class="pre">fit</span></code> で訓練データから統計量を学習し、<code class="docutils literal notranslate"><span class="pre">transform</span></code> でデータを変換する」という共通の使い方になっている。次のサンプルは、架空の家賃データに対して、数値の列には欠損値の補完と標準化を、カテゴリの列には one-hot 符号化を適用する例である。</p>
+<div class="literal-block-wrapper docutils container" id="id17">
+<div class="code-block-caption"><span class="caption-number">コード 3.1 </span><span class="caption-text">ColumnTransformer による前処理（ch03_preprocessing.py より抜粋）</span><a class="headerlink" href="#id17" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos"> 2</span>    <span class="n">df</span> <span class="o">=</span> <span class="n">make_dataset</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+<span class="linenos"> 3</span>    <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="linenos"> 4</span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;欠損値の数:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;area&quot;</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;station&quot;</span><span class="p">]]</span>
+<span class="linenos"> 7</span>    <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;rent&quot;</span><span class="p">]</span>
+<span class="linenos"> 8</span>    <span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span>    <span class="n">numeric</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+<span class="linenos">11</span>        <span class="p">(</span><span class="s2">&quot;impute&quot;</span><span class="p">,</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">)),</span>
+<span class="linenos">12</span>        <span class="p">(</span><span class="s2">&quot;scale&quot;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
+<span class="linenos">13</span>    <span class="p">])</span>
+<span class="linenos">14</span>    <span class="n">preprocess</span> <span class="o">=</span> <span class="n">ColumnTransformer</span><span class="p">([</span>
+<span class="linenos">15</span>        <span class="p">(</span><span class="s2">&quot;num&quot;</span><span class="p">,</span> <span class="n">numeric</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">]),</span>
+<span class="linenos">16</span>        <span class="p">(</span><span class="s2">&quot;cat&quot;</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">handle_unknown</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">),</span> <span class="p">[</span><span class="s2">&quot;station&quot;</span><span class="p">]),</span>
+<span class="linenos">17</span>    <span class="p">])</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span>    <span class="c1"># fit は訓練データだけで行い、テストデータには transform のみを適用する</span>
+<span class="linenos">20</span>    <span class="n">z_train</span> <span class="o">=</span> <span class="n">preprocess</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x_train</span><span class="p">)</span>
+<span class="linenos">21</span>    <span class="n">z_test</span> <span class="o">=</span> <span class="n">preprocess</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;前処理後の列名:&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">preprocess</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">()))</span>
+<span class="linenos">24</span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;訓練データの形状:&quot;</span><span class="p">,</span> <span class="n">z_train</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s2">&quot; テストデータの形状:&quot;</span><span class="p">,</span> <span class="n">z_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="linenos">25</span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;標準化後の訓練データの平均 (ほぼ 0):&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">z_train</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+<span class="linenos">26</span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;標準化後の訓練データの標準偏差 (ほぼ 1):&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">z_train</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+<span class="linenos">27</span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;y_train の件数:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">),</span> <span class="s2">&quot; y_test の件数:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>6〜8 行目で、特徴量とラベルを分けたうえで訓練データとテストデータに分割している。</p></li>
+<li><p>10〜17 行目で、列ごとに適用する前処理を定義している。<code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> は複数の処理を順に適用し、<code class="docutils literal notranslate"><span class="pre">ColumnTransformer</span></code> は列ごとに異なる処理を適用する。</p></li>
+<li><p>20〜21 行目が重要である。<code class="docutils literal notranslate"><span class="pre">fit_transform</span></code> は訓練データだけに適用し、テストデータには <code class="docutils literal notranslate"><span class="pre">transform</span></code> だけを適用する。これにより、補完に使う中央値や標準化に使う平均・標準偏差は訓練データだけから計算される。</p></li>
+</ul>
+<p>実行結果の一部を次に示す。one-hot 符号化によって最寄り駅が 3 つの列に展開され、標準化後の訓練データの平均と標準偏差がそれぞれ 0 と 1 になっていることが分かる。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>前処理後の列名: [&#39;num__area&#39;, &#39;num__age&#39;, &#39;cat__station_A駅&#39;, &#39;cat__station_B駅&#39;, &#39;cat__station_C駅&#39;]
+<span class="linenos">2</span>訓練データの形状: (160, 5)  テストデータの形状: (40, 5)
+<span class="linenos">3</span>標準化後の訓練データの平均 (ほぼ 0): [ 0. -0.]
+<span class="linenos">4</span>標準化後の訓練データの標準偏差 (ほぼ 1): [1. 1.]
+</pre></div>
+</div>
+<p>サンプルコードの全体は <a class="reference download internal" download="" href="_downloads/db09b9522676f3b157b26cf0510d83b3/ch03_preprocessing.py"><code class="xref download docutils literal notranslate"><span class="pre">ch03_preprocessing.py</span></code></a> からダウンロードできる。</p>
+<p>実務では、前処理とモデルを 1 つの <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> にまとめておくとよい。そうすれば、交差検証や本番環境での予測のときにも、前処理が訓練データだけから学習されることが自動的に保証される（第 13 章）。</p>
+</section>
+<section id="id12">
+<h2><span class="section-number">3.8. </span>まとめ<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>モデルに入力する前に、欠損値の処理、数値のスケーリング、カテゴリの符号化などの前処理を行う。</p></li>
+<li><p>カテゴリの特徴量は、順序に意味がなければ one-hot 符号化する。</p></li>
+<li><p>データは訓練データ・検証データ・テストデータに分割し、テストデータは最終評価に一度だけ使う。</p></li>
+<li><p>前処理の統計量は訓練データだけから求める。予測時に使えない情報が学習に混入するデータリークに注意する。</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch02_math.html" class="btn btn-neutral float-left" title="2. 数学の準備" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch04_regression.html" class="btn btn-neutral float-right" title="4. 回帰" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nunu_3060.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

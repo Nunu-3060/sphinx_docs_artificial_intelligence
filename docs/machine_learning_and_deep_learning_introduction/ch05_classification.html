@@ -1,0 +1,384 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5. 分類 &mdash; 機械学習・深層学習入門</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=f043dae3" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=19757887"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=4755f45a"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="6. モデルの評価と改善" href="ch06_evaluation.html" />
+    <link rel="prev" title="4. 回帰" href="ch04_regression.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            機械学習・深層学習入門
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">はじめに</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">はじめに</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">本編</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ch01_overview.html">1. 機械学習の全体像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_math.html">2. 数学の準備</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_data.html">3. データと前処理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_regression.html">4. 回帰</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. 分類</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">5.1. 2 値分類とロジスティック回帰</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">5.1.1. シグモイド関数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">5.1.2. 決定境界</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">5.2. 交差エントロピー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">5.3. ロジスティック回帰の実装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">5.4. 多クラス分類</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id8">5.4.1. ソフトマックス関数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">5.4.2. 多クラスの交差エントロピー</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#k">5.5. k 近傍法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">5.6. サポートベクターマシン</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id11">5.6.1. マージン最大化</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">5.6.2. カーネル法</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id13">5.7. 手法の比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id14">5.8. まとめ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_evaluation.html">6. モデルの評価と改善</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch07_tree_ensemble.html">7. 決定木とアンサンブル学習</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_unsupervised.html">8. 教師なし学習</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_neural_network.html">9. ニューラルネットワークの基礎</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_training_techniques.html">10. 深層学習の学習テクニック</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_cnn.html">11. 畳み込みニューラルネットワーク</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch12_sequence_transformer.html">12. 系列データと Transformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch13_practice.html">13. 実務への適用</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">付録</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendix_glossary.html">用語集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_symbols.html">記号一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_examples.html">サンプルコード一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_references.html">参考文献</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">機械学習・深層学習入門</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">5. </span>分類</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">5. </span>分類<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>この章では、教師あり学習のうち、カテゴリを予測する<strong>分類</strong>を扱う。まず 2 クラスの分類を行うロジスティック回帰を題材に、分類のための損失関数を説明する。その後、多クラスへの拡張と、k 近傍法、サポートベクターマシンという性質の異なる手法を紹介する。決定木にもとづく手法は第 7 章で扱う。</p>
+<section id="id2">
+<h2><span class="section-number">5.1. </span>2 値分類とロジスティック回帰<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>2 つのクラスのどちらに属するかを予測する問題を <strong>2 値分類</strong>と呼ぶ。2 つのクラスを 0 と 1 で表し、たとえば「迷惑メールなら 1、通常のメールなら 0」のようにする。慣習として、検出したい方（迷惑メール、病気あり、不正利用など）をクラス 1（<strong>陽性</strong>）、そうでない方をクラス 0（<strong>陰性</strong>）とすることが多い。</p>
+<section id="id3">
+<h3><span class="section-number">5.1.1. </span>シグモイド関数<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>分類では、「クラス 1 である確率」を出力するモデルが便利である。確率が分かれば、「確率が 0.5 以上ならクラス 1 と判定する」のように使えるだけでなく、判定の確からしさも分かる。</p>
+<p>線形回帰の出力 <span class="math notranslate nohighlight">\(z = \boldsymbol{w}^\top \boldsymbol{x} + b\)</span> は任意の実数値を取るため、そのままでは確率として使えない。そこで、任意の実数を 0〜1 の範囲に変換する<a class="reference internal" href="appendix_glossary.html#term-23"><span class="xref std std-term">シグモイド関数</span></a>を使う（<a class="reference internal" href="#fig-ch05-sigmoid"><span class="std std-numref">図 5.1</span></a>）。</p>
+<div class="math notranslate nohighlight">
+\[\sigma(z) = \frac{1}{1 + e^{-z}}\]</div>
+<figure class="align-center" id="id15">
+<span id="fig-ch05-sigmoid"></span><a class="reference internal image-reference" href="_images/ch05_sigmoid.png"><img alt="_images/ch05_sigmoid.png" src="_images/ch05_sigmoid.png" style="width: 520px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 5.1 </span><span class="caption-text">シグモイド関数。<span class="math notranslate nohighlight">\(z = 0\)</span> のとき 0.5 となり、<span class="math notranslate nohighlight">\(z\)</span> が大きいほど 1 に、小さいほど 0 に近づく。</span><a class="headerlink" href="#id15" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>ロジスティック回帰</strong>は、線形回帰の出力をシグモイド関数に通して、クラス 1 である確率を予測するモデルである。</p>
+<div class="math notranslate nohighlight">
+\[p = P(y = 1 \mid \boldsymbol{x}) = \sigma(\boldsymbol{w}^\top \boldsymbol{x} + b)\]</div>
+<p>名前に「回帰」と付いているが、分類のための手法である。シグモイド関数に入力する前の値 <span class="math notranslate nohighlight">\(z\)</span> は<a class="reference internal" href="appendix_glossary.html#term-49"><span class="xref std std-term">ロジット</span></a>と呼ばれる。</p>
+</section>
+<section id="id4">
+<h3><span class="section-number">5.1.2. </span>決定境界<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>確率 0.5 をしきい値として判定する場合、<span class="math notranslate nohighlight">\(\sigma(z) \geq 0.5\)</span> は <span class="math notranslate nohighlight">\(z \geq 0\)</span> と同じであるから、</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{w}^\top \boldsymbol{x} + b = 0\]</div>
+<p>がクラスを分ける境界になる。このように、特徴量の空間をクラスごとの領域に分ける境界を<strong>決定境界</strong>と呼ぶ。ロジスティック回帰の決定境界は、特徴量が 2 つなら直線、3 つなら平面になる（<a class="reference internal" href="#fig-ch05-logistic-boundary"><span class="std std-numref">図 5.2</span></a>）。決定境界が直線（平面）になるモデルを<strong>線形分類器</strong>と呼ぶ。</p>
+<figure class="align-center" id="id16">
+<span id="fig-ch05-logistic-boundary"></span><a class="reference internal image-reference" href="_images/ch05_logistic_boundary.png"><img alt="_images/ch05_logistic_boundary.png" src="_images/ch05_logistic_boundary.png" style="width: 460px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 5.2 </span><span class="caption-text">ロジスティック回帰による 2 値分類。決定境界から離れるほど、予測の確率が 0 または 1 に近づく。</span><a class="headerlink" href="#id16" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="id5">
+<h2><span class="section-number">5.2. </span>交差エントロピー<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<p>ロジスティック回帰の学習に使う損失関数を考える。正解が <span class="math notranslate nohighlight">\(y = 1\)</span> のときは予測確率 <span class="math notranslate nohighlight">\(p\)</span> が大きいほど良く、<span class="math notranslate nohighlight">\(y = 0\)</span> のときは <span class="math notranslate nohighlight">\(p\)</span> が小さいほど良い。これを 1 つの式で表したものが <strong>2 値交差エントロピー</strong>である。</p>
+<div class="math notranslate nohighlight">
+\[L = -\frac{1}{n} \sum_{i=1}^{n} \left\{ y_i \log p_i + (1 - y_i) \log (1 - p_i) \right\}\]</div>
+<p><span class="math notranslate nohighlight">\(y_i = 1\)</span> のサンプルでは第 1 項 <span class="math notranslate nohighlight">\(-\log p_i\)</span> だけが残り、<span class="math notranslate nohighlight">\(y_i = 0\)</span> のサンプルでは第 2 項 <span class="math notranslate nohighlight">\(-\log(1 - p_i)\)</span> だけが残る。たとえば正解が 1 のとき、予測確率が 0.9 なら損失は <span class="math notranslate nohighlight">\(-\log 0.9 \approx 0.11\)</span> と小さいが、0.01 なら <span class="math notranslate nohighlight">\(-\log 0.01 \approx 4.6\)</span> と大きくなる。自信を持って間違えるほど、大きな罰が与えられる。</p>
+<p><a class="reference internal" href="appendix_glossary.html#term-14"><span class="xref std std-term">交差エントロピー</span></a>は、第 2 章で説明した最尤推定から導かれる損失関数である。分類に平均二乗誤差を使うこともできなくはないが、シグモイド関数と組み合わせると、大きく間違えているときに勾配がかえって小さくなり、学習が進みにくい。</p>
+<p>交差エントロピーの勾配は、連鎖律を使って計算すると次のような簡単な形になる。</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial L}{\partial \boldsymbol{w}} = \frac{1}{n} \sum_{i=1}^{n} (p_i - y_i) \boldsymbol{x}_i, \qquad
+\frac{\partial L}{\partial b} = \frac{1}{n} \sum_{i=1}^{n} (p_i - y_i)\]</div>
+<p>これは、第 4 章で求めた線形回帰の勾配と（定数倍を除いて）同じ形であり、「予測と正解の差」×「特徴量」の平均になっている。</p>
+</section>
+<section id="id6">
+<h2><span class="section-number">5.3. </span>ロジスティック回帰の実装<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<p>勾配降下法によるロジスティック回帰を NumPy で実装すると次のようになる。</p>
+<div class="literal-block-wrapper docutils container" id="id17">
+<div class="code-block-caption"><span class="caption-number">コード 5.1 </span><span class="caption-text">ロジスティック回帰の学習（ch05_logistic_regression_scratch.py より抜粋）</span><a class="headerlink" href="#id17" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">lr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">FloatArray</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;重み w とバイアス b を勾配降下法で学習する。&quot;&quot;&quot;</span>
+<span class="linenos"> 3</span>    <span class="n">n</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+<span class="linenos"> 4</span>    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="linenos"> 5</span>    <span class="n">b</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="linenos"> 6</span>    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+<span class="linenos"> 7</span>        <span class="n">p</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">x</span> <span class="o">@</span> <span class="n">w</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+<span class="linenos"> 8</span>        <span class="c1"># 交差エントロピーをシグモイドの入力で微分すると (p - y) という単純な形になる</span>
+<span class="linenos"> 9</span>        <span class="n">error</span> <span class="o">=</span> <span class="n">p</span> <span class="o">-</span> <span class="n">y</span>
+<span class="linenos">10</span>        <span class="n">w</span> <span class="o">-=</span> <span class="n">lr</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">error</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
+<span class="linenos">11</span>        <span class="n">b</span> <span class="o">-=</span> <span class="n">lr</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">error</span><span class="p">))</span>
+<span class="linenos">12</span>        <span class="k">if</span> <span class="n">epoch</span> <span class="o">%</span> <span class="mi">200</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="linenos">13</span>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;epoch </span><span class="si">{</span><span class="n">epoch</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2">: loss = </span><span class="si">{</span><span class="n">binary_cross_entropy</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos">14</span>    <span class="k">return</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>7 行目で各サンプルがクラス 1 である確率を計算している。</p></li>
+<li><p>9〜11 行目で、上の式に従って勾配を求め、パラメータを更新している。</p></li>
+</ul>
+<p>2 つの正規分布から生成した 2 次元のデータで学習した結果を次に示す。損失が減少し、訓練データの 92.5 % を正しく分類できている。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>epoch    0: loss = 0.6931
+<span class="linenos">2</span>epoch  200: loss = 0.1622
+<span class="linenos">3</span>epoch  400: loss = 0.1620
+<span class="linenos">4</span>epoch  600: loss = 0.1620
+<span class="linenos">5</span>epoch  800: loss = 0.1620
+<span class="linenos">6</span>w = [2.48954831 1.67846907], b = -0.555
+<span class="linenos">7</span>訓練データでの正解率 = 0.925
+<span class="linenos">8</span>点 (0.0, 0.5) がクラス 1 である確率: [0.57046278]
+</pre></div>
+</div>
+<p>最初の損失 0.6931 は <span class="math notranslate nohighlight">\(-\log 0.5\)</span> に等しい。パラメータがすべて 0 の状態では、どのサンプルに対しても確率 0.5 を出力するためである。</p>
+<p>サンプルコードの全体は <a class="reference download internal" download="" href="_downloads/5687f8ed7f2c7ff4057466fcb6613e02/ch05_logistic_regression_scratch.py"><code class="xref download docutils literal notranslate"><span class="pre">ch05_logistic_regression_scratch.py</span></code></a> からダウンロードできる。</p>
+</section>
+<section id="id7">
+<h2><span class="section-number">5.4. </span>多クラス分類<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<p>3 つ以上のクラスから 1 つを選ぶ問題を<strong>多クラス分類</strong>と呼ぶ。手書き数字の認識（0〜9 の 10 クラス）などが代表例である。</p>
+<section id="id8">
+<h3><span class="section-number">5.4.1. </span>ソフトマックス関数<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p><span class="math notranslate nohighlight">\(K\)</span> クラスの分類では、クラスごとに重みベクトル <span class="math notranslate nohighlight">\(\boldsymbol{w}_k\)</span> とバイアス <span class="math notranslate nohighlight">\(b_k\)</span> を用意し、各クラスのスコア（ロジット）<span class="math notranslate nohighlight">\(z_k = \boldsymbol{w}_k^\top \boldsymbol{x} + b_k\)</span> を計算する。そして、<a class="reference internal" href="appendix_glossary.html#term-28"><span class="xref std std-term">ソフトマックス関数</span></a>で各クラスの確率に変換する。</p>
+<div class="math notranslate nohighlight">
+\[p_k = \frac{e^{z_k}}{\sum_{j=1}^{K} e^{z_j}}\]</div>
+<p>ソフトマックス関数の出力はすべて正で、合計は 1 になる。また、スコアの大小関係は保たれるので、スコアが最大のクラスが確率も最大になる。2 クラスの場合、ソフトマックス関数はシグモイド関数と同じ働きをする。</p>
+<p>ソフトマックス関数を実装するときは、<span class="math notranslate nohighlight">\(e^{z_k}\)</span> がオーバーフローしないように、すべての <span class="math notranslate nohighlight">\(z_k\)</span> から最大値を引いてから計算する。この操作は結果を変えない（第 12 章のサンプルコードを参照）。</p>
+</section>
+<section id="id9">
+<h3><span class="section-number">5.4.2. </span>多クラスの交差エントロピー<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<p>多クラス分類の損失関数には、正解クラスの予測確率の対数にマイナスを付けた<strong>交差エントロピー</strong>を使う。</p>
+<div class="math notranslate nohighlight">
+\[L = -\frac{1}{n} \sum_{i=1}^{n} \log p_{i, y_i}\]</div>
+<p>ここで <span class="math notranslate nohighlight">\(p_{i, y_i}\)</span> は、<span class="math notranslate nohighlight">\(i\)</span> 番目のサンプルの正解クラス <span class="math notranslate nohighlight">\(y_i\)</span> に対する予測確率である。正解ラベルを、正解クラスだけが 1 で他が 0 のベクトル（one-hot 符号化した表現）<span class="math notranslate nohighlight">\(\boldsymbol{t}_i\)</span> で表すと、<span class="math notranslate nohighlight">\(L = -\frac{1}{n} \sum_i \sum_k t_{ik} \log p_{ik}\)</span> とも書ける。この「ソフトマックス関数 + 交差エントロピー」の組み合わせは、深層学習の分類でも標準的に使われる（第 9 章）。</p>
+</section>
+</section>
+<section id="k">
+<h2><span class="section-number">5.5. </span>k 近傍法<a class="headerlink" href="#k" title="Link to this heading"></a></h2>
+<p><strong>k 近傍法</strong>（k-Nearest Neighbors、k-NN）は、新しいデータを分類するとき、訓練データの中から距離が近い <span class="math notranslate nohighlight">\(k\)</span> 個のサンプルを探し、その多数決でクラスを決める手法である。</p>
+<ul class="simple">
+<li><p>学習時には訓練データを記憶するだけで、パラメータの最適化は行わない。</p></li>
+<li><p><span class="math notranslate nohighlight">\(k\)</span> が小さいと決定境界が複雑になり、ノイズの影響を受けやすい。<span class="math notranslate nohighlight">\(k\)</span> が大きいと境界が滑らかになる。</p></li>
+<li><p>距離にもとづくため、特徴量の標準化が必要である。</p></li>
+<li><p>予測のたびに全訓練データとの距離を計算するため、データが多いと予測が遅い。また、特徴量の次元が高いと、どのサンプルも同じくらい遠くなってしまい、うまく機能しない（<strong>次元の呪い</strong>）。</p></li>
+</ul>
+<p>仕組みが単純で直感的に理解しやすいため、他の手法と比較する基準（ベースライン）として使われることが多い。</p>
+</section>
+<section id="id10">
+<h2><span class="section-number">5.6. </span>サポートベクターマシン<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<section id="id11">
+<h3><span class="section-number">5.6.1. </span>マージン最大化<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<p><strong>サポートベクターマシン</strong>（Support Vector Machine、SVM）は、2 つのクラスを分ける決定境界のうち、境界に最も近いサンプルまでの距離（<strong>マージン</strong>）が最大になるものを選ぶ手法である。マージンが大きいほど、少しずれた位置に新しいデータが来ても正しく分類できると期待できる。境界に最も近く、境界の位置を決めているサンプルを<strong>サポートベクター</strong>と呼ぶ。</p>
+<p>実際のデータは完全には分離できないことが多いため、一部のサンプルがマージンの内側に入ったり誤分類されたりすることを許す。どの程度許すかをハイパーパラメータ <span class="math notranslate nohighlight">\(C\)</span> で調整する。<span class="math notranslate nohighlight">\(C\)</span> が大きいほど誤分類を厳しく罰し、訓練データに合わせようとする。</p>
+</section>
+<section id="id12">
+<h3><span class="section-number">5.6.2. </span>カーネル法<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<p>SVM の大きな特徴は、<strong>カーネル法</strong>によって非線形な決定境界を学習できることである。第 4 章の多項式回帰では、特徴量を変換して増やすことで曲線を表現した。カーネル法は、この「特徴量を高次元の空間に変換してから線形に分離する」ことを、変換後の特徴量を明示的に計算せずに行う技法である。</p>
+<p>よく使われる <strong>RBF カーネル</strong>（ガウスカーネル）では、サンプル間の類似度を距離にもとづいて測り、複雑な曲線の決定境界を作れる。ハイパーパラメータ <span class="math notranslate nohighlight">\(\gamma\)</span> は 1 つのサンプルの影響が及ぶ範囲を決め、大きいほど境界が複雑になる。</p>
+<p>SVM はデータが数千〜数万件程度までの問題で高い性能を示すが、データ数が多くなると学習に時間がかかる。また、特徴量の標準化が必要である。</p>
+</section>
+</section>
+<section id="id13">
+<h2><span class="section-number">5.7. </span>手法の比較<a class="headerlink" href="#id13" title="Link to this heading"></a></h2>
+<p>三日月形の 2 クラスデータに 3 つの手法を適用したときの決定境界を<a class="reference internal" href="#fig-ch05-classifiers"><span class="std std-numref">図 5.3</span></a> に示す。</p>
+<figure class="align-center" id="id18">
+<span id="fig-ch05-classifiers"></span><img alt="_images/ch05_classifiers.png" src="_images/ch05_classifiers.png" />
+<figcaption>
+<p><span class="caption-number">図 5.3 </span><span class="caption-text">ロジスティック回帰、k 近傍法、SVM（RBF カーネル）の決定境界</span><a class="headerlink" href="#id18" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>ロジスティック回帰は線形分類器なので、決定境界は直線になり、三日月形を分離しきれない。k 近傍法と SVM は曲線の境界を学習できる。</p>
+<p>次のサンプルは、scikit-learn で 3 つの手法を学習し、テストデータでの正解率を比較する。</p>
+<div class="literal-block-wrapper docutils container" id="id19">
+<div class="code-block-caption"><span class="caption-number">コード 5.2 </span><span class="caption-text">分類器の比較（ch05_classifiers_sklearn.py より抜粋）</span><a class="headerlink" href="#id19" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos"> 2</span>    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_moons</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos"> 3</span>    <span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span>    <span class="c1"># 距離や内積を使う手法は特徴量のスケールに敏感なので、標準化と組み合わせる</span>
+<span class="linenos"> 6</span>    <span class="n">models</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+<span class="linenos"> 7</span>        <span class="s2">&quot;ロジスティック回帰&quot;</span><span class="p">:</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">StandardScaler</span><span class="p">(),</span> <span class="n">LogisticRegression</span><span class="p">()),</span>
+<span class="linenos"> 8</span>        <span class="s2">&quot;k 近傍法 (k=15)&quot;</span><span class="p">:</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">StandardScaler</span><span class="p">(),</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">15</span><span class="p">)),</span>
+<span class="linenos"> 9</span>        <span class="s2">&quot;SVM (RBF カーネル)&quot;</span><span class="p">:</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">StandardScaler</span><span class="p">(),</span> <span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;rbf&quot;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="s2">&quot;scale&quot;</span><span class="p">)),</span>
+<span class="linenos">10</span>    <span class="p">}</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span>    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="linenos">13</span>        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="linenos">14</span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: テストデータでの正解率 = </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span><span class="w"> </span><span class="n">y_test</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span>    <span class="c1"># predict_proba で各クラスの確率を得られる</span>
+<span class="linenos">17</span>    <span class="n">proba</span> <span class="o">=</span> <span class="n">models</span><span class="p">[</span><span class="s2">&quot;ロジスティック回帰&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">x_test</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+<span class="linenos">18</span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ロジスティック回帰による先頭 3 件のクラス確率:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">proba</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>6〜10 行目で、各手法を <code class="docutils literal notranslate"><span class="pre">StandardScaler</span></code> による標準化と組み合わせたパイプラインを作っている。</p></li>
+<li><p>12〜14 行目で各モデルを学習し、<code class="docutils literal notranslate"><span class="pre">score</span></code> メソッドでテストデータでの正解率を求めている。</p></li>
+<li><p>17 行目の <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code> は、各クラスの確率を返す。</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>ロジスティック回帰: テストデータでの正解率 = 0.900
+<span class="linenos">2</span>k 近傍法 (k=15): テストデータでの正解率 = 0.930
+<span class="linenos">3</span>SVM (RBF カーネル): テストデータでの正解率 = 0.910
+<span class="linenos">4</span>ロジスティック回帰による先頭 3 件のクラス確率:
+<span class="linenos">5</span> [[0.966 0.034]
+<span class="linenos">6</span> [0.106 0.894]
+<span class="linenos">7</span> [0.031 0.969]]
+</pre></div>
+</div>
+<p>この例では線形分類器のロジスティック回帰でも 90 % の正解率が得られているが、境界付近のサンプルを取りこぼしている。どの手法が最も良いかはデータによって異なるため、実際には複数の手法を検証データで比較して選ぶ。比較のときの注意点は第 6 章で説明する。</p>
+<p>サンプルコードの全体は <a class="reference download internal" download="" href="_downloads/6081600e583aa413a9e07d9b7a89c6ae/ch05_classifiers_sklearn.py"><code class="xref download docutils literal notranslate"><span class="pre">ch05_classifiers_sklearn.py</span></code></a> からダウンロードできる。</p>
+<table class="docutils align-default" id="id20">
+<caption><span class="caption-number">表 5.1 </span><span class="caption-text">分類手法の特徴</span><a class="headerlink" href="#id20" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 26.0%" />
+<col style="width: 26.0%" />
+<col style="width: 26.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>手法</p></th>
+<th class="head"><p>長所</p></th>
+<th class="head"><p>短所</p></th>
+<th class="head"><p>主なハイパーパラメータ</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ロジスティック回帰</p></td>
+<td><p>高速。確率を出力する。重みから特徴量の影響を解釈しやすい。</p></td>
+<td><p>決定境界が線形に限られる。</p></td>
+<td><p>正則化の強さ（第 6 章）</p></td>
+</tr>
+<tr class="row-odd"><td><p>k 近傍法</p></td>
+<td><p>仕組みが単純。学習が不要。</p></td>
+<td><p>予測が遅い。高次元に弱い。</p></td>
+<td><p>近傍の数 <span class="math notranslate nohighlight">\(k\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>SVM</p></td>
+<td><p>カーネル法で複雑な境界を学習できる。中規模のデータで高性能。</p></td>
+<td><p>大規模データでは学習が遅い。確率を直接は出力しない。</p></td>
+<td><p><span class="math notranslate nohighlight">\(C\)</span>、カーネルの種類、<span class="math notranslate nohighlight">\(\gamma\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id14">
+<h2><span class="section-number">5.8. </span>まとめ<a class="headerlink" href="#id14" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>ロジスティック回帰は、線形の式をシグモイド関数に通して、クラス 1 である確率を予測する。</p></li>
+<li><p>分類の損失関数には交差エントロピーを使う。自信を持って間違えるほど損失が大きくなる。</p></li>
+<li><p>多クラス分類では、ソフトマックス関数で各クラスの確率を求め、交差エントロピーで学習する。</p></li>
+<li><p>k 近傍法は近いサンプルの多数決で分類し、SVM はマージンが最大になる境界を求める。いずれも特徴量の標準化が必要である。</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch04_regression.html" class="btn btn-neutral float-left" title="4. 回帰" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch06_evaluation.html" class="btn btn-neutral float-right" title="6. モデルの評価と改善" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nunu_3060.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

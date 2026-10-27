@@ -1,0 +1,652 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4. コンテキストエンジニアリング &mdash; AI を用いた開発</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=c9cec091" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=19757887"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=4755f45a"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="5. ハーネスエンジニアリング" href="harness_engineering.html" />
+    <link rel="prev" title="3. プロンプトエンジニアリング" href="prompt_engineering.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AI を用いた開発
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">本編</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. はじめに</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id2">1.1. 本書の目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id3">1.2. 対象読者と前提知識</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id4">1.3. 本書の範囲</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id5">1.4. 本書の構成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id6">1.5. 表記とサンプルコード</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">2. AI を用いた開発の全体像</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#llm">2.1. 開発者が知っておくべき LLM の性質</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id1">2.1.1. テキストを続けて生成する</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id2">2.1.2. 一度に扱える量に上限がある</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id3">2.1.3. 記憶を持たない</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id4">2.1.4. 出力は確率的である</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id5">2.1.5. 知識に期限がある</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id6">2.1.6. ツールを呼び出せる</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id7">2.2. AI の利用形態の変遷</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id8">2.3. 各エンジニアリングの関係</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id9">2.4. AI に任せる部分と人間が責任を持つ部分</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_engineering.html">3. プロンプトエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id2">3.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id3">3.2. プロンプトの構成要素</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id4">3.3. 基本的なテクニック</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id5">3.3.1. 明確かつ具体的に書く</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id6">3.3.2. 理由を伝える</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id7">3.3.3. 例を示す</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id8">3.3.4. 考える手順を与える</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id9">3.3.5. 入力と指示を区別する</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id10">3.3.6. 出力形式を指定する</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id11">3.3.7. してほしいことを書く</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id12">3.4. サンプルコード：プロンプトのテンプレート</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id13">3.5. 開発作業でのプロンプトの例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id14">3.6. アンチパターン</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id15">3.7. プロンプトだけでは解決できないこと</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. コンテキストエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">4.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">4.2. コンテキストの構成要素</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">4.3. 基本的な考え方</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">4.3.1. 多ければよいわけではない</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">4.3.2. コンテキストの失敗の型</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">4.4. 主な手法</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id8">4.4.1. 規約ファイル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">4.4.2. 必要なときに読み込む</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">4.4.3. 要約と除去</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">4.4.4. 外部の記憶</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">4.4.5. コンテキストの分離</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id13">4.5. サンプルコード：予算内でのコンテキストの組み立て</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="harness_engineering.html">5. ハーネスエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id2">5.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id3">5.2. エージェントの基本構造</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id4">5.3. ガイドとセンサー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id5">5.4. ツールの設計</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id6">5.5. サンプルコード：最小のエージェント</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id7">5.6. センサーとしての検証手段</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id8">5.7. 権限とサンドボックス</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id9">5.8. フック</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#ai">5.9. AI が働きやすいリポジトリ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="loop_engineering.html">6. ループエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id2">6.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id3">6.2. ループの階層</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id4">6.3. エージェントループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id5">6.4. 自己修正のループ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="loop_engineering.html#id6">6.4.1. サンプルコード：自己修正のループ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id7">6.5. 終了条件の設計</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="loop_engineering.html#id8">6.5.1. 完了条件の抜け道に注意する</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id9">6.6. 人間のループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id10">6.7. 長時間・自律的なループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id11">6.8. ハーネス改善のループ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spec_driven.html">7. 仕様駆動開発</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id2">7.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id3">7.2. 作業の流れ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id4">7.3. 仕様書の書き方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#ai">7.4. AI と一緒に仕様を作る</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id5">7.5. 仕様と実装を同期させる</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id6">7.6. 向いている場面と向いていない場面</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="eval_driven.html">8. 評価駆動開発</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id2">8.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id3">8.2. 評価の構成要素</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id4">8.3. 採点器の種類</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id5">8.4. 指標</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id6">8.5. 評価のサイクル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id7">8.6. サンプルコード：プロンプトの比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id8">8.7. 注意点</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="multi_agent.html">9. マルチエージェントとオーケストレーション</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id2">9.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id3">9.2. 構成のパターン</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id4">9.3. サンプルコード：オーケストレーター・ワーカー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id5">9.4. 開発での使い方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id6">9.5. 注意点</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vibe_coding.html">10. Vibe Coding と規律ある AI 開発</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id1">10.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id2">10.2. 両者の比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#vibe-coding">10.3. Vibe Coding の価値と限界</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id3">10.4. 使い分けの指針</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id4">10.5. 人間に求められる能力</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="process.html">11. 開発プロセスへの適用</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id2">11.1. 工程ごとの活用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id3">11.2. テスト駆動開発との組み合わせ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id4">11.3. 作業の単位</a></li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id5">11.4. チームでの運用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="process.html#id6">11.4.1. 規約とハーネスの共有</a></li>
+<li class="toctree-l3"><a class="reference internal" href="process.html#id7">11.4.2. レビューの基準</a></li>
+<li class="toctree-l3"><a class="reference internal" href="process.html#id8">11.4.3. 責任の所在</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id9">11.5. 段階的な導入</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="practice_claude_code.html">12. 実践：Claude Code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id1">12.1. Claude Code の概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id2">12.2. コンテキストを整える</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#claude-md">12.2.1. CLAUDE.md</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id3">12.2.2. コンテキストの管理</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id4">12.2.3. スキル</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id5">12.3. 依頼の進め方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id6">12.4. ハーネスを整える</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id7">12.4.1. 権限モード</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id8">12.4.2. 権限の設定とフック</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#mcp">12.4.3. MCP サーバーとサンドボックス</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id9">12.5. ループを組む</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#stop">12.5.1. Stop フックによる自己修正のループ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#goal-loop">12.5.2. <code class="docutils literal notranslate"><span class="pre">/goal</span></code> と <code class="docutils literal notranslate"><span class="pre">/loop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#ci">12.5.3. 非対話の実行と CI</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id10">12.6. マルチエージェントを使う</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id11">12.6.1. サブエージェント</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id12">12.6.2. 並列の作業</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id13">12.7. ハーネスを改善し続ける</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="risks.html">13. リスクと品質管理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id2">13.1. もっともらしい誤り</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id3">13.2. プロンプトインジェクション</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id4">13.3. 秘密情報と機密情報</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id5">13.4. ライセンスと著作権</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id6">13.5. 費用の管理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id7">13.6. 技能の空洞化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id8">13.7. 品質管理のまとめ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="summary.html">14. まとめ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="summary.html#id2">14.1. 各手法の比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summary.html#id3">14.2. 問題が起きたときの切り分け</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summary.html#id4">14.3. 今後の展望</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">付録</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">サンプルコード一覧</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#id2">実行の準備</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#python">Python のサンプル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#id3">設定ファイルと文書のサンプル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#llm-stub-py">llm_stub.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">用語集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">参考文献</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id2">論文</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id3">記事</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id4">仕様・ツール</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#claude-code">Claude Code</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AI を用いた開発</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">4. </span>コンテキストエンジニアリング</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">4. </span>コンテキストエンジニアリング<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<section id="id2">
+<h2><span class="section-number">4.1. </span>本書の定義<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="glossary.html#term-10"><span class="xref std std-term">コンテキストエンジニアリング</span></a>とは、推論のたびにモデルへ渡す情報全体（<a class="reference internal" href="glossary.html#term-8"><span class="xref std std-term">コンテキスト</span></a>）を設計し、管理する技術である。プロンプトエンジニアリングが「指示文をどう書くか」を扱うのに対し、コンテキストエンジニアリングは「指示文を含め、何を、どれだけ、どの順でモデルに見せるか」を扱う <a class="reference internal" href="references.html#ref-anthropic-context"><span class="std std-ref">[Anthropic-Context]</span></a>。</p>
+<p><a class="reference internal" href="overview.html"><span class="doc">AI を用いた開発の全体像</span></a>で述べたとおり、モデルは記憶を持たず、今回の入力に含まれる情報だけを手がかりに判断する。エージェントが長い作業をこなすほど、コンテキストには会話履歴やツールの実行結果が積み重なっていく。その中から判断に必要な情報を過不足なく保つことが、この層の課題である。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">4.2. </span>コンテキストの構成要素<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>コーディングエージェントのコンテキストは、おおむね<a class="reference internal" href="#table-context-elements"><span class="std std-numref">表 4.1</span></a> の要素からなる。</p>
+<span id="table-context-elements"></span><table class="docutils align-default" id="id14">
+<caption><span class="caption-number">表 4.1 </span><span class="caption-text">コンテキストの構成要素</span><a class="headerlink" href="#id14" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 45.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>要素</p></th>
+<th class="head"><p>内容</p></th>
+<th class="head"><p>主な管理手段</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>システムプロンプト</p></td>
+<td><p>エージェントの役割、振る舞いの規則</p></td>
+<td><p>エージェントの製品側が用意する。利用者が追加できる場合もある</p></td>
+</tr>
+<tr class="row-odd"><td><p>ツール定義</p></td>
+<td><p>使えるツールの名前、説明、引数</p></td>
+<td><p>使うツールを絞る</p></td>
+</tr>
+<tr class="row-even"><td><p>規約ファイル</p></td>
+<td><p>プロジェクトの規約、よく使うコマンド、注意事項</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AGENTS.md</span></code>、<code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code> などを整備する</p></td>
+</tr>
+<tr class="row-odd"><td><p>読み込んだ情報</p></td>
+<td><p>ソースコード、文書、検索結果</p></td>
+<td><p>必要なものだけを、必要なときに読み込む</p></td>
+</tr>
+<tr class="row-even"><td><p>会話履歴</p></td>
+<td><p>利用者の依頼とモデルの応答</p></td>
+<td><p>作業ごとに会話を分ける。要約する</p></td>
+</tr>
+<tr class="row-odd"><td><p>ツールの実行結果</p></td>
+<td><p>コマンドの出力、テストの結果、ファイルの内容</p></td>
+<td><p>出力を絞る。古い結果を除く</p></td>
+</tr>
+</tbody>
+</table>
+<p><a class="reference internal" href="#fig-context-budget"><span class="std std-numref">図 4.1</span></a> は、コンテキストウィンドウの内訳を例として示したものである。整理する前は、読み込んだファイル、会話履歴、ツールの実行結果が大半を占め、新しい作業に使える空きがほとんど残っていない。不要な情報を除き、古い履歴を要約すると、同じ作業でも多くの空きを確保できる。</p>
+<figure class="align-default" id="id15">
+<span id="fig-context-budget"></span><a class="reference internal image-reference" href="_images/context_budget.png"><img alt="コンテキストウィンドウの内訳の例。整理前は空きが 4% だが、整理後は 60% になる" src="_images/context_budget.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 4.1 </span><span class="caption-text">コンテキストウィンドウの内訳の例（説明のための例であり、実測値ではない）</span><a class="headerlink" href="#id15" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="id4">
+<h2><span class="section-number">4.3. </span>基本的な考え方<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<section id="id5">
+<h3><span class="section-number">4.3.1. </span>多ければよいわけではない<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>コンテキストウィンドウが大きくなっても、情報を詰め込むほどよい結果になるわけではない。入力が長くなると、モデルが個々の情報に向ける注意は分散し、重要な情報を見落としやすくなる。特に、長い入力の中ほどにある情報は、先頭や末尾にある情報より活用されにくいことが報告されている <a class="reference internal" href="references.html#ref-liu2023"><span class="std std-ref">[Liu2023]</span></a>。また、入力が長いほど、処理にかかる時間と料金も増える。</p>
+<p>コンテキストエンジニアリングの目標は、「望む結果を得られる可能性が最も高くなる、最小限の情報の集合」を見つけることである <a class="reference internal" href="references.html#ref-anthropic-context"><span class="std std-ref">[Anthropic-Context]</span></a>。</p>
+</section>
+<section id="id6">
+<h3><span class="section-number">4.3.2. </span>コンテキストの失敗の型<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>コンテキストに起因する失敗は、次の型に分けると原因を見つけやすい。</p>
+<table class="docutils align-default" id="id16">
+<caption><span class="caption-number">表 4.2 </span><span class="caption-text">コンテキストの失敗の型</span><a class="headerlink" href="#id16" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 18.0%" />
+<col style="width: 47.0%" />
+<col style="width: 35.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>型</p></th>
+<th class="head"><p>状況</p></th>
+<th class="head"><p>例</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>不足</p></td>
+<td><p>判断に必要な情報が入っていない</p></td>
+<td><p>プロジェクトの規約を知らず、既存の書き方と違うコードを書く</p></td>
+</tr>
+<tr class="row-odd"><td><p>過剰</p></td>
+<td><p>無関係な情報が多く、重要な情報が埋もれる</p></td>
+<td><p>前の作業の履歴が残っていて、今回の作業と混同する</p></td>
+</tr>
+<tr class="row-even"><td><p>矛盾</p></td>
+<td><p>互いに食い違う情報が入っている</p></td>
+<td><p>古い設計書と現在のコードが食い違い、どちらに従うべきか分からない</p></td>
+</tr>
+<tr class="row-odd"><td><p>汚染</p></td>
+<td><p>誤った情報が入り、それを前提に判断を重ねる</p></td>
+<td><p>一度誤った推測をすると、その推測が履歴に残り、以降の判断もそれに引きずられる</p></td>
+</tr>
+</tbody>
+</table>
+<p>汚染が起きた場合は、誤りを指摘して修正させるより、会話をやり直して正しい情報だけで始めるほうが早いことが多い。</p>
+</section>
+</section>
+<section id="id7">
+<h2><span class="section-number">4.4. </span>主な手法<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<section id="id8">
+<h3><span class="section-number">4.4.1. </span>規約ファイル<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p><a class="reference internal" href="glossary.html#term-3"><span class="xref std std-term">規約ファイル</span></a>は、プロジェクトの情報や作業のルールを書いておき、エージェントがセッションの開始時に自動的に読み込むファイルである。毎回同じ説明をする手間が省け、説明の漏れも防げる。</p>
+<table class="docutils align-default" id="id17">
+<caption><span class="caption-number">表 4.3 </span><span class="caption-text">主な規約ファイル</span><a class="headerlink" href="#id17" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 45.0%" />
+<col style="width: 55.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ファイル</p></th>
+<th class="head"><p>読み込むツール</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AGENTS.md</span></code></p></td>
+<td><p>OpenAI Codex、GitHub Copilot、Cursor など多くのツール（共通の形式として提案されている <a class="reference internal" href="references.html#ref-agentsmd"><span class="std std-ref">[AGENTS.md]</span></a>）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code></p></td>
+<td><p>Claude Code</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.github/copilot-instructions.md</span></code></p></td>
+<td><p>GitHub Copilot</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.cursor/rules/</span></code> 配下のファイル</p></td>
+<td><p>Cursor</p></td>
+</tr>
+</tbody>
+</table>
+<p>規約ファイルには、モデルがコードを読むだけでは分からないことを書く。</p>
+<ul class="simple">
+<li><p>よく使うコマンド（テスト、静的解析、ビルド、開発サーバーの起動）</p></li>
+<li><p>コーディング規約と、その理由</p></li>
+<li><p>アーキテクチャ上の決まり（どの層からどの層を呼んでよいか）</p></li>
+<li><p>触れてはいけないファイルや操作</p></li>
+<li><p>作業の進め方（実装前に方針を確認する、など）</p></li>
+</ul>
+<p>逆に、コードを読めば分かること、一般的なプログラミングの知識、頻繁に変わる情報は書かない。規約ファイルは毎回コンテキストに含まれるため、長くなるほど他の情報の場所を奪い、個々の指示も守られにくくなる。要点に絞り、守られていない指示があれば書き方を見直す。具体例は<a class="reference internal" href="practice_claude_code.html"><span class="doc">実践：Claude Code</span></a> で示す。</p>
+</section>
+<section id="id9">
+<h3><span class="section-number">4.4.2. </span>必要なときに読み込む<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<p>関連しそうな情報をあらかじめすべて入れておくのではなく、エージェントが必要になった時点で検索し、読み込む方式が主流になっている。人間がリポジトリ全体を暗記せず、必要に応じてファイルを開くのと同じである。</p>
+<p>検索の方法には、大きく 2 つある。</p>
+<table class="docutils align-default" id="id18">
+<caption><span class="caption-number">表 4.4 </span><span class="caption-text">検索の方法</span><a class="headerlink" href="#id18" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 40.0%" />
+<col style="width: 35.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>方法</p></th>
+<th class="head"><p>内容</p></th>
+<th class="head"><p>向いている対象</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>キーワード検索</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">grep</span></code> やファイル名のパターンで探す。エージェントがツールとして使う</p></td>
+<td><p>ソースコード（識別子が明確で、検索結果を確かめやすい）</p></td>
+</tr>
+<tr class="row-odd"><td><p>意味検索</p></td>
+<td><p>文書を埋め込みベクトルに変換して索引を作り、意味の近いものを探す</p></td>
+<td><p>大量の文書、表現がそろっていない文書</p></td>
+</tr>
+</tbody>
+</table>
+<p>検索した結果をコンテキストに加えて生成させる手法を <a class="reference internal" href="glossary.html#term-RAG"><span class="xref std std-term">RAG</span></a>（検索拡張生成）という <a class="reference internal" href="references.html#ref-lewis2020"><span class="std std-ref">[Lewis2020]</span></a>。コーディングエージェントでは、事前に索引を作らず、エージェント自身が <code class="docutils literal notranslate"><span class="pre">grep</span></code> やファイルの一覧を使って探索することが多い。索引の更新が不要で、検索結果が常に最新のコードと一致するためである。</p>
+<p>また、情報を段階的に見せる方法も有効である。例えば、最初はファイル名や手順書の要約だけを見せ、必要と判断したときに本文を読ませる。Claude Code のスキル（<a class="reference internal" href="practice_claude_code.html"><span class="doc">実践：Claude Code</span></a> 参照）は、この考え方に基づいている。</p>
+</section>
+<section id="id10">
+<h3><span class="section-number">4.4.3. </span>要約と除去<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<p>作業が長くなると、会話履歴とツールの実行結果がコンテキストを圧迫する。古い履歴を要約に置き換えることを<a class="reference internal" href="glossary.html#term-11"><span class="xref std std-term">コンパクション</span></a>という。多くのエージェントは、コンテキストが上限に近づくと自動でコンパクションを行い、利用者が明示的に実行することもできる。</p>
+<p>要約では情報が失われる。決定事項、未解決の問題、変更したファイルなど、作業の継続に必要な情報が要約に残るよう、要約の指示を工夫する。また、すでに役目を終えたツールの実行結果（一度読んだ長いログなど）は、要約するより除去するほうがよい場合もある。</p>
+<p>最も単純で効果的な方法は、作業ごとに会話を分けることである。ある作業が終わったら会話を消去し、次の作業を新しいコンテキストで始める。</p>
+</section>
+<section id="id11">
+<h3><span class="section-number">4.4.4. </span>外部の記憶<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<p>コンテキストウィンドウに収まらない長い作業では、進捗や決定事項をファイルに書き出させ、後で読み戻させる。例えば、作業の計画と完了した項目を <code class="docutils literal notranslate"><span class="pre">PLAN.md</span></code> に記録させておけば、会話をやり直しても、そのファイルを読むだけで作業を再開できる <a class="reference internal" href="references.html#ref-anthropic-harness"><span class="std std-ref">[Anthropic-Harness]</span></a>。<a class="reference internal" href="spec_driven.html"><span class="doc">仕様駆動開発</span></a>で扱う仕様書と実装計画も、この外部の記憶の役割を果たす。</p>
+</section>
+<section id="id12">
+<h3><span class="section-number">4.4.5. </span>コンテキストの分離<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<p>大量のファイルを読む調査を別のエージェント（<a class="reference internal" href="glossary.html#term-12"><span class="xref std std-term">サブエージェント</span></a>）に任せ、結果の要約だけを受け取ると、主となるエージェントのコンテキストを節約できる。この方法は<a class="reference internal" href="multi_agent.html"><span class="doc">マルチエージェントとオーケストレーション</span></a>で詳しく扱う。</p>
+</section>
+</section>
+<section id="id13">
+<h2><span class="section-number">4.5. </span>サンプルコード：予算内でのコンテキストの組み立て<a class="headerlink" href="#id13" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="#code-ex02"><span class="std std-numref">コード 4.1</span></a> は、ここまでの手法を単純化して組み合わせた例である。</p>
+<div class="literal-block-wrapper docutils container" id="id19">
+<span id="code-ex02"></span><div class="code-block-caption"><span class="caption-number">コード 4.1 </span><span class="caption-text">予算内でのコンテキストの組み立て（ex02_context_builder.py）</span><a class="headerlink" href="#id19" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="sd">&quot;&quot;&quot;トークン予算の範囲内でコンテキストを組み立てる例。</span>
+<span class="linenos">  2</span>
+<span class="linenos">  3</span><span class="sd">1. 検索（キーワードの一致数による簡易的な RAG）で関連文書を選ぶ。</span>
+<span class="linenos">  4</span><span class="sd">2. 古い会話履歴を要約して圧縮する（コンパクション）。</span>
+<span class="linenos">  5</span><span class="sd">3. 優先度の高い順に、予算に収まるだけコンテキストに入れる。</span>
+<span class="linenos">  6</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="linenos">  7</span>
+<span class="linenos">  8</span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="linenos">  9</span>
+<span class="linenos"> 10</span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="linenos"> 11</span><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="linenos"> 12</span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="linenos"> 13</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+<span class="linenos"> 14</span>
+<span class="linenos"> 15</span><span class="kn">from</span><span class="w"> </span><span class="nn">llm_stub</span><span class="w"> </span><span class="kn">import</span> <span class="n">estimate_tokens</span>
+<span class="linenos"> 16</span>
+<span class="linenos"> 17</span><span class="n">Kind</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;instruction&quot;</span><span class="p">,</span> <span class="s2">&quot;memory&quot;</span><span class="p">,</span> <span class="s2">&quot;retrieved&quot;</span><span class="p">,</span> <span class="s2">&quot;history&quot;</span><span class="p">]</span>
+<span class="linenos"> 18</span>
+<span class="linenos"> 19</span>
+<span class="linenos"> 20</span><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos"> 21</span><span class="k">class</span><span class="w"> </span><span class="nc">ContextItem</span><span class="p">:</span>
+<span class="linenos"> 22</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;コンテキストに入れる候補の情報。priority は小さいほど優先する。&quot;&quot;&quot;</span>
+<span class="linenos"> 23</span>
+<span class="linenos"> 24</span>    <span class="n">kind</span><span class="p">:</span> <span class="n">Kind</span>
+<span class="linenos"> 25</span>    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+<span class="linenos"> 26</span>    <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span>
+<span class="linenos"> 27</span>
+<span class="linenos"> 28</span>    <span class="nd">@property</span>
+<span class="linenos"> 29</span>    <span class="k">def</span><span class="w"> </span><span class="nf">tokens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="linenos"> 30</span>        <span class="k">return</span> <span class="n">estimate_tokens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="linenos"> 31</span>
+<span class="linenos"> 32</span>
+<span class="linenos"> 33</span><span class="k">def</span><span class="w"> </span><span class="nf">tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="linenos"> 34</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;英数字の単語と、2 文字以上の漢字・カタカナの並びを検索語として取り出す。&quot;&quot;&quot;</span>
+<span class="linenos"> 35</span>    <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[A-Za-z0-9_]+|[一-鿿゠-ヿ]{2,}&quot;</span><span class="p">,</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span>
+<span class="linenos"> 36</span>
+<span class="linenos"> 37</span>
+<span class="linenos"> 38</span><span class="k">def</span><span class="w"> </span><span class="nf">retrieve</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">documents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="linenos"> 39</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;クエリと共通する語が多い順に、文書を top_k 件返す。共通する語がない文書は返さない。&quot;&quot;&quot;</span>
+<span class="linenos"> 40</span>    <span class="n">query_terms</span> <span class="o">=</span> <span class="n">tokenize</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+<span class="linenos"> 41</span>    <span class="n">scored</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="linenos"> 42</span>    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">body</span> <span class="ow">in</span> <span class="n">documents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="linenos"> 43</span>        <span class="n">score</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">query_terms</span> <span class="o">&amp;</span> <span class="n">tokenize</span><span class="p">(</span><span class="n">body</span><span class="p">))</span>
+<span class="linenos"> 44</span>        <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="linenos"> 45</span>            <span class="n">scored</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">score</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">body</span><span class="p">))</span>
+<span class="linenos"> 46</span>    <span class="n">scored</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos"> 47</span>    <span class="k">return</span> <span class="p">[(</span><span class="n">name</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">body</span> <span class="ow">in</span> <span class="n">scored</span><span class="p">[:</span><span class="n">top_k</span><span class="p">]]</span>
+<span class="linenos"> 48</span>
+<span class="linenos"> 49</span>
+<span class="linenos"> 50</span><span class="k">def</span><span class="w"> </span><span class="nf">compact_history</span><span class="p">(</span><span class="n">history</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">keep_last</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="linenos"> 51</span>                    <span class="n">summarize</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="linenos"> 52</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;直近 keep_last 件を残し、それより古い履歴を 1 件の要約に置き換える。</span>
+<span class="linenos"> 53</span>
+<span class="linenos"> 54</span><span class="sd">    要約（古い履歴がなければ None）と、直近の履歴を返す。</span>
+<span class="linenos"> 55</span><span class="sd">    &quot;&quot;&quot;</span>
+<span class="linenos"> 56</span>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">history</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">keep_last</span><span class="p">:</span>
+<span class="linenos"> 57</span>        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">history</span><span class="p">)</span>
+<span class="linenos"> 58</span>    <span class="n">old</span><span class="p">,</span> <span class="n">recent</span> <span class="o">=</span> <span class="n">history</span><span class="p">[:</span><span class="o">-</span><span class="n">keep_last</span><span class="p">],</span> <span class="n">history</span><span class="p">[</span><span class="o">-</span><span class="n">keep_last</span><span class="p">:]</span>
+<span class="linenos"> 59</span>    <span class="k">return</span> <span class="n">summarize</span><span class="p">(</span><span class="n">old</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">recent</span><span class="p">)</span>
+<span class="linenos"> 60</span>
+<span class="linenos"> 61</span>
+<span class="linenos"> 62</span><span class="k">def</span><span class="w"> </span><span class="nf">naive_summarize</span><span class="p">(</span><span class="n">lines</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="linenos"> 63</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;要約の代わりに各行の先頭だけを残す。実際には LLM に要約させる。&quot;&quot;&quot;</span>
+<span class="linenos"> 64</span>    <span class="n">heads</span> <span class="o">=</span> <span class="s2">&quot; / &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">[:</span><span class="mi">16</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">)</span>
+<span class="linenos"> 65</span>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;（これまでの </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span><span class="si">}</span><span class="s2"> 件の要約）</span><span class="si">{</span><span class="n">heads</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="linenos"> 66</span>
+<span class="linenos"> 67</span>
+<span class="linenos"> 68</span><span class="k">def</span><span class="w"> </span><span class="nf">build_context</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ContextItem</span><span class="p">],</span> <span class="n">budget</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">ContextItem</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">ContextItem</span><span class="p">]]:</span>
+<span class="linenos"> 69</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;優先度の高い順に、予算に収まる項目を選ぶ。選ばれた項目と、外れた項目を返す。&quot;&quot;&quot;</span>
+<span class="linenos"> 70</span>    <span class="n">selected</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ContextItem</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="linenos"> 71</span>    <span class="n">dropped</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ContextItem</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="linenos"> 72</span>    <span class="n">used</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos"> 73</span>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">priority</span><span class="p">):</span>
+<span class="linenos"> 74</span>        <span class="k">if</span> <span class="n">used</span> <span class="o">+</span> <span class="n">item</span><span class="o">.</span><span class="n">tokens</span> <span class="o">&lt;=</span> <span class="n">budget</span><span class="p">:</span>
+<span class="linenos"> 75</span>            <span class="n">selected</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+<span class="linenos"> 76</span>            <span class="n">used</span> <span class="o">+=</span> <span class="n">item</span><span class="o">.</span><span class="n">tokens</span>
+<span class="linenos"> 77</span>        <span class="k">else</span><span class="p">:</span>
+<span class="linenos"> 78</span>            <span class="n">dropped</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+<span class="linenos"> 79</span>    <span class="k">return</span> <span class="n">selected</span><span class="p">,</span> <span class="n">dropped</span>
+<span class="linenos"> 80</span>
+<span class="linenos"> 81</span>
+<span class="linenos"> 82</span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos"> 83</span>    <span class="n">documents</span> <span class="o">=</span> <span class="p">{</span>
+<span class="linenos"> 84</span>        <span class="s2">&quot;docs/deploy.md&quot;</span><span class="p">:</span> <span class="s2">&quot;デプロイ手順: main ブランチにマージすると CI が staging に自動デプロイする。&quot;</span><span class="p">,</span>
+<span class="linenos"> 85</span>        <span class="s2">&quot;docs/testing.md&quot;</span><span class="p">:</span> <span class="s2">&quot;テスト: pytest を使う。DB を使うテストは docker compose で PostgreSQL を起動してから実行する。&quot;</span><span class="p">,</span>
+<span class="linenos"> 86</span>        <span class="s2">&quot;docs/style.md&quot;</span><span class="p">:</span> <span class="s2">&quot;コーディング規約: 型ヒント必須。flake8 と mypy を通すこと。&quot;</span><span class="p">,</span>
+<span class="linenos"> 87</span>        <span class="s2">&quot;docs/history.md&quot;</span><span class="p">:</span> <span class="s2">&quot;2019 年の移行作業の記録。旧システムは Perl で書かれていた。&quot;</span><span class="p">,</span>
+<span class="linenos"> 88</span>    <span class="p">}</span>
+<span class="linenos"> 89</span>    <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;DB を使うテストを pytest で実行したい&quot;</span>
+<span class="linenos"> 90</span>    <span class="n">history</span> <span class="o">=</span> <span class="p">[</span>
+<span class="linenos"> 91</span>        <span class="s2">&quot;利用者: ログイン画面の不具合を調べて&quot;</span><span class="p">,</span>
+<span class="linenos"> 92</span>        <span class="s2">&quot;AI: auth.py の 42 行目でセッションの期限切れを判定していないのが原因だった&quot;</span><span class="p">,</span>
+<span class="linenos"> 93</span>        <span class="s2">&quot;利用者: 修正して&quot;</span><span class="p">,</span>
+<span class="linenos"> 94</span>        <span class="s2">&quot;AI: auth.py を修正し、既存テストがすべて成功することを確認した&quot;</span><span class="p">,</span>
+<span class="linenos"> 95</span>        <span class="s2">&quot;利用者: 次は注文 API のテストを追加したい&quot;</span><span class="p">,</span>
+<span class="linenos"> 96</span>    <span class="p">]</span>
+<span class="linenos"> 97</span>
+<span class="linenos"> 98</span>    <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ContextItem</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+<span class="linenos"> 99</span>        <span class="n">ContextItem</span><span class="p">(</span><span class="s2">&quot;instruction&quot;</span><span class="p">,</span> <span class="s2">&quot;あなたはこのリポジトリの開発を支援するエージェントである。&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="linenos">100</span>        <span class="n">ContextItem</span><span class="p">(</span><span class="s2">&quot;memory&quot;</span><span class="p">,</span> <span class="s2">&quot;プロジェクト規約: 型ヒント必須。テストは tests/ に置く。&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="linenos">101</span>    <span class="p">]</span>
+<span class="linenos">102</span>    <span class="n">summary</span><span class="p">,</span> <span class="n">recent</span> <span class="o">=</span> <span class="n">compact_history</span><span class="p">(</span><span class="n">history</span><span class="p">,</span> <span class="n">keep_last</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">summarize</span><span class="o">=</span><span class="n">naive_summarize</span><span class="p">)</span>
+<span class="linenos">103</span>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">recent</span><span class="p">:</span>
+<span class="linenos">104</span>        <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ContextItem</span><span class="p">(</span><span class="s2">&quot;history&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="linenos">105</span>    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">body</span> <span class="ow">in</span> <span class="n">retrieve</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">documents</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="linenos">106</span>        <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ContextItem</span><span class="p">(</span><span class="s2">&quot;retrieved&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">body</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="linenos">107</span>    <span class="k">if</span> <span class="n">summary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos">108</span>        <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ContextItem</span><span class="p">(</span><span class="s2">&quot;history&quot;</span><span class="p">,</span> <span class="n">summary</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="linenos">109</span>
+<span class="linenos">110</span>    <span class="n">selected</span><span class="p">,</span> <span class="n">dropped</span> <span class="o">=</span> <span class="n">build_context</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">budget</span><span class="o">=</span><span class="mi">160</span><span class="p">)</span>
+<span class="linenos">111</span>
+<span class="linenos">112</span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;種類&#39;</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}{</span><span class="s1">&#39;トークン&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">  内容&quot;</span><span class="p">)</span>
+<span class="linenos">113</span>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">selected</span><span class="p">:</span>
+<span class="linenos">114</span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">kind</span><span class="si">:</span><span class="s2">&lt;12</span><span class="si">}{</span><span class="n">item</span><span class="o">.</span><span class="n">tokens</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span><span class="mi">40</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos">115</span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;合計 </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">tokens</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">selected</span><span class="p">)</span><span class="si">}</span><span class="s2"> トークン（予算 160）&quot;</span><span class="p">)</span>
+<span class="linenos">116</span>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dropped</span><span class="p">:</span>
+<span class="linenos">117</span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;予算超過で除外: </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">kind</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span><span class="mi">40</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos">118</span>
+<span class="linenos">119</span>
+<span class="linenos">120</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="linenos">121</span>    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">retrieve</span></code>（38 〜 47 行目）は、クエリと共通する語の数で文書を選ぶ。実際の RAG における検索の部分を、キーワードの一致数だけでごく単純にしたものである。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">compact_history</span></code>（50 〜 59 行目）は、直近の履歴を残し、古い履歴を要約に置き換える。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">build_context</span></code>（68 〜 79 行目）は、優先度の高い順に、予算に収まる項目だけを選ぶ。</p></li>
+</ul>
+<p>実行結果は次のとおりである。予算の 160 トークンを超えるため、優先度の最も低い「古い履歴の要約」が除外されている。</p>
+<div class="literal-block-wrapper docutils container" id="id20">
+<div class="code-block-caption"><span class="caption-number">コード 4.2 </span><span class="caption-text">ex02_context_builder.py の出力</span><a class="headerlink" href="#id20" title="Link to this code"></a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>種類            トークン  内容
+<span class="linenos">2</span>instruction       29  あなたはこのリポジトリの開発を支援するエージェントである。
+<span class="linenos">3</span>memory            26  プロジェクト規約: 型ヒント必須。テストは tests/ に置く。
+<span class="linenos">4</span>history           28  AI: auth.py を修正し、既存テストがすべて成功することを確認した
+<span class="linenos">5</span>history           19  利用者: 次は注文 API のテストを追加したい
+<span class="linenos">6</span>retrieved         42  [docs/testing.md] テスト: pytest を使う。DB を使う
+<span class="linenos">7</span>合計 144 トークン（予算 160）
+<span class="linenos">8</span>予算超過で除外: history （これまでの 3 件の要約）利用者: ログイン画面の不具合を / AI: aut
+</pre></div>
+</div>
+</div>
+<p>実際のエージェントでは、この判断の多くをモデル自身が行う。人間の役割は、規約ファイルや検索の手段を整え、モデルが正しい情報にたどり着ける状態を作ることである。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="prompt_engineering.html" class="btn btn-neutral float-left" title="3. プロンプトエンジニアリング" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="harness_engineering.html" class="btn btn-neutral float-right" title="5. ハーネスエンジニアリング" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nunu_3060.
+      <span class="lastupdated">最終更新: 2026-10-26
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,750 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>12. 実践：Claude Code &mdash; AI を用いた開発</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=c9cec091" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=19757887"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=4755f45a"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="13. リスクと品質管理" href="risks.html" />
+    <link rel="prev" title="11. 開発プロセスへの適用" href="process.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AI を用いた開発
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">本編</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. はじめに</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id2">1.1. 本書の目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id3">1.2. 対象読者と前提知識</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id4">1.3. 本書の範囲</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id5">1.4. 本書の構成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id6">1.5. 表記とサンプルコード</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">2. AI を用いた開発の全体像</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#llm">2.1. 開発者が知っておくべき LLM の性質</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id1">2.1.1. テキストを続けて生成する</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id2">2.1.2. 一度に扱える量に上限がある</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id3">2.1.3. 記憶を持たない</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id4">2.1.4. 出力は確率的である</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id5">2.1.5. 知識に期限がある</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id6">2.1.6. ツールを呼び出せる</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id7">2.2. AI の利用形態の変遷</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id8">2.3. 各エンジニアリングの関係</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id9">2.4. AI に任せる部分と人間が責任を持つ部分</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_engineering.html">3. プロンプトエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id2">3.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id3">3.2. プロンプトの構成要素</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id4">3.3. 基本的なテクニック</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id5">3.3.1. 明確かつ具体的に書く</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id6">3.3.2. 理由を伝える</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id7">3.3.3. 例を示す</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id8">3.3.4. 考える手順を与える</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id9">3.3.5. 入力と指示を区別する</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id10">3.3.6. 出力形式を指定する</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id11">3.3.7. してほしいことを書く</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id12">3.4. サンプルコード：プロンプトのテンプレート</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id13">3.5. 開発作業でのプロンプトの例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id14">3.6. アンチパターン</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id15">3.7. プロンプトだけでは解決できないこと</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="context_engineering.html">4. コンテキストエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id2">4.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id3">4.2. コンテキストの構成要素</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id4">4.3. 基本的な考え方</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id5">4.3.1. 多ければよいわけではない</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id6">4.3.2. コンテキストの失敗の型</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id7">4.4. 主な手法</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id8">4.4.1. 規約ファイル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id9">4.4.2. 必要なときに読み込む</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id10">4.4.3. 要約と除去</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id11">4.4.4. 外部の記憶</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id12">4.4.5. コンテキストの分離</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id13">4.5. サンプルコード：予算内でのコンテキストの組み立て</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="harness_engineering.html">5. ハーネスエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id2">5.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id3">5.2. エージェントの基本構造</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id4">5.3. ガイドとセンサー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id5">5.4. ツールの設計</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id6">5.5. サンプルコード：最小のエージェント</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id7">5.6. センサーとしての検証手段</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id8">5.7. 権限とサンドボックス</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id9">5.8. フック</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#ai">5.9. AI が働きやすいリポジトリ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="loop_engineering.html">6. ループエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id2">6.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id3">6.2. ループの階層</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id4">6.3. エージェントループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id5">6.4. 自己修正のループ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="loop_engineering.html#id6">6.4.1. サンプルコード：自己修正のループ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id7">6.5. 終了条件の設計</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="loop_engineering.html#id8">6.5.1. 完了条件の抜け道に注意する</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id9">6.6. 人間のループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id10">6.7. 長時間・自律的なループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id11">6.8. ハーネス改善のループ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spec_driven.html">7. 仕様駆動開発</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id2">7.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id3">7.2. 作業の流れ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id4">7.3. 仕様書の書き方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#ai">7.4. AI と一緒に仕様を作る</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id5">7.5. 仕様と実装を同期させる</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id6">7.6. 向いている場面と向いていない場面</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="eval_driven.html">8. 評価駆動開発</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id2">8.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id3">8.2. 評価の構成要素</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id4">8.3. 採点器の種類</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id5">8.4. 指標</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id6">8.5. 評価のサイクル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id7">8.6. サンプルコード：プロンプトの比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id8">8.7. 注意点</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="multi_agent.html">9. マルチエージェントとオーケストレーション</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id2">9.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id3">9.2. 構成のパターン</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id4">9.3. サンプルコード：オーケストレーター・ワーカー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id5">9.4. 開発での使い方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id6">9.5. 注意点</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vibe_coding.html">10. Vibe Coding と規律ある AI 開発</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id1">10.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id2">10.2. 両者の比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#vibe-coding">10.3. Vibe Coding の価値と限界</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id3">10.4. 使い分けの指針</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id4">10.5. 人間に求められる能力</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="process.html">11. 開発プロセスへの適用</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id2">11.1. 工程ごとの活用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id3">11.2. テスト駆動開発との組み合わせ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id4">11.3. 作業の単位</a></li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id5">11.4. チームでの運用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="process.html#id6">11.4.1. 規約とハーネスの共有</a></li>
+<li class="toctree-l3"><a class="reference internal" href="process.html#id7">11.4.2. レビューの基準</a></li>
+<li class="toctree-l3"><a class="reference internal" href="process.html#id8">11.4.3. 責任の所在</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id9">11.5. 段階的な導入</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">12. 実践：Claude Code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">12.1. Claude Code の概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">12.2. コンテキストを整える</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#claude-md">12.2.1. CLAUDE.md</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">12.2.2. コンテキストの管理</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">12.2.3. スキル</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">12.3. 依頼の進め方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">12.4. ハーネスを整える</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">12.4.1. 権限モード</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">12.4.2. 権限の設定とフック</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mcp">12.4.3. MCP サーバーとサンドボックス</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">12.5. ループを組む</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#stop">12.5.1. Stop フックによる自己修正のループ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#goal-loop">12.5.2. <code class="docutils literal notranslate"><span class="pre">/goal</span></code> と <code class="docutils literal notranslate"><span class="pre">/loop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ci">12.5.3. 非対話の実行と CI</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">12.6. マルチエージェントを使う</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id11">12.6.1. サブエージェント</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">12.6.2. 並列の作業</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id13">12.7. ハーネスを改善し続ける</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="risks.html">13. リスクと品質管理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id2">13.1. もっともらしい誤り</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id3">13.2. プロンプトインジェクション</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id4">13.3. 秘密情報と機密情報</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id5">13.4. ライセンスと著作権</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id6">13.5. 費用の管理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id7">13.6. 技能の空洞化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id8">13.7. 品質管理のまとめ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="summary.html">14. まとめ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="summary.html#id2">14.1. 各手法の比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summary.html#id3">14.2. 問題が起きたときの切り分け</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summary.html#id4">14.3. 今後の展望</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">付録</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">サンプルコード一覧</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#id2">実行の準備</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#python">Python のサンプル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#id3">設定ファイルと文書のサンプル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#llm-stub-py">llm_stub.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">用語集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">参考文献</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id2">論文</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id3">記事</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id4">仕様・ツール</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#claude-code">Claude Code</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AI を用いた開発</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">12. </span>実践：Claude Code</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="claude-code">
+<h1><span class="section-number">12. </span>実践：Claude Code<a class="headerlink" href="#claude-code" title="Link to this heading"></a></h1>
+<p>本章では、Anthropic のコーディングエージェントである Claude Code を題材に、これまでの章で説明した手法を実際に適用する方法を示す。Claude Code の機能は頻繁に更新されるため、詳細は公式文書 <a class="reference internal" href="references.html#ref-claudecode-docs"><span class="std std-ref">[ClaudeCode-Docs]</span></a> で確認してほしい。本章の内容は、2026 年 10 月時点の情報に基づく。</p>
+<section id="id1">
+<h2><span class="section-number">12.1. </span>Claude Code の概要<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>Claude Code は、利用者が自然言語で依頼すると、ソースコードを読み、コマンドを実行し、ファイルを編集しながら作業を進めるエージェントである。ターミナル、VS Code や JetBrains 系の IDE、デスクトップアプリ、Web ブラウザから使える。作業したいプロジェクトのディレクトリで <code class="docutils literal notranslate"><span class="pre">claude</span></code> コマンドを実行すると、対話画面が始まる。</p>
+<p>Claude Code の主な機能を、本書の 4 つの層に対応付けると<a class="reference internal" href="#table-claude-code-layers"><span class="std std-numref">表 12.1</span></a> のようになる。</p>
+<span id="table-claude-code-layers"></span><table class="docutils align-default" id="id14">
+<caption><span class="caption-number">表 12.1 </span><span class="caption-text">Claude Code の機能と本書の各層の対応</span><a class="headerlink" href="#id14" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>層</p></th>
+<th class="head"><p>Claude Code の機能</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>プロンプト</p></td>
+<td><p>依頼の文面</p></td>
+</tr>
+<tr class="row-odd"><td><p>コンテキスト</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code>、<code class="docutils literal notranslate"><span class="pre">&#64;</span></code> によるファイルの参照、スキル、<code class="docutils literal notranslate"><span class="pre">/clear</span></code>、<code class="docutils literal notranslate"><span class="pre">/compact</span></code>、<code class="docutils literal notranslate"><span class="pre">/context</span></code>、サブエージェント</p></td>
+</tr>
+<tr class="row-even"><td><p>ハーネス</p></td>
+<td><p>権限の設定、フック、サンドボックス、MCP サーバー、<code class="docutils literal notranslate"><span class="pre">settings.json</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>ループ</p></td>
+<td><p>計画モード（計画の承認）、Stop フック、<code class="docutils literal notranslate"><span class="pre">/goal</span></code>、<code class="docutils literal notranslate"><span class="pre">/loop</span></code>、<code class="docutils literal notranslate"><span class="pre">claude</span> <span class="pre">-p</span></code> による非対話の実行、GitHub Actions</p></td>
+</tr>
+</tbody>
+</table>
+<p>本章では、注文管理の Web API（Python、FastAPI）を開発する架空のプロジェクトを例に、これらを順に設定していく。</p>
+</section>
+<section id="id2">
+<h2><span class="section-number">12.2. </span>コンテキストを整える<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="claude-md">
+<h3><span class="section-number">12.2.1. </span>CLAUDE.md<a class="headerlink" href="#claude-md" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code> は Claude Code の規約ファイルであり、セッションの開始時に自動的に読み込まれる <a class="reference internal" href="references.html#ref-claudecode-memory"><span class="std std-ref">[ClaudeCode-Memory]</span></a>。</p>
+<table class="docutils align-default" id="id15">
+<caption><span class="caption-number">表 12.2 </span><span class="caption-text">CLAUDE.md の主な置き場所</span><a class="headerlink" href="#id15" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 35.0%" />
+<col style="width: 65.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>場所</p></th>
+<th class="head"><p>用途</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>プロジェクト直下の <code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code></p></td>
+<td><p>プロジェクト固有の情報。リポジトリに含めてチームで共有する</p></td>
+</tr>
+<tr class="row-odd"><td><p>サブディレクトリの <code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code></p></td>
+<td><p>そのディレクトリ配下で作業するときにだけ必要な情報</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">~/.claude/CLAUDE.md</span></code></p></td>
+<td><p>すべてのプロジェクトに共通する個人の好み</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">/init</span></code> コマンドを実行すると、Claude Code がプロジェクトを調査して <code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code> の雛形を作る。雛形をもとに、<a class="reference internal" href="context_engineering.html"><span class="doc">コンテキストエンジニアリング</span></a>で述べた「コードを読むだけでは分からないこと」を追記していく。<a class="reference internal" href="#code-claude-md"><span class="std std-numref">コード 12.1</span></a> は記述の例である。</p>
+<div class="literal-block-wrapper docutils container" id="id16">
+<span id="code-claude-md"></span><div class="code-block-caption"><span class="caption-number">コード 12.1 </span><span class="caption-text">CLAUDE.md の例（CLAUDE.sample.md）</span><a class="headerlink" href="#id16" title="Link to this code"></a></div>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="gh"># 注文管理 API</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span>FastAPI で作った注文管理の Web API。DB は PostgreSQL。
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="gu">## よく使うコマンド</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="k">-</span><span class="w"> </span>テスト: <span class="sb">`python -m pytest -q`</span>（DB を使うテストは先に <span class="sb">`docker compose up -d db`</span>）
+<span class="linenos"> 8</span><span class="k">-</span><span class="w"> </span>静的解析: <span class="sb">`flake8 src tests`</span> と <span class="sb">`mypy src`</span>
+<span class="linenos"> 9</span><span class="k">-</span><span class="w"> </span>開発サーバー: <span class="sb">`uvicorn app.main:app --reload`</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="gu">## 規約</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="k">-</span><span class="w"> </span>型ヒントを必ず書く。mypy の strict モードを通すこと
+<span class="linenos">14</span><span class="k">-</span><span class="w"> </span>DB へのアクセスは <span class="sb">`src/app/repositories/`</span> に閉じ込め、API 層から直接 SQL を書かない
+<span class="linenos">15</span><span class="k">-</span><span class="w"> </span>金額は <span class="sb">`Decimal`</span> で扱う。`float` を使わない
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="gu">## 作業の進め方</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span><span class="k">-</span><span class="w"> </span>実装の前に、変更方針を箇条書きで示して確認を取る
+<span class="linenos">20</span><span class="k">-</span><span class="w"> </span>振る舞いを変えたらテストを追加し、`python -m pytest -q` が成功するまで修正する
+<span class="linenos">21</span><span class="k">-</span><span class="w"> </span>仕様は <span class="sb">`docs/specs/`</span> にある。仕様と実装が食い違ったら、実装せずに報告する
+<span class="linenos">22</span>
+<span class="linenos">23</span><span class="gu">## してはいけないこと</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span><span class="k">-</span><span class="w"> </span><span class="sb">`migrations/`</span> 配下の既存ファイルを編集しない（新しいマイグレーションを追加する）
+<span class="linenos">26</span><span class="k">-</span><span class="w"> </span><span class="sb">`.env`</span> を読まない、コミットしない
+</pre></div>
+</div>
+</div>
+<p>規約には理由を添え（15 行目では、金額に <code class="docutils literal notranslate"><span class="pre">Decimal</span></code> を使う規則）、作業の進め方（19 〜 21 行目）と、してはいけないこと（25 〜 26 行目）を明示している。21 行目の「仕様と実装が食い違ったら報告する」は、<a class="reference internal" href="spec_driven.html"><span class="doc">仕様駆動開発</span></a>で述べた仕様と実装の同期のための指示である。</p>
+</section>
+<section id="id3">
+<h3><span class="section-number">12.2.2. </span>コンテキストの管理<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<table class="docutils align-default" id="id17">
+<caption><span class="caption-number">表 12.3 </span><span class="caption-text">コンテキストの管理に使うコマンド</span><a class="headerlink" href="#id17" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>コマンド</p></th>
+<th class="head"><p>内容</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/context</span></code></p></td>
+<td><p>現在のコンテキストの使用状況を、要素ごとに表示する</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/clear</span></code></p></td>
+<td><p>会話の履歴を消去し、新しい会話を始める。別の作業に移るときに使う</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/compact</span></code></p></td>
+<td><p>これまでの会話を要約して、コンテキストを空ける。作業を続けたまま整理したいときに使う</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/memory</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code> を編集する</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/rewind</span></code></p></td>
+<td><p>会話やファイルの変更を、過去の時点に巻き戻す</p></td>
+</tr>
+</tbody>
+</table>
+<p><a class="reference internal" href="context_engineering.html"><span class="doc">コンテキストエンジニアリング</span></a>で述べたとおり、最も効果的なのは作業ごとに <code class="docutils literal notranslate"><span class="pre">/clear</span></code> で会話を分けることである。また、AI が誤った前提で作業を重ねてしまったときは、誤りを指摘し続けるより、<code class="docutils literal notranslate"><span class="pre">/rewind</span></code> で誤る前の時点に戻すか、<code class="docutils literal notranslate"><span class="pre">/clear</span></code> でやり直すほうが早い。</p>
+</section>
+<section id="id4">
+<h3><span class="section-number">12.2.3. </span>スキル<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p><a class="reference internal" href="glossary.html#term-16"><span class="xref std std-term">スキル</span></a>は、特定の作業の手順や知識をまとめたものである <a class="reference internal" href="references.html#ref-claudecode-skills"><span class="std std-ref">[ClaudeCode-Skills]</span></a>。<code class="docutils literal notranslate"><span class="pre">.claude/skills/&lt;スキル名&gt;/SKILL.md</span></code> に置くと、Claude は関連する作業を頼まれたときにスキルを読み込み、その手順に従う。<code class="docutils literal notranslate"><span class="pre">/&lt;スキル名&gt;</span></code> で明示的に呼び出すこともできる。</p>
+<div class="literal-block-wrapper docutils container" id="id18">
+<div class="code-block-caption"><span class="caption-number">コード 12.2 </span><span class="caption-text">スキルの例（SKILL.sample.md）</span><a class="headerlink" href="#id18" title="Link to this code"></a></div>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>---
+<span class="linenos"> 2</span>name: add-endpoint
+<span class="linenos"> 3</span><span class="gu">description: 注文管理 API に新しいエンドポイントを追加する手順。API の追加や変更を頼まれたときに使う。</span>
+<span class="linenos"> 4</span><span class="gu">---</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="gh"># エンドポイントの追加手順</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="k">1.</span> <span class="sb">`docs/specs/`</span> に仕様書があるか確認する。なければ作業を止めて、仕様書の作成を提案する
+<span class="linenos"> 9</span><span class="k">2.</span> <span class="sb">`src/app/schemas/`</span> にリクエストとレスポンスの Pydantic モデルを追加する
+<span class="linenos">10</span><span class="k">3.</span> <span class="sb">`src/app/repositories/`</span> に DB アクセスを追加する
+<span class="linenos">11</span><span class="k">4.</span> <span class="sb">`src/app/routers/`</span> にエンドポイントを追加する
+<span class="linenos">12</span><span class="k">5.</span> <span class="sb">`tests/api/`</span> に正常系と異常系（400、404）のテストを追加する
+<span class="linenos">13</span><span class="k">6.</span> <span class="sb">`python -m pytest -q tests/api`</span> と <span class="sb">`mypy src`</span> が成功するまで修正する
+<span class="linenos">14</span><span class="k">7.</span> <span class="sb">`docs/api.md`</span> のエンドポイント一覧を更新する
+</pre></div>
+</div>
+</div>
+<p>先頭の <code class="docutils literal notranslate"><span class="pre">name</span></code> と <code class="docutils literal notranslate"><span class="pre">description</span></code>（2 〜 3 行目）は常に Claude に示され、Claude はこの説明を見てスキルを使うかどうかを判断する。本文は使うときにだけ読み込まれる。<a class="reference internal" href="context_engineering.html"><span class="doc">コンテキストエンジニアリング</span></a>で述べた「情報を段階的に見せる」方法であり、多くのスキルを用意してもコンテキストを圧迫しない。毎回必要な情報は <code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code> に、特定の作業のときだけ必要な手順はスキルに書く、と使い分ける。</p>
+</section>
+</section>
+<section id="id5">
+<h2><span class="section-number">12.3. </span>依頼の進め方<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<p>Claude Code に大きな作業を任せるときは、「調査 → 計画 → 実装 → 検証 → コミット」の順に進める <a class="reference internal" href="references.html#ref-claudecode-bestpractices"><span class="std std-ref">[ClaudeCode-BestPractices]</span></a>。</p>
+<p>計画の段階では<a class="reference internal" href="glossary.html#term-4"><span class="xref std std-term">計画モード</span></a>を使う。計画モードでは、Claude はファイルを変更せずに調査と計画だけを行う。Shift + Tab キーで権限モードを切り替えるか、<code class="docutils literal notranslate"><span class="pre">/plan</span></code> コマンドで計画モードに入る。計画を確認して合意したら、通常のモードに戻して実装を依頼する。これは<a class="reference internal" href="loop_engineering.html"><span class="doc">ループエンジニアリング</span></a>で述べた「計画の承認」の時点で人間が関与する方法である。</p>
+<div class="literal-block-wrapper docutils container" id="id19">
+<div class="code-block-caption"><span class="caption-number">コード 12.3 </span><span class="caption-text">計画モードでの依頼の例</span><a class="headerlink" href="#id19" title="Link to this code"></a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>/plan docs/specs/order-cancel.md の仕様を実装したい。
+<span class="linenos">2</span>関係する既存のコードを調べ、仕様書の「実装計画」のタスク T1 〜 T4 それぞれについて、
+<span class="linenos">3</span>変更するファイルと変更内容を示して。不明な点があれば質問して。
+</pre></div>
+</div>
+</div>
+<p>計画に合意したら、タスクを 1 つずつ依頼する。</p>
+<div class="literal-block-wrapper docutils container" id="id20">
+<div class="code-block-caption"><span class="caption-number">コード 12.4 </span><span class="caption-text">実装の依頼の例</span><a class="headerlink" href="#id20" title="Link to this code"></a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>計画どおり T2 を実装して。受け入れ条件 4 と 5 に対応するテストも追加し、
+<span class="linenos">2</span>python -m pytest -q と mypy src が成功するまで修正すること。既存のテストは変更しないこと。
+<span class="linenos">3</span>終わったら、変更したファイル、確認したこと、未確認のことを報告して。
+</pre></div>
+</div>
+</div>
+<p>1 行目で対象と範囲を、2 行目で完了条件を、3 行目で報告の形式を示している。<a class="reference internal" href="prompt_engineering.html"><span class="doc">プロンプトエンジニアリング</span></a>で述べた要素がそろっていることを確認してほしい。</p>
+</section>
+<section id="id6">
+<h2><span class="section-number">12.4. </span>ハーネスを整える<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<section id="id7">
+<h3><span class="section-number">12.4.1. </span>権限モード<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>Claude Code が利用者の許可なしにどこまで操作してよいかは、<a class="reference internal" href="glossary.html#term-5"><span class="xref std std-term">権限モード</span></a>で切り替える <a class="reference internal" href="references.html#ref-claudecode-permissions"><span class="std std-ref">[ClaudeCode-Permissions]</span></a>。</p>
+<table class="docutils align-default" id="id21">
+<caption><span class="caption-number">表 12.4 </span><span class="caption-text">主な権限モード</span><a class="headerlink" href="#id21" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>モード</p></th>
+<th class="head"><p>内容</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">default</span></code></p></td>
+<td><p>ファイルの編集やコマンドの実行のたびに許可を求める</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">acceptEdits</span></code></p></td>
+<td><p>ファイルの編集は許可なしで行い、コマンドの実行には許可を求める</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">plan</span></code></p></td>
+<td><p>調査と計画だけを行い、ファイルの変更や、変更を伴うコマンドの実行はしない</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>安全と判断された操作は自動で実行し、危険の可能性がある操作は止める</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dontAsk</span></code></p></td>
+<td><p>設定ファイルで事前に許可した操作だけを実行し、それ以外は確認せずに拒否する。無人で動かす自動化向けである</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bypassPermissions</span></code></p></td>
+<td><p>ほぼすべての操作を許可なしで実行する。コンテナや仮想マシンなどの隔離された環境以外では使わない</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id8">
+<h3><span class="section-number">12.4.2. </span>権限の設定とフック<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p>権限の規則とフックは <code class="docutils literal notranslate"><span class="pre">settings.json</span></code> に書く <a class="reference internal" href="references.html#ref-claudecode-settings"><span class="std std-ref">[ClaudeCode-Settings]</span></a>。プロジェクトの <code class="docutils literal notranslate"><span class="pre">.claude/settings.json</span></code> に書けばチームで共有でき、<code class="docutils literal notranslate"><span class="pre">.claude/settings.local.json</span></code> に書けば自分だけに適用される。</p>
+<div class="literal-block-wrapper docutils container" id="id22">
+<span id="code-settings"></span><div class="code-block-caption"><span class="caption-number">コード 12.5 </span><span class="caption-text">settings.json の例（settings.sample.json）</span><a class="headerlink" href="#id22" title="Link to this code"></a></div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="p">{</span>
+<span class="linenos"> 2</span><span class="w">  </span><span class="nt">&quot;permissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="nt">&quot;allow&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos"> 4</span><span class="w">      </span><span class="s2">&quot;Bash(pytest *)&quot;</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">      </span><span class="s2">&quot;Bash(python -m pytest *)&quot;</span><span class="p">,</span>
+<span class="linenos"> 6</span><span class="w">      </span><span class="s2">&quot;Bash(flake8 *)&quot;</span><span class="p">,</span>
+<span class="linenos"> 7</span><span class="w">      </span><span class="s2">&quot;Bash(mypy *)&quot;</span><span class="p">,</span>
+<span class="linenos"> 8</span><span class="w">      </span><span class="s2">&quot;Bash(git diff *)&quot;</span><span class="p">,</span>
+<span class="linenos"> 9</span><span class="w">      </span><span class="s2">&quot;Bash(git status)&quot;</span>
+<span class="linenos">10</span><span class="w">    </span><span class="p">],</span>
+<span class="linenos">11</span><span class="w">    </span><span class="nt">&quot;deny&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">12</span><span class="w">      </span><span class="s2">&quot;Read(./.env)&quot;</span><span class="p">,</span>
+<span class="linenos">13</span><span class="w">      </span><span class="s2">&quot;Read(./secrets/**)&quot;</span><span class="p">,</span>
+<span class="linenos">14</span><span class="w">      </span><span class="s2">&quot;Bash(git push *)&quot;</span>
+<span class="linenos">15</span><span class="w">    </span><span class="p">]</span>
+<span class="linenos">16</span><span class="w">  </span><span class="p">},</span>
+<span class="linenos">17</span><span class="w">  </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">18</span><span class="w">    </span><span class="nt">&quot;PostToolUse&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">19</span><span class="w">      </span><span class="p">{</span>
+<span class="linenos">20</span><span class="w">        </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Edit|Write&quot;</span><span class="p">,</span>
+<span class="linenos">21</span><span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">22</span><span class="w">          </span><span class="p">{</span>
+<span class="linenos">23</span><span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span>
+<span class="linenos">24</span><span class="w">            </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python -m flake8 src tests 1&gt;&amp;2 || exit 2&quot;</span>
+<span class="linenos">25</span><span class="w">          </span><span class="p">}</span>
+<span class="linenos">26</span><span class="w">        </span><span class="p">]</span>
+<span class="linenos">27</span><span class="w">      </span><span class="p">}</span>
+<span class="linenos">28</span><span class="w">    </span><span class="p">],</span>
+<span class="linenos">29</span><span class="w">    </span><span class="nt">&quot;Stop&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">30</span><span class="w">      </span><span class="p">{</span>
+<span class="linenos">31</span><span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">32</span><span class="w">          </span><span class="p">{</span>
+<span class="linenos">33</span><span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span>
+<span class="linenos">34</span><span class="w">            </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python .claude/hooks/stop_hook_run_tests.py&quot;</span>
+<span class="linenos">35</span><span class="w">          </span><span class="p">}</span>
+<span class="linenos">36</span><span class="w">        </span><span class="p">]</span>
+<span class="linenos">37</span><span class="w">      </span><span class="p">}</span>
+<span class="linenos">38</span><span class="w">    </span><span class="p">]</span>
+<span class="linenos">39</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">40</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">permissions</span></code> の <code class="docutils literal notranslate"><span class="pre">allow</span></code>（3 〜 10 行目）には許可なしで実行してよい操作を、<code class="docutils literal notranslate"><span class="pre">deny</span></code>（11 〜 15 行目）には禁止する操作を書く。この例では、テスト、静的解析、差分の確認を許可し、秘密情報の読み取りと <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span></code> を禁止している。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hooks</span></code> の <code class="docutils literal notranslate"><span class="pre">PostToolUse</span></code>（18 〜 28 行目）は、ファイルを編集するたびに flake8 を実行するフックである。コマンドが終了コード 2 で終わると、標準エラー出力の内容が Claude に伝えられる。flake8 が違反を検出すると終了コード 2 を返すようにしているため（24 行目）、Claude は違反の内容を読んで修正する。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Stop</span></code>（29 〜 38 行目）は、後述するループのためのフックである。</p></li>
+</ul>
+<p>フックには、ほかにも次のような種類がある <a class="reference internal" href="references.html#ref-claudecode-hooks"><span class="std std-ref">[ClaudeCode-Hooks]</span></a>。</p>
+<table class="docutils align-default" id="id23">
+<caption><span class="caption-number">表 12.5 </span><span class="caption-text">主なフックの種類</span><a class="headerlink" href="#id23" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 28.0%" />
+<col style="width: 72.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>種類</p></th>
+<th class="head"><p>実行される時点</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PreToolUse</span></code></p></td>
+<td><p>ツールを使う直前。ツールの使用を止めることもできる</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PostToolUse</span></code></p></td>
+<td><p>ツールを使った直後。整形ツールや静的解析の実行に使う</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">UserPromptSubmit</span></code></p></td>
+<td><p>利用者が依頼を送信したとき</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Stop</span></code></p></td>
+<td><p>Claude が応答を終えようとしたとき。作業を続けさせることもできる</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SubagentStop</span></code></p></td>
+<td><p>サブエージェントが応答を終えようとしたとき</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SessionStart</span></code></p></td>
+<td><p>セッションを開始したとき</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code> に書いた指示は Claude が判断して従うものだが、フックは必ず実行される。<a class="reference internal" href="harness_engineering.html"><span class="doc">ハーネスエンジニアリング</span></a>で述べたとおり、例外なく守らせたい規則はフックで実現する。</p>
+</section>
+<section id="mcp">
+<h3><span class="section-number">12.4.3. </span>MCP サーバーとサンドボックス<a class="headerlink" href="#mcp" title="Link to this heading"></a></h3>
+<p>MCP サーバーを登録すると、課題管理サービスやデータベース、ブラウザなどを Claude Code から操作できる <a class="reference internal" href="references.html#ref-claudecode-mcp"><span class="std std-ref">[ClaudeCode-MCP]</span></a>。例えば課題管理サービスの MCP サーバーを登録すれば、「課題 123 の内容を読んで仕様書の案を作って」のような依頼ができる。</p>
+<p>また、<code class="docutils literal notranslate"><span class="pre">/sandbox</span></code> コマンドでサンドボックスを有効にすると、Claude が実行するコマンドのファイルシステムやネットワークへのアクセスを制限できる（対応している環境のみ）。</p>
+</section>
+</section>
+<section id="id9">
+<h2><span class="section-number">12.5. </span>ループを組む<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
+<section id="stop">
+<h3><span class="section-number">12.5.1. </span>Stop フックによる自己修正のループ<a class="headerlink" href="#stop" title="Link to this heading"></a></h3>
+<p><a class="reference internal" href="#code-settings"><span class="std std-numref">コード 12.5</span></a> の <code class="docutils literal notranslate"><span class="pre">Stop</span></code> フックは、Claude が作業を終えようとしたときに<a class="reference internal" href="#code-stop-hook"><span class="std std-numref">コード 12.6</span></a> のスクリプトを実行する。</p>
+<div class="literal-block-wrapper docutils container" id="id24">
+<span id="code-stop-hook"></span><div class="code-block-caption"><span class="caption-number">コード 12.6 </span><span class="caption-text">テストが成功するまで作業を続けさせる Stop フック（stop_hook_run_tests.py）</span><a class="headerlink" href="#id24" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="sd">&quot;&quot;&quot;Claude Code の Stop フックとして使い、テストが成功するまで作業を続けさせるスクリプト。</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="sd">Claude が応答を終えようとしたときに pytest を実行する。失敗したテストがあれば</span>
+<span class="linenos"> 4</span><span class="sd">``{&quot;decision&quot;: &quot;block&quot;, &quot;reason&quot;: ...}`` を出力し、Claude に作業を続けさせる。</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="sd">``stop_hook_active`` が真のときは、すでにこのフックによって作業を続けている。</span>
+<span class="linenos"> 7</span><span class="sd">この場合は終了を止めない。テストがいつまでも成功しない場合に、ループが</span>
+<span class="linenos"> 8</span><span class="sd">終わらなくなるのを防ぐためである。</span>
+<span class="linenos"> 9</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="linenos">14</span><span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="linenos">15</span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="linenos">19</span>    <span class="n">hook_input</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">)</span>
+<span class="linenos">20</span>    <span class="k">if</span> <span class="n">hook_input</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;stop_hook_active&quot;</span><span class="p">):</span>
+<span class="linenos">21</span>        <span class="k">return</span> <span class="mi">0</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span>    <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+<span class="linenos">24</span>        <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;pytest&quot;</span><span class="p">,</span> <span class="s2">&quot;-q&quot;</span><span class="p">,</span> <span class="s2">&quot;--no-header&quot;</span><span class="p">],</span>
+<span class="linenos">25</span>        <span class="n">cwd</span><span class="o">=</span><span class="n">hook_input</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cwd&quot;</span><span class="p">),</span>
+<span class="linenos">26</span>        <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="linenos">27</span>        <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="linenos">28</span>        <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
+<span class="linenos">29</span>    <span class="p">)</span>
+<span class="linenos">30</span>    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">returncode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="linenos">31</span>        <span class="k">return</span> <span class="mi">0</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span>    <span class="n">tail</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="o">-</span><span class="mi">20</span><span class="p">:])</span>
+<span class="linenos">34</span>    <span class="n">decision</span> <span class="o">=</span> <span class="p">{</span>
+<span class="linenos">35</span>        <span class="s2">&quot;decision&quot;</span><span class="p">:</span> <span class="s2">&quot;block&quot;</span><span class="p">,</span>
+<span class="linenos">36</span>        <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;テストが失敗している。原因を調べて修正し、再度 pytest を実行すること。</span><span class="se">\n</span><span class="si">{</span><span class="n">tail</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="linenos">37</span>    <span class="p">}</span>
+<span class="linenos">38</span>    <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">decision</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="linenos">39</span>    <span class="k">return</span> <span class="mi">0</span>
+<span class="linenos">40</span>
+<span class="linenos">41</span>
+<span class="linenos">42</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="linenos">43</span>    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<p>スクリプトは pytest を実行し（23 〜 29 行目）、失敗したテストがあれば <code class="docutils literal notranslate"><span class="pre">{&quot;decision&quot;:</span> <span class="pre">&quot;block&quot;,</span> <span class="pre">&quot;reason&quot;:</span> <span class="pre">...}</span></code> を出力する（34 〜 38 行目）。<code class="docutils literal notranslate"><span class="pre">decision</span></code> が <code class="docutils literal notranslate"><span class="pre">block</span></code> のとき、Claude は終了せず、<code class="docutils literal notranslate"><span class="pre">reason</span></code> の内容を読んで作業を続ける。つまり、「テストがすべて成功するまで終わらない」という完了条件を、Claude の判断に任せず、仕組みとして強制している。</p>
+<p>ただし、<a class="reference internal" href="loop_engineering.html"><span class="doc">ループエンジニアリング</span></a>で述べたとおり、ループには終了条件が必要である。テストがいつまでも成功しない場合に備え、このスクリプトは、フックによってすでに作業を続けている状態（<code class="docutils literal notranslate"><span class="pre">stop_hook_active</span></code> が真）では終了を止めない（20 〜 21 行目）。これにより、フックによる差し戻しは 1 回までになる。より多く差し戻したい場合は、回数をファイルに記録するなどして上限を設ける。</p>
+</section>
+<section id="goal-loop">
+<h3><span class="section-number">12.5.2. </span><code class="docutils literal notranslate"><span class="pre">/goal</span></code> と <code class="docutils literal notranslate"><span class="pre">/loop</span></code><a class="headerlink" href="#goal-loop" title="Link to this heading"></a></h3>
+<p>フックの設定を書かずに、同様のループを手軽に作る方法もある。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/goal</span></code> コマンドに条件を与えると、Claude はその条件を満たすまで、ターンをまたいで作業を続ける。例えば <code class="docutils literal notranslate"><span class="pre">/goal</span> <span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pytest</span> <span class="pre">-q</span> <span class="pre">がすべて成功する</span></code>のように使う。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/loop</span></code> コマンドは、指示を一定の間隔で繰り返し実行する。例えば <code class="docutils literal notranslate"><span class="pre">/loop</span> <span class="pre">5m</span> <span class="pre">デプロイが完了したか確認して</span></code>のように、外部の状態の監視に使う。</p></li>
+</ul>
+</section>
+<section id="ci">
+<h3><span class="section-number">12.5.3. </span>非対話の実行と CI<a class="headerlink" href="#ci" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">-p</span></code> オプションを付けると、Claude Code を対話画面なしで実行し、結果を標準出力に出力できる <a class="reference internal" href="references.html#ref-claudecode-headless"><span class="std std-ref">[ClaudeCode-Headless]</span></a>。シェルスクリプトや CI に組み込めるため、<a class="reference internal" href="loop_engineering.html"><span class="doc">ループエンジニアリング</span></a>で述べた外側のループを自動化できる。</p>
+<div class="literal-block-wrapper docutils container" id="id25">
+<div class="code-block-caption"><span class="caption-number">コード 12.7 </span><span class="caption-text">非対話の実行の例</span><a class="headerlink" href="#id25" title="Link to this code"></a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="gp">$ </span><span class="c1"># 結果を JSON で受け取り、jq で処理する</span>
+<span class="linenos">2</span><span class="gp">$ </span>claude<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;直近のコミットの変更点を要約して&quot;</span><span class="w"> </span>--output-format<span class="w"> </span>json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span>.result
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="gp">$ </span><span class="c1"># 許可するツールと、反復・費用の上限を指定して実行する</span>
+<span class="linenos">5</span><span class="gp">$ </span>claude<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;tests/ の失敗しているテストを直して&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="linenos">6</span><span class="w">    </span>--allowedTools<span class="w"> </span><span class="s2">&quot;Read,Edit,Bash(python -m pytest *)&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="linenos">7</span><span class="w">    </span>--max-turns<span class="w"> </span><span class="m">30</span><span class="w"> </span>--max-budget-usd<span class="w"> </span><span class="m">5</span>
+</pre></div>
+</div>
+</div>
+<p>7 行目の <code class="docutils literal notranslate"><span class="pre">--max-turns</span></code> と <code class="docutils literal notranslate"><span class="pre">--max-budget-usd</span></code> は、それぞれ反復の回数と費用の上限を指定する。無人で動かす場合は、<a class="reference internal" href="loop_engineering.html"><span class="doc">ループエンジニアリング</span></a>で述べたとおり、必ずこうした上限を設ける。</p>
+<p>GitHub Actions と連携すると、プルリクエストや課題のコメントで Claude に依頼し、レビューや修正を任せることもできる <a class="reference internal" href="references.html#ref-claudecode-githubactions"><span class="std std-ref">[ClaudeCode-GitHubActions]</span></a>。</p>
+</section>
+</section>
+<section id="id10">
+<h2><span class="section-number">12.6. </span>マルチエージェントを使う<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<section id="id11">
+<h3><span class="section-number">12.6.1. </span>サブエージェント<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<p>Claude Code は、作業の一部を<a class="reference internal" href="glossary.html#term-12"><span class="xref std std-term">サブエージェント</span></a>に任せられる <a class="reference internal" href="references.html#ref-claudecode-subagents"><span class="std std-ref">[ClaudeCode-Subagents]</span></a>。サブエージェントはメインの会話とは別のコンテキストで作業し、結果だけを返す。独自のサブエージェントは <code class="docutils literal notranslate"><span class="pre">.claude/agents/&lt;名前&gt;.md</span></code> に定義する。</p>
+<div class="literal-block-wrapper docutils container" id="id26">
+<div class="code-block-caption"><span class="caption-number">コード 12.8 </span><span class="caption-text">サブエージェントの例（agent.sample.md）</span><a class="headerlink" href="#id26" title="Link to this code"></a></div>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>---
+<span class="linenos"> 2</span>name: spec-reviewer
+<span class="linenos"> 3</span>description: 実装が仕様書を満たしているかを確認する。実装が終わった後、コミットの前に使う。
+<span class="linenos"> 4</span>tools: Read, Grep, Glob, Bash
+<span class="linenos"> 5</span><span class="gu">model: sonnet</span>
+<span class="linenos"> 6</span><span class="gu">---</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span>あなたは仕様と実装の対応を確認するレビュー担当者である。
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="k">1.</span> 依頼で指定された仕様書（`docs/specs/` 配下）を読み、受け入れ条件を一覧にする
+<span class="linenos">11</span><span class="k">2.</span> <span class="sb">`git diff`</span> で変更内容を確認する
+<span class="linenos">12</span><span class="k">3.</span> 受け入れ条件ごとに、満たしているか・テストで確認されているかを判定する
+<span class="linenos">13</span><span class="k">4.</span> 結果を次の形式で報告する。ファイルは編集しない
+<span class="linenos">14</span>
+<span class="linenos">15</span>| 受け入れ条件 | 判定 | 根拠（ファイル名と行番号） |
+</pre></div>
+</div>
+</div>
+<p>この例は、実装が仕様書を満たしているかを確認するレビュー担当である。<code class="docutils literal notranslate"><span class="pre">tools</span></code>（4 行目）で <code class="docutils literal notranslate"><span class="pre">Edit</span></code> や <code class="docutils literal notranslate"><span class="pre">Write</span></code> を与えず、本文（13 行目）でも編集しないよう指示している。ただし、<code class="docutils literal notranslate"><span class="pre">Bash</span></code> を与えているため、コマンドによる変更は技術的には可能である。厳密に禁止したい場合は、権限の設定で禁止する。<code class="docutils literal notranslate"><span class="pre">model</span></code>（5 行目）では、作業に応じたモデルを指定できる。<a class="reference internal" href="multi_agent.html"><span class="doc">マルチエージェントとオーケストレーション</span></a>で述べた「専門化」と「相互の検証」の例である。</p>
+</section>
+<section id="id12">
+<h3><span class="section-number">12.6.2. </span>並列の作業<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">claude</span> <span class="pre">--worktree</span> <span class="pre">&lt;名前&gt;</span></code>（または <code class="docutils literal notranslate"><span class="pre">-w</span></code>）で起動すると、Git の worktree を作り、隔離された作業場所で Claude Code を動かせる。複数の Claude Code を同時に動かしても、互いの変更が衝突しない。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/batch</span></code> コマンドは、大規模な変更を独立した作業に分割し、計画を示したうえで、承認後に複数のエージェントで並列に処理する。</p></li>
+</ul>
+</section>
+</section>
+<section id="id13">
+<h2><span class="section-number">12.7. </span>ハーネスを改善し続ける<a class="headerlink" href="#id13" title="Link to this heading"></a></h2>
+<p>最後に、<a class="reference internal" href="loop_engineering.html"><span class="doc">ループエンジニアリング</span></a>で述べたハーネス改善のループを Claude Code で回す方法をまとめる。</p>
+<ol class="arabic simple">
+<li><p>Claude が誤った振る舞いをしたら、その場で直させるだけでなく、原因を考える。</p></li>
+<li><p>情報の不足が原因なら <code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code> やスキルに追記する。規則が守られなかったのが原因なら、フックや権限の設定で強制する。検証の不足が原因なら、テストやリンターの規則を追加する。</p></li>
+<li><p>変更をリポジトリにコミットし、チームで共有する。</p></li>
+<li><p>同じ種類の作業で効果を確かめる。重要な変更であれば、<a class="reference internal" href="eval_driven.html"><span class="doc">評価駆動開発</span></a>の方法で、<code class="docutils literal notranslate"><span class="pre">claude</span> <span class="pre">-p</span></code> を使って同じ課題を複数回実行し、変更前後の成功率を比べる。</p></li>
+</ol>
+<p>このループを続けることで、Claude Code はそのプロジェクトに特化した、信頼できる開発の担い手になっていく。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="process.html" class="btn btn-neutral float-left" title="11. 開発プロセスへの適用" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="risks.html" class="btn btn-neutral float-right" title="13. リスクと品質管理" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nunu_3060.
+      <span class="lastupdated">最終更新: 2026-10-26
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

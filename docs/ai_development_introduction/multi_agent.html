@@ -1,0 +1,532 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>9. マルチエージェントとオーケストレーション &mdash; AI を用いた開発</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=c9cec091" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=19757887"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=4755f45a"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="10. Vibe Coding と規律ある AI 開発" href="vibe_coding.html" />
+    <link rel="prev" title="8. 評価駆動開発" href="eval_driven.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AI を用いた開発
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">本編</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. はじめに</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id2">1.1. 本書の目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id3">1.2. 対象読者と前提知識</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id4">1.3. 本書の範囲</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id5">1.4. 本書の構成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id6">1.5. 表記とサンプルコード</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">2. AI を用いた開発の全体像</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#llm">2.1. 開発者が知っておくべき LLM の性質</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id1">2.1.1. テキストを続けて生成する</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id2">2.1.2. 一度に扱える量に上限がある</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id3">2.1.3. 記憶を持たない</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id4">2.1.4. 出力は確率的である</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id5">2.1.5. 知識に期限がある</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id6">2.1.6. ツールを呼び出せる</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id7">2.2. AI の利用形態の変遷</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id8">2.3. 各エンジニアリングの関係</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id9">2.4. AI に任せる部分と人間が責任を持つ部分</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_engineering.html">3. プロンプトエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id2">3.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id3">3.2. プロンプトの構成要素</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id4">3.3. 基本的なテクニック</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id5">3.3.1. 明確かつ具体的に書く</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id6">3.3.2. 理由を伝える</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id7">3.3.3. 例を示す</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id8">3.3.4. 考える手順を与える</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id9">3.3.5. 入力と指示を区別する</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id10">3.3.6. 出力形式を指定する</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id11">3.3.7. してほしいことを書く</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id12">3.4. サンプルコード：プロンプトのテンプレート</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id13">3.5. 開発作業でのプロンプトの例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id14">3.6. アンチパターン</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id15">3.7. プロンプトだけでは解決できないこと</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="context_engineering.html">4. コンテキストエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id2">4.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id3">4.2. コンテキストの構成要素</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id4">4.3. 基本的な考え方</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id5">4.3.1. 多ければよいわけではない</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id6">4.3.2. コンテキストの失敗の型</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id7">4.4. 主な手法</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id8">4.4.1. 規約ファイル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id9">4.4.2. 必要なときに読み込む</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id10">4.4.3. 要約と除去</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id11">4.4.4. 外部の記憶</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id12">4.4.5. コンテキストの分離</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id13">4.5. サンプルコード：予算内でのコンテキストの組み立て</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="harness_engineering.html">5. ハーネスエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id2">5.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id3">5.2. エージェントの基本構造</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id4">5.3. ガイドとセンサー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id5">5.4. ツールの設計</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id6">5.5. サンプルコード：最小のエージェント</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id7">5.6. センサーとしての検証手段</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id8">5.7. 権限とサンドボックス</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id9">5.8. フック</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#ai">5.9. AI が働きやすいリポジトリ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="loop_engineering.html">6. ループエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id2">6.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id3">6.2. ループの階層</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id4">6.3. エージェントループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id5">6.4. 自己修正のループ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="loop_engineering.html#id6">6.4.1. サンプルコード：自己修正のループ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id7">6.5. 終了条件の設計</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="loop_engineering.html#id8">6.5.1. 完了条件の抜け道に注意する</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id9">6.6. 人間のループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id10">6.7. 長時間・自律的なループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id11">6.8. ハーネス改善のループ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spec_driven.html">7. 仕様駆動開発</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id2">7.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id3">7.2. 作業の流れ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id4">7.3. 仕様書の書き方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#ai">7.4. AI と一緒に仕様を作る</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id5">7.5. 仕様と実装を同期させる</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_driven.html#id6">7.6. 向いている場面と向いていない場面</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="eval_driven.html">8. 評価駆動開発</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id2">8.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id3">8.2. 評価の構成要素</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id4">8.3. 採点器の種類</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id5">8.4. 指標</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id6">8.5. 評価のサイクル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id7">8.6. サンプルコード：プロンプトの比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id8">8.7. 注意点</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">9. マルチエージェントとオーケストレーション</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">9.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">9.2. 構成のパターン</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">9.3. サンプルコード：オーケストレーター・ワーカー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">9.4. 開発での使い方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">9.5. 注意点</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vibe_coding.html">10. Vibe Coding と規律ある AI 開発</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id1">10.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id2">10.2. 両者の比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#vibe-coding">10.3. Vibe Coding の価値と限界</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id3">10.4. 使い分けの指針</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id4">10.5. 人間に求められる能力</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="process.html">11. 開発プロセスへの適用</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id2">11.1. 工程ごとの活用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id3">11.2. テスト駆動開発との組み合わせ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id4">11.3. 作業の単位</a></li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id5">11.4. チームでの運用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="process.html#id6">11.4.1. 規約とハーネスの共有</a></li>
+<li class="toctree-l3"><a class="reference internal" href="process.html#id7">11.4.2. レビューの基準</a></li>
+<li class="toctree-l3"><a class="reference internal" href="process.html#id8">11.4.3. 責任の所在</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id9">11.5. 段階的な導入</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="practice_claude_code.html">12. 実践：Claude Code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id1">12.1. Claude Code の概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id2">12.2. コンテキストを整える</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#claude-md">12.2.1. CLAUDE.md</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id3">12.2.2. コンテキストの管理</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id4">12.2.3. スキル</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id5">12.3. 依頼の進め方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id6">12.4. ハーネスを整える</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id7">12.4.1. 権限モード</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id8">12.4.2. 権限の設定とフック</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#mcp">12.4.3. MCP サーバーとサンドボックス</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id9">12.5. ループを組む</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#stop">12.5.1. Stop フックによる自己修正のループ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#goal-loop">12.5.2. <code class="docutils literal notranslate"><span class="pre">/goal</span></code> と <code class="docutils literal notranslate"><span class="pre">/loop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#ci">12.5.3. 非対話の実行と CI</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id10">12.6. マルチエージェントを使う</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id11">12.6.1. サブエージェント</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id12">12.6.2. 並列の作業</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id13">12.7. ハーネスを改善し続ける</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="risks.html">13. リスクと品質管理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id2">13.1. もっともらしい誤り</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id3">13.2. プロンプトインジェクション</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id4">13.3. 秘密情報と機密情報</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id5">13.4. ライセンスと著作権</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id6">13.5. 費用の管理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id7">13.6. 技能の空洞化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id8">13.7. 品質管理のまとめ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="summary.html">14. まとめ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="summary.html#id2">14.1. 各手法の比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summary.html#id3">14.2. 問題が起きたときの切り分け</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summary.html#id4">14.3. 今後の展望</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">付録</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">サンプルコード一覧</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#id2">実行の準備</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#python">Python のサンプル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#id3">設定ファイルと文書のサンプル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#llm-stub-py">llm_stub.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">用語集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">参考文献</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id2">論文</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id3">記事</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id4">仕様・ツール</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#claude-code">Claude Code</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AI を用いた開発</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">9. </span>マルチエージェントとオーケストレーション</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">9. </span>マルチエージェントとオーケストレーション<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<section id="id2">
+<h2><span class="section-number">9.1. </span>本書の定義<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="glossary.html#term-28"><span class="xref std std-term">マルチエージェント</span></a>とは、複数のエージェントに作業を分担させる構成である。各エージェントは、それぞれ独立したコンテキスト、指示、ツールを持つ。複数のエージェントの役割分担と作業の流れを設計し、制御することを<a class="reference internal" href="glossary.html#term-2"><span class="xref std std-term">オーケストレーション</span></a>という。</p>
+<p>これまでの章では、1 つのエージェントが作業する場面を主に扱ってきた。1 つのエージェントで十分な作業は多く、まずは 1 つのエージェントで試すのが基本である。そのうえで、次のような場合にマルチエージェントを検討する。</p>
+<table class="docutils align-default" id="id7">
+<caption><span class="caption-number">表 9.1 </span><span class="caption-text">マルチエージェントを使う理由</span><a class="headerlink" href="#id7" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>理由</p></th>
+<th class="head"><p>内容</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>コンテキストの分離</p></td>
+<td><p>大量のファイルを読む調査を別のエージェントに任せ、結果の要約だけを受け取る。主となるエージェントのコンテキストが、調査の途中経過で埋まらない</p></td>
+</tr>
+<tr class="row-odd"><td><p>並列化</p></td>
+<td><p>互いに独立した作業を同時に進め、全体の所要時間を短くする</p></td>
+</tr>
+<tr class="row-even"><td><p>専門化</p></td>
+<td><p>役割ごとに異なる指示、ツール、権限、モデルを与える。例えば、レビュー担当には編集の権限を与えない</p></td>
+</tr>
+<tr class="row-odd"><td><p>相互の検証</p></td>
+<td><p>実装したエージェントとは別のエージェントにレビューさせる。同じコンテキストで自分の成果物を見直すより、先入観のない確認ができる</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id3">
+<h2><span class="section-number">9.2. </span>構成のパターン<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>複数のモデルの呼び出しやエージェントを組み合わせる構成には、いくつかの典型的なパターンがある <a class="reference internal" href="references.html#ref-anthropic-agents"><span class="std std-ref">[Anthropic-Agents]</span></a>。代表的なパターンを<a class="reference internal" href="#fig-multi-agent"><span class="std std-numref">図 9.1</span></a> に示す。</p>
+<figure class="align-center" id="id8">
+<span id="fig-multi-agent"></span><div class="graphviz"><object data="_images/graphviz-16d8c6eae4f8a0d82d918a21984fe1b6dc06f000.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph patterns {
+  rankdir=LR;
+  graph [fontsize=11, nodesep=0.25, ranksep=0.4];
+  node [shape=box, style=&quot;rounded,filled&quot;, fillcolor=&quot;#EEF3FA&quot;, color=&quot;#4C78A8&quot;, fontsize=10];
+  edge [color=&quot;#555555&quot;, fontsize=9];
+
+  subgraph cluster_eval {
+    label=&quot;生成と評価&quot;; style=&quot;rounded&quot;; color=&quot;#999999&quot;;
+    g [label=&quot;生成担当&quot;]; e [label=&quot;評価担当&quot;, fillcolor=&quot;#E8F5E9&quot;, color=&quot;#2E7D32&quot;];
+    g -&gt; e [label=&quot;成果物&quot;];
+    e -&gt; g [label=&quot;指摘&quot;, style=dashed];
+  }
+
+  subgraph cluster_orch {
+    label=&quot;オーケストレーター・ワーカー&quot;; style=&quot;rounded&quot;; color=&quot;#999999&quot;;
+    o  [label=&quot;オーケストレーター&quot;, fillcolor=&quot;#FFF6E5&quot;, color=&quot;#C98500&quot;];
+    w1 [label=&quot;ワーカー 1&quot;]; w2 [label=&quot;ワーカー 2&quot;]; w3 [label=&quot;ワーカー 3&quot;];
+    o -&gt; w1; o -&gt; w2; o -&gt; w3;
+    w1 -&gt; o [style=dashed]; w2 -&gt; o [style=dashed]; w3 -&gt; o [style=dashed];
+  }
+
+  subgraph cluster_chain {
+    label=&quot;逐次処理&quot;; style=&quot;rounded&quot;; color=&quot;#999999&quot;;
+    c1 [label=&quot;設計&quot;]; c2 [label=&quot;実装&quot;]; c3 [label=&quot;テスト&quot;];
+    c1 -&gt; c2 -&gt; c3;
+  }
+}</p></object></div>
+<figcaption>
+<p><span class="caption-number">図 9.1 </span><span class="caption-text">マルチエージェントの代表的なパターン</span><a class="headerlink" href="#id8" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<table class="docutils align-default" id="id9">
+<caption><span class="caption-number">表 9.2 </span><span class="caption-text">構成のパターン</span><a class="headerlink" href="#id9" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 43.0%" />
+<col style="width: 35.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>パターン</p></th>
+<th class="head"><p>内容</p></th>
+<th class="head"><p>開発での例</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>逐次処理</p></td>
+<td><p>前の段階の出力を次の段階の入力にする。段階の間に検査を挟める</p></td>
+<td><p>設計 → 実装 → テストの作成</p></td>
+</tr>
+<tr class="row-odd"><td><p>振り分け</p></td>
+<td><p>入力の種類を判定し、それに適した担当に振り分ける</p></td>
+<td><p>問い合わせを不具合・要望・質問に分類し、担当に渡す</p></td>
+</tr>
+<tr class="row-even"><td><p>並列処理</p></td>
+<td><p>独立した作業を同時に実行する。同じ作業を複数回実行し、結果を比べる使い方もある</p></td>
+<td><p>複数のモジュールの同時調査、複数の観点での同時レビュー</p></td>
+</tr>
+<tr class="row-odd"><td><p>オーケストレーター・ワーカー</p></td>
+<td><p>中心となるエージェントが作業を動的に分割してワーカーに割り当て、結果を統合する</p></td>
+<td><p>大規模な移行作業を、ファイル単位でワーカーに割り当てる</p></td>
+</tr>
+<tr class="row-even"><td><p>生成と評価</p></td>
+<td><p>生成担当が作った成果物を評価担当が批評し、生成担当が改善する</p></td>
+<td><p>実装担当とレビュー担当の分離</p></td>
+</tr>
+</tbody>
+</table>
+<p>逐次処理、振り分け、並列処理のように、流れをあらかじめコードで決めておく構成は、振る舞いを予測しやすく、検証もしやすい。オーケストレーター・ワーカーのように、作業の分割をモデルが動的に決める構成は柔軟だが、予測しにくい。作業の流れが事前に決められるなら、ワークフローを優先するとよい。</p>
+</section>
+<section id="id4">
+<h2><span class="section-number">9.3. </span>サンプルコード：オーケストレーター・ワーカー<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="#code-ex06"><span class="std std-numref">コード 9.1</span></a> は、オーケストレーター・ワーカー型の構成の例である。オーケストレーターは 4 つのファイルの調査をワーカーに割り当て、ワーカーは並列に動く。</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<span id="code-ex06"></span><div class="code-block-caption"><span class="caption-number">コード 9.1 </span><span class="caption-text">オーケストレーター・ワーカー（ex06_orchestrator.py）</span><a class="headerlink" href="#id10" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="sd">&quot;&quot;&quot;オーケストレーター・ワーカー型のマルチエージェントの例。</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="sd">オーケストレーターが作業を分割し、ワーカーを並列に動かす。各ワーカーは</span>
+<span class="linenos"> 4</span><span class="sd">独立したコンテキスト（会話履歴）で作業し、短い報告だけを返す。オーケストレーターは</span>
+<span class="linenos"> 5</span><span class="sd">ファイルの中身を読まずに報告だけを統合するため、自身のコンテキストを節約できる。</span>
+<span class="linenos"> 6</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>
+<span class="linenos">11</span><span class="kn">from</span><span class="w"> </span><span class="nn">concurrent.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
+<span class="linenos">12</span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="linenos">13</span>
+<span class="linenos">14</span><span class="kn">from</span><span class="w"> </span><span class="nn">llm_stub</span><span class="w"> </span><span class="kn">import</span> <span class="n">Message</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">RuleBasedLLM</span><span class="p">,</span> <span class="n">estimate_tokens</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="n">SOURCES</span> <span class="o">=</span> <span class="p">{</span>
+<span class="linenos">17</span>    <span class="s2">&quot;auth.py&quot;</span><span class="p">:</span> <span class="s2">&quot;def login(user, password):</span><span class="se">\n</span><span class="s2">    # TODO: 試行回数の制限</span><span class="se">\n</span><span class="s2">    return check(user, password)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="linenos">18</span>    <span class="s2">&quot;order.py&quot;</span><span class="p">:</span> <span class="s2">&quot;def total(items):</span><span class="se">\n</span><span class="s2">    return sum(i.price * i.qty for i in items)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="linenos">19</span>    <span class="s2">&quot;report.py&quot;</span><span class="p">:</span> <span class="s2">&quot;def export(rows):</span><span class="se">\n</span><span class="s2">    # TODO: 文字コードの指定</span><span class="se">\n</span><span class="s2">    # TODO: 大量データ時の分割</span><span class="se">\n</span><span class="s2">    pass</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="linenos">20</span>    <span class="s2">&quot;util.py&quot;</span><span class="p">:</span> <span class="s2">&quot;def clamp(x, lo, hi):</span><span class="se">\n</span><span class="s2">    return max(lo, min(x, hi))</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="linenos">21</span><span class="p">}</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos">25</span><span class="k">class</span><span class="w"> </span><span class="nc">WorkerReport</span><span class="p">:</span>
+<span class="linenos">26</span>    <span class="n">target</span><span class="p">:</span> <span class="nb">str</span>
+<span class="linenos">27</span>    <span class="n">summary</span><span class="p">:</span> <span class="nb">str</span>
+<span class="linenos">28</span>    <span class="n">context_tokens</span><span class="p">:</span> <span class="nb">int</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span>
+<span class="linenos">31</span><span class="k">def</span><span class="w"> </span><span class="nf">worker_rule</span><span class="p">(</span><span class="n">system</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Message</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<span class="linenos">32</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;模擬ワーカー：渡されたソースの TODO を数えて報告する。&quot;&quot;&quot;</span>
+<span class="linenos">33</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">messages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
+<span class="linenos">34</span>    <span class="n">todos</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;TODO:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">source</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span> <span class="k">if</span> <span class="s2">&quot;TODO:&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
+<span class="linenos">35</span>    <span class="k">if</span> <span class="ow">not</span> <span class="n">todos</span><span class="p">:</span>
+<span class="linenos">36</span>        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;未完了の作業なし&quot;</span><span class="p">)</span>
+<span class="linenos">37</span>    <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;未完了 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">todos</span><span class="p">)</span><span class="si">}</span><span class="s2"> 件: &quot;</span> <span class="o">+</span> <span class="s2">&quot;、&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">todos</span><span class="p">))</span>
+<span class="linenos">38</span>
+<span class="linenos">39</span>
+<span class="linenos">40</span><span class="k">def</span><span class="w"> </span><span class="nf">run_worker</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WorkerReport</span><span class="p">:</span>
+<span class="linenos">41</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;1 つのファイルを担当するワーカー。独自のコンテキストを持つ。&quot;&quot;&quot;</span>
+<span class="linenos">42</span>    <span class="n">llm</span> <span class="o">=</span> <span class="n">RuleBasedLLM</span><span class="p">(</span><span class="n">worker_rule</span><span class="p">)</span>
+<span class="linenos">43</span>    <span class="n">system</span> <span class="o">=</span> <span class="s2">&quot;あなたはコード調査の担当者である。未完了の作業を短く報告せよ。&quot;</span>
+<span class="linenos">44</span>    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span><span class="n">Message</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">SOURCES</span><span class="p">[</span><span class="n">target</span><span class="p">])]</span>
+<span class="linenos">45</span>    <span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">complete</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">messages</span><span class="p">)</span>
+<span class="linenos">46</span>    <span class="n">used</span> <span class="o">=</span> <span class="n">estimate_tokens</span><span class="p">(</span><span class="n">system</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">estimate_tokens</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">content</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">)</span>
+<span class="linenos">47</span>    <span class="k">return</span> <span class="n">WorkerReport</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">used</span><span class="p">)</span>
+<span class="linenos">48</span>
+<span class="linenos">49</span>
+<span class="linenos">50</span><span class="k">def</span><span class="w"> </span><span class="nf">orchestrate</span><span class="p">(</span><span class="n">targets</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="linenos">51</span>    <span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+<span class="linenos">52</span>        <span class="n">reports</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">run_worker</span><span class="p">,</span> <span class="n">targets</span><span class="p">))</span>
+<span class="linenos">53</span>    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">reports</span><span class="p">:</span>
+<span class="linenos">54</span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ワーカー </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">target</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}</span><span class="s2"> コンテキスト </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">context_tokens</span><span class="si">:</span><span class="s2">&gt;3</span><span class="si">}</span><span class="s2"> トークン -&gt; </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos">55</span>    <span class="n">summary</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">target</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">summary</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">reports</span><span class="p">)</span>
+<span class="linenos">56</span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;オーケストレーターが受け取った報告: </span><span class="si">{</span><span class="n">estimate_tokens</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span><span class="si">}</span><span class="s2"> トークン&quot;</span><span class="p">)</span>
+<span class="linenos">57</span>    <span class="k">return</span> <span class="n">summary</span>
+<span class="linenos">58</span>
+<span class="linenos">59</span>
+<span class="linenos">60</span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos">61</span>    <span class="nb">print</span><span class="p">(</span><span class="n">orchestrate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">SOURCES</span><span class="p">)))</span>
+<span class="linenos">62</span>
+<span class="linenos">63</span>
+<span class="linenos">64</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="linenos">65</span>    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">run_worker</span></code>（40 〜 47 行目）は、ワーカーごとに新しいクライアントと会話履歴を作る。つまり、各ワーカーは独立したコンテキストで作業する。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">orchestrate</span></code>（50 〜 57 行目）は、<code class="docutils literal notranslate"><span class="pre">ThreadPoolExecutor</span></code> でワーカーを並列に動かし、報告だけを統合する。</p></li>
+</ul>
+<p>実行結果は次のとおりである。4 つのワーカーのコンテキストは合計 212 トークンだが、オーケストレーターが受け取るのは 64 トークンの報告だけである。実際の作業では、ワーカーが読むファイルは数万トークンになることもあり、この差はさらに大きくなる。</p>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-number">コード 9.2 </span><span class="caption-text">ex06_orchestrator.py の出力</span><a class="headerlink" href="#id11" title="Link to this code"></a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>ワーカー auth.py    コンテキスト  57 トークン -&gt; 未完了 1 件: 試行回数の制限
+<span class="linenos">2</span>ワーカー order.py   コンテキスト  48 トークン -&gt; 未完了の作業なし
+<span class="linenos">3</span>ワーカー report.py  コンテキスト  62 トークン -&gt; 未完了 2 件: 文字コードの指定、大量データ時の分割
+<span class="linenos">4</span>ワーカー util.py    コンテキスト  45 トークン -&gt; 未完了の作業なし
+<span class="linenos">5</span>オーケストレーターが受け取った報告: 64 トークン
+<span class="linenos">6</span>- auth.py: 未完了 1 件: 試行回数の制限
+<span class="linenos">7</span>- order.py: 未完了の作業なし
+<span class="linenos">8</span>- report.py: 未完了 2 件: 文字コードの指定、大量データ時の分割
+<span class="linenos">9</span>- util.py: 未完了の作業なし
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id5">
+<h2><span class="section-number">9.4. </span>開発での使い方<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<p>コーディングエージェントでマルチエージェントを使う代表的な場面は、次のとおりである。</p>
+<ul class="simple">
+<li><p><strong>調査の委任</strong>：「このリポジトリで認証がどう実装されているか調べて」のような、多くのファイルを読む調査をサブエージェントに任せる。主となるエージェントは結論だけを受け取る。</p></li>
+<li><p><strong>独立した観点でのレビュー</strong>：実装が終わったら、実装の経緯を知らないレビュー担当のサブエージェントに差分を確認させる。仕様との照合（<a class="reference internal" href="spec_driven.html"><span class="doc">仕様駆動開発</span></a>）を専門に行うエージェントを作るのも有効である。</p></li>
+<li><p><strong>並列の実装</strong>：互いに独立した作業（別々のモジュールの改修など）を、複数のエージェントに同時に進めさせる。各エージェントが同じファイルを同時に書き換えて衝突しないよう、Git の worktree などで作業場所を分ける。</p></li>
+<li><p><strong>大規模な定型作業</strong>：多数のファイルに同じ種類の変更（API の移行など）を加える作業を、ファイル単位に分割して並列に処理する。</p></li>
+</ul>
+<p>Claude Code での具体的な方法は<a class="reference internal" href="practice_claude_code.html"><span class="doc">実践：Claude Code</span></a> で示す。</p>
+</section>
+<section id="id6">
+<h2><span class="section-number">9.5. </span>注意点<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>費用が増える</strong>：エージェントの数だけモデルを呼ぶため、トークンの消費が大きく増える。Anthropic の報告では、エージェントは通常の対話の約 4 倍、マルチエージェントは約 15 倍のトークンを消費した <a class="reference internal" href="references.html#ref-anthropic-multiagent"><span class="std std-ref">[Anthropic-MultiAgent]</span></a>。作業の価値が費用に見合うかを考える。</p></li>
+<li><p><strong>情報が欠落する</strong>：ワーカーの報告は要約であり、オーケストレーターには細部が伝わらない。報告に含めるべき項目（根拠となるファイル名と行番号など）を指示しておく。</p></li>
+<li><p><strong>調整が難しい</strong>：互いに依存する作業を複数のエージェントに分けると、前提の食い違いや、同じファイルへの変更の衝突が起きる。前述の Anthropic の報告では、コーディングの作業は調査の作業に比べて、真に並列化できる部分が少ないことも指摘されている <a class="reference internal" href="references.html#ref-anthropic-multiagent"><span class="std std-ref">[Anthropic-MultiAgent]</span></a>。</p></li>
+<li><p><strong>全体の把握が難しくなる</strong>：エージェントが増えるほど、誰が何をしたかを人間が追いにくくなる。各エージェントの作業の記録を残し、最終的な統合と確認は 1 か所で行う。</p></li>
+</ul>
+<p>分担の基本は、「読み取りは並列に、書き込みは慎重に」である。調査やレビューのような読み取り中心の作業は並列化しやすく、効果も大きい。書き込みを伴う作業は、互いに独立していることを確かめてから並列化する。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="eval_driven.html" class="btn btn-neutral float-left" title="8. 評価駆動開発" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="vibe_coding.html" class="btn btn-neutral float-right" title="10. Vibe Coding と規律ある AI 開発" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nunu_3060.
+      <span class="lastupdated">最終更新: 2026-10-26
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,433 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>7. 決定木とアンサンブル学習 &mdash; 機械学習・深層学習入門</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=f043dae3" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=19757887"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=4755f45a"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="8. 教師なし学習" href="ch08_unsupervised.html" />
+    <link rel="prev" title="6. モデルの評価と改善" href="ch06_evaluation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            機械学習・深層学習入門
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">はじめに</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">はじめに</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">本編</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ch01_overview.html">1. 機械学習の全体像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch02_math.html">2. 数学の準備</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch03_data.html">3. データと前処理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch04_regression.html">4. 回帰</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch05_classification.html">5. 分類</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch06_evaluation.html">6. モデルの評価と改善</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">7. 決定木とアンサンブル学習</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">7.1. 決定木</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">7.1.1. 決定木の構造</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">7.1.2. 分割の選び方</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">7.1.3. 決定木の長所と短所</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">7.1.4. 決定境界の形</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">7.2. アンサンブル学習</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">7.3. バギングとランダムフォレスト</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">7.3.1. バギング</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">7.3.2. ランダムフォレスト</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id12">7.4. ブースティングと勾配ブースティング</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id13">7.4.1. ブースティング</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">7.4.2. 勾配ブースティング</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id16">7.4.3. 勾配ブースティングのライブラリ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id20">7.5. 手法の比較</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id21">7.5.1. 特徴量重要度の注意点</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id22">7.6. どの手法を使うべきか</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id23">7.7. まとめ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch08_unsupervised.html">8. 教師なし学習</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch09_neural_network.html">9. ニューラルネットワークの基礎</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch10_training_techniques.html">10. 深層学習の学習テクニック</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch11_cnn.html">11. 畳み込みニューラルネットワーク</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch12_sequence_transformer.html">12. 系列データと Transformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch13_practice.html">13. 実務への適用</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">付録</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendix_glossary.html">用語集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_symbols.html">記号一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_examples.html">サンプルコード一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_references.html">参考文献</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">機械学習・深層学習入門</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">7. </span>決定木とアンサンブル学習</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">7. </span>決定木とアンサンブル学習<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>この章では、質問を繰り返してデータを分けていく<strong>決定木</strong>と、多数の決定木を組み合わせる<strong>アンサンブル学習</strong>の手法であるランダムフォレストと勾配ブースティングを説明する。勾配ブースティングは、表形式のデータに対して最も高い性能を示すことが多い手法の 1 つであり、実務で非常に広く使われている。</p>
+<section id="id2">
+<h2><span class="section-number">7.1. </span>決定木<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3><span class="section-number">7.1.1. </span>決定木の構造<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p><a class="reference internal" href="appendix_glossary.html#term-12"><span class="xref std std-term">決定木</span></a>は、「特徴量 <span class="math notranslate nohighlight">\(x_j\)</span> はしきい値 <span class="math notranslate nohighlight">\(t\)</span> 以下か」という質問を繰り返してデータを分割し、最終的にたどり着いた場所で予測を行うモデルである。次の図は、乳がんの診断データ（30 個の特徴量から悪性か良性かを判定する）で学習した深さ 2 の決定木である。</p>
+<figure class="align-center" id="id24">
+<div class="graphviz"><img src="_images/graphviz-d579eccedf8b9ec90695b47ac1ab5eca8f3d8dc5.png" alt="digraph tree {
+    node [shape=box, style=&quot;rounded,filled&quot;, fillcolor=&quot;#eef4fb&quot;, fontsize=11];
+    edge [fontsize=10];
+    root [label=&quot;worst radius &lt;= 16.80 ?&quot;];
+    n1 [label=&quot;worst concave points &lt;= 0.14 ?&quot;];
+    n2 [label=&quot;worst texture &lt;= 19.91 ?&quot;];
+    l1 [label=&quot;良性&quot;, fillcolor=&quot;#dbeedb&quot;];
+    l2 [label=&quot;悪性&quot;, fillcolor=&quot;#f6dcdc&quot;];
+    l3 [label=&quot;良性&quot;, fillcolor=&quot;#dbeedb&quot;];
+    l4 [label=&quot;悪性&quot;, fillcolor=&quot;#f6dcdc&quot;];
+    root -&gt; n1 [label=&quot;はい&quot;];
+    root -&gt; n2 [label=&quot;いいえ&quot;];
+    n1 -&gt; l1 [label=&quot;はい&quot;];
+    n1 -&gt; l2 [label=&quot;いいえ&quot;];
+    n2 -&gt; l3 [label=&quot;はい&quot;];
+    n2 -&gt; l4 [label=&quot;いいえ&quot;];
+}" class="graphviz" /></div>
+<figcaption>
+<p><span class="caption-number">図 7.1 </span><span class="caption-text">乳がんの診断データで学習した深さ 2 の決定木</span><a class="headerlink" href="#id24" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>一番上の分岐を<strong>根ノード</strong>、末端を<strong>葉ノード</strong>と呼ぶ。新しいデータを予測するときは、根ノードから質問に答えながら下にたどり、行き着いた葉ノードの値を予測とする。分類では葉ノードに含まれる訓練データの多数決のクラス（またはクラスの割合）を、回帰では葉ノードに含まれる訓練データのラベルの平均値を予測とする。</p>
+<p>決定木の最大の利点は、学習結果を「if-then ルール」として人間が読めることである。上の図からは、「腫瘍の大きさ（worst radius）が小さく、くぼみ（worst concave points）も少なければ良性」といった判断の根拠を読み取れる。</p>
+</section>
+<section id="id4">
+<h3><span class="section-number">7.1.2. </span>分割の選び方<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>決定木の学習では、各ノードで「どの特徴量の、どのしきい値で分割するか」を決める。良い分割とは、分割後の各グループに同じクラスのサンプルばかりが集まるような分割である。グループ内のクラスの混ざり具合を<strong>不純度</strong>と呼び、分類では<strong>ジニ不純度</strong>がよく使われる。</p>
+<div class="math notranslate nohighlight">
+\[G = 1 - \sum_{k=1}^{K} p_k^2\]</div>
+<p><span class="math notranslate nohighlight">\(p_k\)</span> はノード内でクラス <span class="math notranslate nohighlight">\(k\)</span> が占める割合である。すべてのサンプルが同じクラスなら <span class="math notranslate nohighlight">\(G = 0\)</span>、2 クラスが半々なら <span class="math notranslate nohighlight">\(G = 0.5\)</span> となる。</p>
+<p>学習では、すべての特徴量とすべてのしきい値の候補について、分割後の不純度（サンプル数で重み付けした平均）を計算し、分割前からの不純度の減少量が最大になる分割を選ぶ。これを分割後の各ノードで再帰的に繰り返す。次のコードは、1 回分の分割の探索を実装したものである。</p>
+<div class="literal-block-wrapper docutils container" id="id25">
+<div class="code-block-caption"><span class="caption-number">コード 7.1 </span><span class="caption-text">最良の分割の探索（ch07_tree_split_scratch.py より抜粋）</span><a class="headerlink" href="#id25" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span><span class="w"> </span><span class="nf">best_split</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">IntArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;不純度の減少量が最大となる (特徴量の番号, しきい値, 減少量) を返す。&quot;&quot;&quot;</span>
+<span class="linenos"> 3</span>    <span class="n">n</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+<span class="linenos"> 4</span>    <span class="n">parent</span> <span class="o">=</span> <span class="n">gini</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="linenos"> 5</span>    <span class="n">best</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="linenos"> 6</span>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+<span class="linenos"> 7</span>        <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
+<span class="linenos"> 8</span>        <span class="c1"># 隣り合う値の中点をしきい値の候補とする</span>
+<span class="linenos"> 9</span>        <span class="k">for</span> <span class="n">threshold</span> <span class="ow">in</span> <span class="p">(</span><span class="n">values</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">:</span>
+<span class="linenos">10</span>            <span class="n">left</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">x</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">threshold</span><span class="p">]</span>
+<span class="linenos">11</span>            <span class="n">right</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">x</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">]</span>
+<span class="linenos">12</span>            <span class="c1"># 子ノードの不純度を、サンプル数で重み付けして平均する</span>
+<span class="linenos">13</span>            <span class="n">child</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">gini</span><span class="p">(</span><span class="n">left</span><span class="p">)</span> <span class="o">+</span> <span class="n">right</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">gini</span><span class="p">(</span><span class="n">right</span><span class="p">))</span> <span class="o">/</span> <span class="n">n</span>
+<span class="linenos">14</span>            <span class="n">gain</span> <span class="o">=</span> <span class="n">parent</span> <span class="o">-</span> <span class="n">child</span>
+<span class="linenos">15</span>            <span class="k">if</span> <span class="n">gain</span> <span class="o">&gt;</span> <span class="n">best</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+<span class="linenos">16</span>                <span class="n">best</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">threshold</span><span class="p">),</span> <span class="n">gain</span><span class="p">)</span>
+<span class="linenos">17</span>    <span class="k">return</span> <span class="n">best</span>
+</pre></div>
+</div>
+</div>
+<p>年齢と年収から商品を購入したかを予測する 8 件のデータに適用すると、「年収 5.75 百万円以下か」で分割すれば、購入しなかった人と購入した人が完全に分かれることが見つかる。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>分割前のジニ不純度 = 0.500
+<span class="linenos">2</span>最良の分割: 年収 &lt;= 5.75 (不純度の減少量 = 0.500)
+<span class="linenos">3</span>左の子ノードのラベル: [0 0 0 0]  右の子ノードのラベル: [1 1 1 1]
+</pre></div>
+</div>
+<p>サンプルコードの全体は <a class="reference download internal" download="" href="_downloads/3c94483316370e7976a5d24690fa5e10/ch07_tree_split_scratch.py"><code class="xref download docutils literal notranslate"><span class="pre">ch07_tree_split_scratch.py</span></code></a> からダウンロードできる。</p>
+<p>回帰の決定木では、不純度の代わりにノード内のラベルの分散（平均二乗誤差）を使う。</p>
+</section>
+<section id="id5">
+<h3><span class="section-number">7.1.3. </span>決定木の長所と短所<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>決定木には次の長所がある。</p>
+<ul class="simple">
+<li><p>学習結果を人間が解釈しやすい。</p></li>
+<li><p>特徴量の大小関係しか使わないため、標準化などのスケーリングが不要である。</p></li>
+<li><p>数値とカテゴリの特徴量が混在していても扱いやすい。</p></li>
+<li><p>特徴量の間の相互作用（「広さが大きく、かつ駅に近い」など）を自然に表現できる。</p></li>
+</ul>
+<p>一方、大きな短所として、過学習しやすいことがある。深さを制限しなければ、すべての葉ノードに 1 種類のクラスしか含まれなくなるまで分割を続け、訓練データを丸暗記してしまう。また、訓練データが少し変わるだけで木の形が大きく変わる、つまりバリアンスが大きい。</p>
+<p>過学習を防ぐには、木の最大の深さ（<code class="docutils literal notranslate"><span class="pre">max_depth</span></code>）や、葉ノードに含まれるサンプル数の最小値（<code class="docutils literal notranslate"><span class="pre">min_samples_leaf</span></code>）などのハイパーパラメータで木の成長を制限する。</p>
+</section>
+<section id="id6">
+<h3><span class="section-number">7.1.4. </span>決定境界の形<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>決定木は各特徴量の軸に沿って空間を分割するため、決定境界は軸に平行な線分を組み合わせた階段状になる。<a class="reference internal" href="#fig-ch07-tree-boundary"><span class="std std-numref">図 7.2</span></a> の左の 2 つの図は、第 5 章の三日月形のデータで学習した決定木の決定境界である。深さを制限しない決定木は、少数のノイズのサンプルを囲い込むような複雑な境界を作っており、過学習していることが分かる。</p>
+<figure class="align-center" id="id26">
+<span id="fig-ch07-tree-boundary"></span><img alt="_images/ch07_tree_boundary.png" src="_images/ch07_tree_boundary.png" />
+<figcaption>
+<p><span class="caption-number">図 7.2 </span><span class="caption-text">決定木、ランダムフォレスト、勾配ブースティングの決定境界</span><a class="headerlink" href="#id26" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="id7">
+<h2><span class="section-number">7.2. </span>アンサンブル学習<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<p>複数のモデルを組み合わせて 1 つのモデルより良い予測を得る方法を<a class="reference internal" href="appendix_glossary.html#term-0"><span class="xref std std-term">アンサンブル学習</span></a>と呼ぶ。決定木は単体では過学習しやすいが、学習が速く、組み合わせの部品として非常に優れている。決定木を組み合わせる代表的な方法に、<strong>バギング</strong>と<strong>ブースティング</strong>がある。</p>
+<figure class="align-center" id="id27">
+<div class="graphviz"><img src="_images/graphviz-b785a1383a037d7f8baf70691ce38388decfd820.png" alt="digraph ensemble {
+    rankdir=LR;
+    node [shape=box, style=&quot;rounded,filled&quot;, fillcolor=&quot;#eef4fb&quot;, fontsize=11];
+    subgraph cluster_bag {
+        label=&quot;バギング（並列に学習して平均する）&quot;; style=dashed;
+        bd [label=&quot;訓練データ&quot;];
+        b1 [label=&quot;木 1&quot;]; b2 [label=&quot;木 2&quot;]; b3 [label=&quot;木 3&quot;];
+        bavg [label=&quot;平均・多数決&quot;, fillcolor=&quot;#fdf0e0&quot;];
+        bd -&gt; b1 [label=&quot;復元抽出&quot;, fontsize=9]; bd -&gt; b2; bd -&gt; b3;
+        b1 -&gt; bavg; b2 -&gt; bavg; b3 -&gt; bavg;
+    }
+    subgraph cluster_boost {
+        label=&quot;ブースティング（前の木の誤りを順に修正する）&quot;; style=dashed;
+        g1 [label=&quot;木 1&quot;]; g2 [label=&quot;木 2&quot;]; g3 [label=&quot;木 3&quot;];
+        gsum [label=&quot;和&quot;, fillcolor=&quot;#fdf0e0&quot;];
+        g1 -&gt; g2 [label=&quot;残った誤差&quot;, fontsize=9];
+        g2 -&gt; g3 [label=&quot;残った誤差&quot;, fontsize=9];
+        g1 -&gt; gsum; g2 -&gt; gsum; g3 -&gt; gsum;
+    }
+}" class="graphviz" /></div>
+<figcaption>
+<p><span class="caption-number">図 7.3 </span><span class="caption-text">バギングとブースティングの違い</span><a class="headerlink" href="#id27" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="id8">
+<h2><span class="section-number">7.3. </span>バギングとランダムフォレスト<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<section id="id9">
+<h3><span class="section-number">7.3.1. </span>バギング<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<p><a class="reference internal" href="appendix_glossary.html#term-41"><span class="xref std std-term">バギング</span></a>（bagging、bootstrap aggregating の略）は、訓練データから<strong>復元抽出</strong>（同じサンプルを重複して選ぶことを許す抽出）でデータを作り直し、それぞれで別々のモデルを学習して、予測を平均（分類では多数決）する方法である。復元抽出で作ったデータをブートストラップ標本と呼ぶ。</p>
+<p>個々の決定木はデータの選ばれ方によって大きく異なる予測をするが、多数の木の予測を平均すると、ばらつきが打ち消し合う。つまりバギングは、バイアスをほぼ保ったままバリアンスを下げる効果がある。</p>
+</section>
+<section id="id10">
+<h3><span class="section-number">7.3.2. </span>ランダムフォレスト<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<p><a class="reference internal" href="appendix_glossary.html#term-48"><span class="xref std std-term">ランダムフォレスト</span></a> <a class="reference internal" href="appendix_references.html#breiman2001" id="id11"><span>[Breiman2001]</span></a> は、バギングに加えて、各ノードの分割で候補とする特徴量をランダムに一部だけに絞る手法である。これにより、どの木も同じ強い特徴量で分割するということがなくなり、木どうしの相関が下がって、平均したときのバリアンスの低減効果が大きくなる。</p>
+<p>ランダムフォレストには次の特徴がある。</p>
+<ul class="simple">
+<li><p>ハイパーパラメータの調整をあまりしなくても、安定して良い性能が得られる。</p></li>
+<li><p>木の本数（<code class="docutils literal notranslate"><span class="pre">n_estimators</span></code>）を増やしても過学習はしにくい。本数を増やすと性能は頭打ちになり、計算時間だけが増える。</p></li>
+<li><p>各木は独立に学習できるため、並列化しやすい。</p></li>
+<li><p>各木の学習に使われなかったサンプル（OOB: out-of-bag）で評価すれば、検証データを別に用意しなくても汎化性能を見積もれる。</p></li>
+</ul>
+</section>
+</section>
+<section id="id12">
+<h2><span class="section-number">7.4. </span>ブースティングと勾配ブースティング<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
+<section id="id13">
+<h3><span class="section-number">7.4.1. </span>ブースティング<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<p><strong>ブースティング</strong>は、モデルを 1 つずつ順番に学習し、後のモデルが前のモデルの誤りを修正するように組み合わせる方法である。個々のモデルには、単体では性能の低い浅い決定木（<strong>弱学習器</strong>）を使う。バギングが主にバリアンスを下げるのに対し、ブースティングは弱学習器を積み重ねることでバイアスを下げる。</p>
+</section>
+<section id="id14">
+<h3><span class="section-number">7.4.2. </span>勾配ブースティング<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<p><a class="reference internal" href="appendix_glossary.html#term-19"><span class="xref std std-term">勾配ブースティング</span></a> <a class="reference internal" href="appendix_references.html#friedman2001" id="id15"><span>[Friedman2001]</span></a> は、ブースティングの代表的な手法である。回帰で平均二乗誤差を使う場合、手順は次のようになる。</p>
+<ol class="arabic simple">
+<li><p>最初の予測 <span class="math notranslate nohighlight">\(F_0(\boldsymbol{x})\)</span> を、全サンプルのラベルの平均値とする。</p></li>
+<li><p><span class="math notranslate nohighlight">\(m = 1, 2, \ldots, M\)</span> について、次を繰り返す。</p>
+<ol class="loweralpha simple">
+<li><p>各サンプルの残差 <span class="math notranslate nohighlight">\(r_i = y_i - F_{m-1}(\boldsymbol{x}_i)\)</span> を計算する。</p></li>
+<li><p>残差 <span class="math notranslate nohighlight">\(r_i\)</span> を予測する浅い決定木 <span class="math notranslate nohighlight">\(h_m\)</span> を学習する。</p></li>
+<li><p>予測を <span class="math notranslate nohighlight">\(F_m(\boldsymbol{x}) = F_{m-1}(\boldsymbol{x}) + \eta \, h_m(\boldsymbol{x})\)</span> と更新する。</p></li>
+</ol>
+</li>
+</ol>
+<p>つまり、「今の予測で残っている誤差」を次の木に学習させ、それを少しずつ足し込んでいく。<a class="reference internal" href="#fig-ch07-boosting-steps"><span class="std std-numref">図 7.4</span></a> に、木を足していくにつれて予測が真の関数に近づく様子を示す。</p>
+<figure class="align-center" id="id28">
+<span id="fig-ch07-boosting-steps"></span><img alt="_images/ch07_boosting_steps.png" src="_images/ch07_boosting_steps.png" />
+<figcaption>
+<p><span class="caption-number">図 7.4 </span><span class="caption-text">勾配ブースティングの予測の変化（深さ 2 の決定木、学習率 0.5）</span><a class="headerlink" href="#id28" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>平均二乗誤差の場合、残差 <span class="math notranslate nohighlight">\(y_i - F(\boldsymbol{x}_i)\)</span> は損失関数を予測値 <span class="math notranslate nohighlight">\(F(\boldsymbol{x}_i)\)</span> で微分したものの符号を反転した値（負の勾配）に比例する。勾配ブースティングという名前は、一般の損失関数について、この「負の勾配」を次の木に学習させることに由来する。これは、パラメータではなく予測値そのものを勾配降下法で更新していると見ることもできる。損失関数を交差エントロピーにすれば、同じ枠組みで分類にも使える。</p>
+<p><span class="math notranslate nohighlight">\(\eta\)</span> は学習率で、第 4 章の勾配降下法と同じ役割を持つ。学習率を小さくして木の本数を増やすと、一般に汎化性能が上がるが、学習に時間がかかる。ランダムフォレストと異なり、木の本数を増やしすぎると過学習するため、検証データの損失が改善しなくなった時点で学習を打ち切る<strong>早期終了</strong>を使うのが一般的である。</p>
+<p>主なハイパーパラメータは、学習率、木の本数、木の深さ（または葉ノードの数）、葉ノードに含まれるサンプル数の最小値などである。</p>
+</section>
+<section id="id16">
+<h3><span class="section-number">7.4.3. </span>勾配ブースティングのライブラリ<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<p>勾配ブースティングには、高速化や性能向上の工夫を加えた実装が複数ある。</p>
+<ul class="simple">
+<li><p><strong>XGBoost</strong> <a class="reference internal" href="appendix_references.html#chen2016" id="id17"><span>[Chen2016]</span></a>: 正則化を取り入れ、高速な実装で広く普及した。</p></li>
+<li><p><strong>LightGBM</strong> <a class="reference internal" href="appendix_references.html#ke2017" id="id18"><span>[Ke2017]</span></a>: 特徴量の値を少数の区間（ビン）にまとめるヒストグラムベースの手法などにより、大規模データでも高速に学習できる。</p></li>
+<li><p><strong>CatBoost</strong> <a class="reference internal" href="appendix_references.html#prokhorenkova2018" id="id19"><span>[Prokhorenkova2018]</span></a>: カテゴリの特徴量の扱いに工夫がある。</p></li>
+<li><p>scikit-learn の <code class="docutils literal notranslate"><span class="pre">HistGradientBoostingClassifier</span></code> / <code class="docutils literal notranslate"><span class="pre">HistGradientBoostingRegressor</span></code>: LightGBM と同様のヒストグラムベースの実装で、欠損値をそのまま扱え、早期終了にも対応している。</p></li>
+</ul>
+<p>いずれも、欠損値を含む表形式のデータをほとんど前処理なしで扱え、高い性能を示す。</p>
+</section>
+</section>
+<section id="id20">
+<h2><span class="section-number">7.5. </span>手法の比較<a class="headerlink" href="#id20" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="#fig-ch07-tree-boundary"><span class="std std-numref">図 7.2</span></a> の右の 2 つの図を見ると、ランダムフォレストと勾配ブースティングは、単体の決定木よりも滑らかで妥当な決定境界を学習していることが分かる。</p>
+<p>次のサンプルは、乳がんの診断データで 4 つのモデルを 5 分割交差検証で比較し、浅い決定木のルールと、ランダムフォレストの特徴量重要度を表示する。</p>
+<div class="literal-block-wrapper docutils container" id="id29">
+<div class="code-block-caption"><span class="caption-number">コード 7.2 </span><span class="caption-text">決定木とアンサンブル学習の比較（ch07_tree_ensemble_sklearn.py より抜粋）</span><a class="headerlink" href="#id29" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos"> 2</span>    <span class="n">data</span> <span class="o">=</span> <span class="n">load_breast_cancer</span><span class="p">()</span>
+<span class="linenos"> 3</span>    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">target</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span>    <span class="n">models</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+<span class="linenos"> 6</span>        <span class="s2">&quot;決定木 (深さ制限なし)&quot;</span><span class="p">:</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+<span class="linenos"> 7</span>        <span class="s2">&quot;決定木 (深さ 3)&quot;</span><span class="p">:</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+<span class="linenos"> 8</span>        <span class="s2">&quot;ランダムフォレスト&quot;</span><span class="p">:</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+<span class="linenos"> 9</span>        <span class="s2">&quot;勾配ブースティング&quot;</span><span class="p">:</span> <span class="n">HistGradientBoostingClassifier</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+<span class="linenos">10</span>    <span class="p">}</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span>    <span class="n">cv</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos">13</span>    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="linenos">14</span>        <span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">)</span>
+<span class="linenos">15</span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: 正解率 = </span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> (標準偏差 </span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span>    <span class="c1"># 浅い決定木は学習結果を if-then ルールとして読める</span>
+<span class="linenos">18</span>    <span class="n">shallow</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="linenos">19</span>    <span class="nb">print</span><span class="p">(</span><span class="n">export_text</span><span class="p">(</span><span class="n">shallow</span><span class="p">,</span> <span class="n">feature_names</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">feature_names</span><span class="p">)))</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span>    <span class="c1"># ランダムフォレストの特徴量重要度 (不純度の減少量にもとづく) の上位 5 件</span>
+<span class="linenos">22</span>    <span class="n">forest</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="linenos">23</span>    <span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">forest</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="mi">5</span><span class="p">]</span>
+<span class="linenos">24</span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">order</span><span class="p">:</span>
+<span class="linenos">25</span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">feature_names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">forest</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>決定木 (深さ制限なし): 正解率 = 0.926 (標準偏差 0.022)
+<span class="linenos"> 2</span>決定木 (深さ 3): 正解率 = 0.930 (標準偏差 0.024)
+<span class="linenos"> 3</span>ランダムフォレスト: 正解率 = 0.958 (標準偏差 0.017)
+<span class="linenos"> 4</span>勾配ブースティング: 正解率 = 0.968 (標準偏差 0.015)
+<span class="linenos"> 5</span>|--- worst radius &lt;= 16.80
+<span class="linenos"> 6</span>|   |--- worst concave points &lt;= 0.14
+<span class="linenos"> 7</span>|   |   |--- class: 1
+<span class="linenos"> 8</span>|   |--- worst concave points &gt;  0.14
+<span class="linenos"> 9</span>|   |   |--- class: 0
+<span class="linenos">10</span>|--- worst radius &gt;  16.80
+<span class="linenos">11</span>|   |--- worst texture &lt;= 19.91
+<span class="linenos">12</span>|   |   |--- class: 1
+<span class="linenos">13</span>|   |--- worst texture &gt;  19.91
+<span class="linenos">14</span>|   |   |--- class: 0
+<span class="linenos">15</span>
+<span class="linenos">16</span>worst radius: 0.125
+<span class="linenos">17</span>worst concave points: 0.125
+<span class="linenos">18</span>worst perimeter: 0.120
+<span class="linenos">19</span>worst area: 0.110
+<span class="linenos">20</span>mean concave points: 0.102
+</pre></div>
+</div>
+<p>アンサンブル学習の 2 手法は、単体の決定木より正解率が高く、ばらつき（標準偏差）も小さい。<code class="docutils literal notranslate"><span class="pre">export_text</span></code> の出力は、本章の最初に示した決定木の図と同じ内容である（このデータセットではクラス 0 が悪性、クラス 1 が良性）。</p>
+<p>サンプルコードの全体は <a class="reference download internal" download="" href="_downloads/40017a4af7fa70df3d6110bf92d040b9/ch07_tree_ensemble_sklearn.py"><code class="xref download docutils literal notranslate"><span class="pre">ch07_tree_ensemble_sklearn.py</span></code></a> からダウンロードできる。</p>
+<section id="id21">
+<h3><span class="section-number">7.5.1. </span>特徴量重要度の注意点<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<p>ランダムフォレストや勾配ブースティングでは、各特徴量が分割によって不純度をどれだけ減らしたかを集計した<strong>特徴量重要度</strong>を得られる。どの特徴量が予測に効いているかの目安になるが、次の点に注意が必要である。</p>
+<ul class="simple">
+<li><p>値の種類が多い特徴量（連続値や ID のような列）の重要度が過大に評価されやすい。</p></li>
+<li><p>互いに強く相関する特徴量があると、重要度がそれらの間で分散する。上の例では worst radius、worst perimeter、worst area はいずれも腫瘍の大きさを表しており、強く相関している。</p></li>
+<li><p>重要度は「予測に使われた度合い」であり、因果関係を表すものではない。</p></li>
+</ul>
+<p>より信頼性の高い方法として、第 13 章で紹介する順列重要度がある。</p>
+</section>
+</section>
+<section id="id22">
+<h2><span class="section-number">7.6. </span>どの手法を使うべきか<a class="headerlink" href="#id22" title="Link to this heading"></a></h2>
+<p>表形式のデータの教師あり学習では、次のように進めるのが実務的である。</p>
+<ol class="arabic simple">
+<li><p>まずロジスティック回帰や線形回帰などの単純なモデルでベースラインを作る。</p></li>
+<li><p>次に勾配ブースティング（LightGBM、XGBoost、scikit-learn の <code class="docutils literal notranslate"><span class="pre">HistGradientBoosting</span></code> など）を試す。多くの場合、これが最も高い性能を示す。</p></li>
+<li><p>調整の手間をかけずに安定した性能がほしい場合は、ランダムフォレストも有力な選択肢である。</p></li>
+<li><p>解釈性が最も重要な場合は、浅い決定木や線形モデルを使う。</p></li>
+</ol>
+<p>画像・音声・文章のようなデータでは、第 9 章以降で説明する深層学習が圧倒的に優れている。一方、表形式のデータでは、深層学習よりも勾配ブースティングの方が性能が高いことが多い。</p>
+</section>
+<section id="id23">
+<h2><span class="section-number">7.7. </span>まとめ<a class="headerlink" href="#id23" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>決定木は質問を繰り返してデータを分割するモデルで、解釈しやすく前処理も少なくて済むが、単体では過学習しやすい。</p></li>
+<li><p>分割は、不純度（ジニ不純度など）の減少量が最大になるように選ぶ。</p></li>
+<li><p>バギングは、復元抽出したデータで学習した多数のモデルを平均してバリアンスを下げる。ランダムフォレストはこれに特徴量のランダムな選択を加えたものである。</p></li>
+<li><p>勾配ブースティングは、前のモデルの誤差（負の勾配）を次の木に学習させて積み重ねる。表形式データで非常に高い性能を示す。</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ch06_evaluation.html" class="btn btn-neutral float-left" title="6. モデルの評価と改善" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ch08_unsupervised.html" class="btn btn-neutral float-right" title="8. 教師なし学習" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nunu_3060.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

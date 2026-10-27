@@ -1,0 +1,498 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>7. 仕様駆動開発 &mdash; AI を用いた開発</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=c9cec091" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=19757887"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=4755f45a"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="8. 評価駆動開発" href="eval_driven.html" />
+    <link rel="prev" title="6. ループエンジニアリング" href="loop_engineering.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AI を用いた開発
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">本編</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. はじめに</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id2">1.1. 本書の目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id3">1.2. 対象読者と前提知識</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id4">1.3. 本書の範囲</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id5">1.4. 本書の構成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id6">1.5. 表記とサンプルコード</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">2. AI を用いた開発の全体像</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#llm">2.1. 開発者が知っておくべき LLM の性質</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id1">2.1.1. テキストを続けて生成する</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id2">2.1.2. 一度に扱える量に上限がある</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id3">2.1.3. 記憶を持たない</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id4">2.1.4. 出力は確率的である</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id5">2.1.5. 知識に期限がある</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#id6">2.1.6. ツールを呼び出せる</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id7">2.2. AI の利用形態の変遷</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id8">2.3. 各エンジニアリングの関係</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id9">2.4. AI に任せる部分と人間が責任を持つ部分</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="prompt_engineering.html">3. プロンプトエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id2">3.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id3">3.2. プロンプトの構成要素</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id4">3.3. 基本的なテクニック</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id5">3.3.1. 明確かつ具体的に書く</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id6">3.3.2. 理由を伝える</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id7">3.3.3. 例を示す</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id8">3.3.4. 考える手順を与える</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id9">3.3.5. 入力と指示を区別する</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id10">3.3.6. 出力形式を指定する</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prompt_engineering.html#id11">3.3.7. してほしいことを書く</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id12">3.4. サンプルコード：プロンプトのテンプレート</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id13">3.5. 開発作業でのプロンプトの例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id14">3.6. アンチパターン</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt_engineering.html#id15">3.7. プロンプトだけでは解決できないこと</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="context_engineering.html">4. コンテキストエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id2">4.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id3">4.2. コンテキストの構成要素</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id4">4.3. 基本的な考え方</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id5">4.3.1. 多ければよいわけではない</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id6">4.3.2. コンテキストの失敗の型</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id7">4.4. 主な手法</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id8">4.4.1. 規約ファイル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id9">4.4.2. 必要なときに読み込む</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id10">4.4.3. 要約と除去</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id11">4.4.4. 外部の記憶</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context_engineering.html#id12">4.4.5. コンテキストの分離</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="context_engineering.html#id13">4.5. サンプルコード：予算内でのコンテキストの組み立て</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="harness_engineering.html">5. ハーネスエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id2">5.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id3">5.2. エージェントの基本構造</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id4">5.3. ガイドとセンサー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id5">5.4. ツールの設計</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id6">5.5. サンプルコード：最小のエージェント</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id7">5.6. センサーとしての検証手段</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id8">5.7. 権限とサンドボックス</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#id9">5.8. フック</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harness_engineering.html#ai">5.9. AI が働きやすいリポジトリ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="loop_engineering.html">6. ループエンジニアリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id2">6.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id3">6.2. ループの階層</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id4">6.3. エージェントループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id5">6.4. 自己修正のループ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="loop_engineering.html#id6">6.4.1. サンプルコード：自己修正のループ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id7">6.5. 終了条件の設計</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="loop_engineering.html#id8">6.5.1. 完了条件の抜け道に注意する</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id9">6.6. 人間のループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id10">6.7. 長時間・自律的なループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop_engineering.html#id11">6.8. ハーネス改善のループ</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">7. 仕様駆動開発</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">7.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">7.2. 作業の流れ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">7.3. 仕様書の書き方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ai">7.4. AI と一緒に仕様を作る</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">7.5. 仕様と実装を同期させる</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">7.6. 向いている場面と向いていない場面</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="eval_driven.html">8. 評価駆動開発</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id2">8.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id3">8.2. 評価の構成要素</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id4">8.3. 採点器の種類</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id5">8.4. 指標</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id6">8.5. 評価のサイクル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id7">8.6. サンプルコード：プロンプトの比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval_driven.html#id8">8.7. 注意点</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="multi_agent.html">9. マルチエージェントとオーケストレーション</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id2">9.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id3">9.2. 構成のパターン</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id4">9.3. サンプルコード：オーケストレーター・ワーカー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id5">9.4. 開発での使い方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_agent.html#id6">9.5. 注意点</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vibe_coding.html">10. Vibe Coding と規律ある AI 開発</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id1">10.1. 本書の定義</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id2">10.2. 両者の比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#vibe-coding">10.3. Vibe Coding の価値と限界</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id3">10.4. 使い分けの指針</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vibe_coding.html#id4">10.5. 人間に求められる能力</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="process.html">11. 開発プロセスへの適用</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id2">11.1. 工程ごとの活用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id3">11.2. テスト駆動開発との組み合わせ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id4">11.3. 作業の単位</a></li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id5">11.4. チームでの運用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="process.html#id6">11.4.1. 規約とハーネスの共有</a></li>
+<li class="toctree-l3"><a class="reference internal" href="process.html#id7">11.4.2. レビューの基準</a></li>
+<li class="toctree-l3"><a class="reference internal" href="process.html#id8">11.4.3. 責任の所在</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="process.html#id9">11.5. 段階的な導入</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="practice_claude_code.html">12. 実践：Claude Code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id1">12.1. Claude Code の概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id2">12.2. コンテキストを整える</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#claude-md">12.2.1. CLAUDE.md</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id3">12.2.2. コンテキストの管理</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id4">12.2.3. スキル</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id5">12.3. 依頼の進め方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id6">12.4. ハーネスを整える</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id7">12.4.1. 権限モード</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id8">12.4.2. 権限の設定とフック</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#mcp">12.4.3. MCP サーバーとサンドボックス</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id9">12.5. ループを組む</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#stop">12.5.1. Stop フックによる自己修正のループ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#goal-loop">12.5.2. <code class="docutils literal notranslate"><span class="pre">/goal</span></code> と <code class="docutils literal notranslate"><span class="pre">/loop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#ci">12.5.3. 非対話の実行と CI</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id10">12.6. マルチエージェントを使う</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id11">12.6.1. サブエージェント</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practice_claude_code.html#id12">12.6.2. 並列の作業</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practice_claude_code.html#id13">12.7. ハーネスを改善し続ける</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="risks.html">13. リスクと品質管理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id2">13.1. もっともらしい誤り</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id3">13.2. プロンプトインジェクション</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id4">13.3. 秘密情報と機密情報</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id5">13.4. ライセンスと著作権</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id6">13.5. 費用の管理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id7">13.6. 技能の空洞化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risks.html#id8">13.7. 品質管理のまとめ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="summary.html">14. まとめ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="summary.html#id2">14.1. 各手法の比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summary.html#id3">14.2. 問題が起きたときの切り分け</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summary.html#id4">14.3. 今後の展望</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">付録</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">サンプルコード一覧</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#id2">実行の準備</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#python">Python のサンプル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#id3">設定ファイルと文書のサンプル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#llm-stub-py">llm_stub.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">用語集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">参考文献</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id2">論文</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id3">記事</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#id4">仕様・ツール</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#claude-code">Claude Code</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AI を用いた開発</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">7. </span>仕様駆動開発</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">7. </span>仕様駆動開発<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<section id="id2">
+<h2><span class="section-number">7.1. </span>本書の定義<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="glossary.html#term-15"><span class="xref std std-term">仕様駆動開発</span></a>とは、実装の前に仕様書を作り、それを基準として AI に計画・実装・検証をさせる開発の進め方である。仕様書は人間と AI の間の「契約」であり、AI が作業中に立ち返る拠り所でもある。</p>
+<p>対話で思いついたことを次々に AI に頼む進め方は、小さな作業では手軽で速い。しかし、作業が大きくなると、次のような問題が起きやすい。</p>
+<ul class="simple">
+<li><p>人間の頭の中にある要求が AI に伝わらず、AI が推測で補った部分が意図とずれる。</p></li>
+<li><p>会話が長くなり、初期に伝えた要求がコンテキストの中で埋もれたり、要約で失われたりする。</p></li>
+<li><p>何をもって完成とするかが曖昧で、AI も人間も完了を判断できない。</p></li>
+</ul>
+<p>仕様駆動開発は、要求を文書として外に出すことでこれらを防ぐ。これまでの章の観点でいえば、仕様書はコンテキストエンジニアリングにおける外部の記憶であり、受け入れ条件はループエンジニアリングにおける完了条件である。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">7.2. </span>作業の流れ<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>仕様駆動開発は、<a class="reference internal" href="#fig-spec-flow"><span class="std std-numref">図 7.1</span></a> の流れで進める。各段階の成果物を人間が確認してから次の段階に進むことが重要である。</p>
+<figure class="align-center" id="id7">
+<span id="fig-spec-flow"></span><div class="graphviz"><object data="_images/graphviz-f68cbda2a51ba61e43280c635421386b2a5b06b1.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph spec {
+  rankdir=LR;
+  graph [fontsize=11, nodesep=0.3];
+  node [shape=box, style=&quot;rounded,filled&quot;, fillcolor=&quot;#EEF3FA&quot;, color=&quot;#4C78A8&quot;, fontsize=10];
+  edge [color=&quot;#555555&quot;, fontsize=9];
+
+  req   [label=&quot;要求\n何を・なぜ&quot;];
+  spec  [label=&quot;仕様\n受け入れ条件&quot;];
+  plan  [label=&quot;計画\n設計・方針&quot;];
+  tasks [label=&quot;タスク\n小さな作業に分割&quot;];
+  impl  [label=&quot;実装・検証\nタスクごと&quot;];
+  check [label=&quot;仕様との照合&quot;, fillcolor=&quot;#E8F5E9&quot;, color=&quot;#2E7D32&quot;];
+
+  req -&gt; spec -&gt; plan -&gt; tasks -&gt; impl -&gt; check;
+  check -&gt; impl [label=&quot;不足&quot;, style=dashed];
+  check -&gt; spec [label=&quot;仕様の修正&quot;, style=dashed];
+}</p></object></div>
+<figcaption>
+<p><span class="caption-number">図 7.1 </span><span class="caption-text">仕様駆動開発の流れ</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<table class="docutils align-default" id="id8">
+<caption><span class="caption-number">表 7.1 </span><span class="caption-text">各段階の作業と成果物</span><a class="headerlink" href="#id8" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 45.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>段階</p></th>
+<th class="head"><p>作業</p></th>
+<th class="head"><p>主に書く人</p></th>
+<th class="head"><p>主に確認する人</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>要求</p></td>
+<td><p>何を作るか、なぜ作るかを書く</p></td>
+<td><p>人間</p></td>
+<td><p>人間</p></td>
+</tr>
+<tr class="row-odd"><td><p>仕様</p></td>
+<td><p>要求を、検証できる受け入れ条件に落とし込む。曖昧な点を洗い出す</p></td>
+<td><p>AI と人間</p></td>
+<td><p>人間</p></td>
+</tr>
+<tr class="row-even"><td><p>計画</p></td>
+<td><p>技術的な方針、変更するモジュール、データ構造を決める</p></td>
+<td><p>AI</p></td>
+<td><p>人間</p></td>
+</tr>
+<tr class="row-odd"><td><p>タスク</p></td>
+<td><p>計画を、1 つずつ実装・検証できる小さな作業に分割する</p></td>
+<td><p>AI</p></td>
+<td><p>人間</p></td>
+</tr>
+<tr class="row-even"><td><p>実装・検証</p></td>
+<td><p>タスクごとに実装し、テストで検証する</p></td>
+<td><p>AI</p></td>
+<td><p>仕組み（テスト）と AI</p></td>
+</tr>
+<tr class="row-odd"><td><p>照合</p></td>
+<td><p>受け入れ条件をすべて満たしているかを確認する</p></td>
+<td><p>AI</p></td>
+<td><p>人間</p></td>
+</tr>
+</tbody>
+</table>
+<p>前半（要求から計画まで）は人間の判断の比重が大きく、後半（実装と検証）は AI と仕組みの比重が大きい。人間は、方向を決める前半に時間を使い、後半は検証の仕組みに任せる。</p>
+<p>この流れを支援するツールも登場している。GitHub の Spec Kit は、プロジェクトの原則の定義、仕様の作成、計画、タスクへの分割、実装という段階を、エージェントへの定型の指示として提供する <a class="reference internal" href="references.html#ref-speckit"><span class="std std-ref">[SpecKit]</span></a>。AWS の Kiro は、要求（<code class="docutils literal notranslate"><span class="pre">requirements.md</span></code>）、設計（<code class="docutils literal notranslate"><span class="pre">design.md</span></code>）、タスク（<code class="docutils literal notranslate"><span class="pre">tasks.md</span></code>）の 3 つの文書を作りながら開発を進める <a class="reference internal" href="references.html#ref-kiro"><span class="std std-ref">[Kiro]</span></a>。ただし、特別なツールがなくても、Markdown の仕様書とエージェントへの指示だけで同じ流れを実践できる。</p>
+</section>
+<section id="id4">
+<h2><span class="section-number">7.3. </span>仕様書の書き方<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<p>AI に渡す仕様書は、人間向けの仕様書と基本的に同じだが、特に次の点を意識する。</p>
+<ul class="simple">
+<li><p><strong>受け入れ条件を検証できる形で書く</strong>：「使いやすいこと」ではなく、「状態が <code class="docutils literal notranslate"><span class="pre">shipped</span></code> の注文に対しては 409 を返す」のように、テストで確かめられる形で書く。受け入れ条件はそのまま自己修正のループの完了条件になる。</p></li>
+<li><p><strong>対象外を明記する</strong>：書かれていないことを AI が「気を利かせて」実装することを防ぐ。</p></li>
+<li><p><strong>背景を書く</strong>：なぜその機能が必要かが分かれば、仕様書に書かれていない細部の判断が、意図に沿ったものになりやすい。</p></li>
+<li><p><strong>未決事項を明示する</strong>：曖昧な点を残したまま実装に進むと、AI は推測で決める。決まっていないことは決まっていないと明記し、実装を止めるよう指示する。</p></li>
+</ul>
+<p><a class="reference internal" href="#code-spec-sample"><span class="std std-numref">コード 7.1</span></a> は、仕様書の例である。</p>
+<div class="literal-block-wrapper docutils container" id="id9">
+<span id="code-spec-sample"></span><div class="code-block-caption"><span class="caption-number">コード 7.1 </span><span class="caption-text">仕様書の例（spec.sample.md）</span><a class="headerlink" href="#id9" title="Link to this code"></a></div>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="gh"># 仕様: 注文のキャンセル</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="gu">## 背景</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span>利用者が注文後に自分でキャンセルできないため、問い合わせ対応の負担が大きい。
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="gu">## 要求</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="k">-</span><span class="w"> </span>利用者は、発送前の自分の注文をキャンセルできる
+<span class="linenos">10</span><span class="k">-</span><span class="w"> </span>キャンセルした注文の在庫は戻る
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="gu">## 受け入れ条件</span>
+<span class="linenos">13</span>
+<span class="linenos">14</span><span class="k">1.</span> <span class="sb">`POST /orders/{order_id}/cancel`</span> で注文の状態が <span class="sb">`cancelled`</span> になる
+<span class="linenos">15</span><span class="k">2.</span> 状態が <span class="sb">`shipped`</span> または <span class="sb">`cancelled`</span> の注文に対しては 409 を返し、状態を変えない
+<span class="linenos">16</span><span class="k">3.</span> 他人の注文に対しては 404 を返す（注文の存在を知らせない）
+<span class="linenos">17</span><span class="k">4.</span> キャンセルすると、注文明細の数量だけ在庫が増える
+<span class="linenos">18</span><span class="k">5.</span> 状態の変更と在庫の更新は 1 つのトランザクションで行う
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="gu">## 対象外</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="k">-</span><span class="w"> </span>一部の商品だけのキャンセル
+<span class="linenos">23</span><span class="k">-</span><span class="w"> </span>返金処理（決済サービス側で別途対応する）
+<span class="linenos">24</span>
+<span class="linenos">25</span><span class="gu">## 実装計画（AI が作成し、人間が承認する）</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span><span class="k">- [ ]</span> T1: <span class="sb">`OrderStatus`</span> に <span class="sb">`cancelled`</span> を追加し、マイグレーションを作成する
+<span class="linenos">28</span><span class="k">- [ ]</span> T2: <span class="sb">`OrderRepository.cancel()`</span> を実装する（条件 4、5）
+<span class="linenos">29</span><span class="k">- [ ]</span> T3: エンドポイントを追加する（条件 1、2、3）
+<span class="linenos">30</span><span class="k">- [ ]</span> T4: 受け入れ条件 1 〜 5 に対応するテストを追加する
+</pre></div>
+</div>
+</div>
+<p>受け入れ条件（12 〜 18 行目）には番号を付け、実装計画（25 〜 30 行目）の各タスクがどの条件に対応するかを示している。こうしておくと、AI に「T2 を実装して」と頼むだけで、何を満たせばよいかが伝わる。また、完了したタスクにチェックを付けさせれば、仕様書が進捗の記録にもなる。</p>
+</section>
+<section id="ai">
+<h2><span class="section-number">7.4. </span>AI と一緒に仕様を作る<a class="headerlink" href="#ai" title="Link to this heading"></a></h2>
+<p>仕様書を人間がすべて書く必要はない。むしろ、AI に仕様の作成を手伝わせると、人間が見落としていた観点に気付けることが多い。効果的なのは、AI に質問させる方法である。</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-number">コード 7.2 </span><span class="caption-text">仕様の作成を手伝わせる依頼の例</span><a class="headerlink" href="#id10" title="Link to this code"></a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>注文のキャンセル機能を追加したい。利用者が発送前の注文を自分でキャンセルできるようにする。
+<span class="linenos">2</span>実装はまだしないこと。
+<span class="linenos">3</span>仕様書を docs/specs/order-cancel.md に作りたいので、まず不明な点や決めるべき点を
+<span class="linenos">4</span>質問して。既存のコード（src/app/ 配下）を読んで、関係しそうな箇所も調べること。
+<span class="linenos">5</span>質問への回答がそろったら、背景・要求・受け入れ条件・対象外の形式で仕様書を書いて。
+</pre></div>
+</div>
+</div>
+<p>この依頼に対して AI は、「一部の商品だけのキャンセルは必要か」「在庫は戻すか」「返金はどう扱うか」といった質問を返す。人間はそれに答えるだけで、検討の漏れが少ない仕様書ができあがる。</p>
+</section>
+<section id="id5">
+<h2><span class="section-number">7.5. </span>仕様と実装を同期させる<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<p>実装を進めると、仕様の誤りや不足に気付くことがある。このとき、実装だけを変えて仕様書を放置すると、仕様書は信頼できない文書になり、以降の作業で AI を誤らせる原因になる。</p>
+<p>仕様と実装が食い違ったら、AI に勝手に判断させず、報告させる。人間がどちらを正とするかを決め、仕様書を更新してから実装を続ける。規約ファイルに「仕様と実装が食い違ったら、実装せずに報告する」と書いておくとよい（<a class="reference internal" href="practice_claude_code.html"><span class="doc">実践：Claude Code</span></a> の<a class="reference internal" href="practice_claude_code.html#code-claude-md"><span class="std std-numref">コード 12.1</span></a> 参照）。</p>
+</section>
+<section id="id6">
+<h2><span class="section-number">7.6. </span>向いている場面と向いていない場面<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<table class="docutils align-default" id="id11">
+<caption><span class="caption-number">表 7.2 </span><span class="caption-text">仕様駆動開発が向いている場面と向いていない場面</span><a class="headerlink" href="#id11" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>向いている場面</p></th>
+<th class="head"><p>向いていない場面</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>複数のファイルやモジュールにまたがる機能の追加</p></td>
+<td><p>数行で終わる修正</p></td>
+</tr>
+<tr class="row-odd"><td><p>要求が明確で、受け入れ条件を書ける</p></td>
+<td><p>何を作るべきか自体を探っている段階（試作）</p></td>
+</tr>
+<tr class="row-even"><td><p>長期にわたって保守するソフトウェア</p></td>
+<td><p>使い捨ての検証用のコード</p></td>
+</tr>
+<tr class="row-odd"><td><p>複数人や複数のエージェントで分担する作業</p></td>
+<td><p>1 人で短時間に完結する作業</p></td>
+</tr>
+</tbody>
+</table>
+<p>何を作るべきかを探る段階では、仕様を固めるより、AI に素早く試作させて触ってみるほうがよい。試作で要求が見えてきたら、それをもとに仕様書を書き、本番のコードは仕様駆動で作り直す、という使い分けが有効である。この対比は <a class="reference internal" href="vibe_coding.html"><span class="doc">Vibe Coding と規律ある AI 開発</span></a>で改めて扱う。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="loop_engineering.html" class="btn btn-neutral float-left" title="6. ループエンジニアリング" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="eval_driven.html" class="btn btn-neutral float-right" title="8. 評価駆動開発" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nunu_3060.
+      <span class="lastupdated">最終更新: 2026-10-26
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
